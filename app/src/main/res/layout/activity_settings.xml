@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <Toolbar
-        android:layout_marginTop="@dimen/margin_top"
+        android:id="@+id/settings_back"
         android:layout_height="@dimen/toolbar_height"
         android:layout_width="match_parent"
         android:title="@string/settings"
@@ -19,18 +19,19 @@
     <Switch
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:minHeight="@dimen/height_view"
         android:layout_marginTop="@dimen/button_top"
         android:paddingStart="@dimen/inner_pad"
         android:paddingEnd="@dimen/switch_end"
         android:text="@string/dark"
         android:titleTextColor="@color/black"
-        android:minHeight="@dimen/height_view"
         />
     <TextView
-        android:layout_height="@dimen/height_view"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/height_view"
         android:text="@string/share"
-        android:titleTextColor="@color/black"
+        android:textColor="@color/black"
         android:textSize="@dimen/text_size2"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/inner_pad"
@@ -38,10 +39,11 @@
         app:drawableEndCompat="@drawable/share"
         />
     <TextView
-        android:layout_height="@dimen/height_view"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/height_view"
         android:text="@string/support"
-        android:titleTextColor="@color/black"
+        android:textColor="@color/black"
         android:textSize="@dimen/text_size2"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/inner_pad"
@@ -49,10 +51,11 @@
         app:drawableEndCompat="@drawable/support"
         />
     <TextView
-        android:layout_height="@dimen/height_view"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/height_view"
         android:text="@string/agreement"
-        android:titleTextColor="@color/black"
+        android:textColor="@color/black"
         android:textSize="@dimen/text_size2"
         android:gravity="center_vertical"
         android:paddingEnd="@dimen/inner_pad"

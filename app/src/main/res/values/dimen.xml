@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="inner_pad"> 16dp </dimen>
-    <dimen name="title_height"> 55dp </dimen>
-    <dimen name="title_margin_top"> 14dp </dimen>
-    <dimen name="button_top"> 24dp </dimen>
-    <dimen name="text_size"> 22sp </dimen>
-    <dimen name="zero_height"> 0dp </dimen>
-    <dimen name="full_weight"> 1 </dimen>
-    <dimen name="margin_top"> 14dp </dimen>
-    <dimen name="margin_bottom"> 28dp </dimen>
-    <dimen name ="toolbar_height"> 56dp </dimen>
-    <dimen name="switch_end"> 8 dp </dimen>
-    <dimen name="height_view"> 61dp </dimen>
-    <dimen name="text_size2"> 16sp </dimen>
+    <dimen name="inner_pad">16dp</dimen>
+    <dimen name="title_height">56dp</dimen>
+    <dimen name="title_margin_top">14dp</dimen>
+    <dimen name="button_top">24dp</dimen>
+    <dimen name="text_size">22sp</dimen>
+    <dimen name="zero_height">0dp</dimen>
+    <dimen name="full_weight">1</dimen>
+    <dimen name="margin_top">14dp</dimen>
+    <dimen name="margin_bottom">28dp</dimen>
+    <dimen name ="toolbar_height">56dp</dimen>
+    <dimen name="switch_end">8dp</dimen>
+    <dimen name="height_view">61dp</dimen>
+    <dimen name="text_size2">16sp</dimen>
 </resources>
