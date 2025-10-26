@@ -12,10 +12,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker">
         <activity
-            android:name=".Search"
+            android:name=".SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".Mediateka"
+            android:name=".MediatekaActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
