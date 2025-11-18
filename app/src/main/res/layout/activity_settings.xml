@@ -6,60 +6,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <Toolbar
         android:id="@+id/settings_back"
-        android:layout_height="@dimen/toolbar_height"
-        android:layout_width="match_parent"
+        style="@style/header"
         android:title="@string/settings"
-        android:titleTextColor="@color/black"
-        android:gravity="center_vertical"
-        android:navigationIcon="@drawable/ic_arrow_back_48"
+        android:navigationIcon="@drawable/ic_arrow_back_24"
         />
 
     <Switch
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_view"
+        style="@style/setting_buttons"
         android:layout_marginTop="@dimen/button_top"
-        android:paddingStart="@dimen/inner_pad"
         android:paddingEnd="@dimen/switch_end"
         android:text="@string/dark"
-        android:titleTextColor="@color/black"
         />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_view"
+        android:id="@+id/share"
+        style="@style/setting_buttons"
         android:text="@string/share"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size2"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/inner_pad"
-        android:paddingStart="@dimen/inner_pad"
         app:drawableEndCompat="@drawable/ic_share_24"
         />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_view"
+        android:id="@+id/support"
+        style="@style/setting_buttons"
         android:text="@string/support"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size2"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/inner_pad"
-        android:paddingStart="@dimen/inner_pad"
         app:drawableEndCompat="@drawable/ic_support_24"
         />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/height_view"
+        android:id="@+id/agreement"
+        style="@style/setting_buttons"
         android:text="@string/agreement"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size2"
-        android:gravity="center_vertical"
-        android:paddingEnd="@dimen/inner_pad"
-        android:paddingStart="@dimen/inner_pad"
         app:drawableEndCompat="@drawable/ic_arrow_forward_24"
         />
 </LinearLayout>
