@@ -4,15 +4,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/blue"
->
+    android:orientation="vertical">
+
     <TextView
         style="@style/header"
-        android:text="@string/app_name"
         android:paddingLeft="@dimen/inner_pad"
-        android:textColor="@color/white"
-        />
+        android:text="@string/app_name"
+        android:textColor="@color/white" />
 
     <Button
         android:id="@+id/button_search"
@@ -25,15 +24,13 @@
         android:id="@+id/button_media"
         style="@style/mainButton"
         android:text="@string/media"
-        app:icon="@drawable/ic_media_24"
-       />
+        app:icon="@drawable/ic_media_24" />
 
     <Button
         android:id="@+id/button_settings"
         style="@style/mainButton"
         android:layout_marginBottom="@dimen/button_bottom"
         android:text="@string/settings"
-        app:icon="@drawable/ic_settings_24"
-        />
+        app:icon="@drawable/ic_settings_24" />
 
 </LinearLayout>

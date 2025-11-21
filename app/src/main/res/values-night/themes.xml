@@ -4,6 +4,7 @@
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/yp_black</item>
         <item name="android:statusBarColor">@color/yp_black</item>
-        <item name="android:textColor"> @color/white </item>
+        <item name="android:textColor"> @color/white</item>
+        <item name="android:textColorPrimary"> @color/white</item>
     </style>
 </resources>

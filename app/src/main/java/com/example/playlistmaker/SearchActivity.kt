@@ -12,15 +12,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.doAfterTextChanged
 
 class SearchActivity : AppCompatActivity() {
 
     private var text:String = TEXT_DEFAULT
-
-    companion object {
-        const val TEXT = "TEXT"
-        const val TEXT_DEFAULT = ""
-    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -52,7 +48,7 @@ class SearchActivity : AppCompatActivity() {
             inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
         }
 
-        val simpleTextWatcher = object : TextWatcher {
+       val simpleTextWatcher = object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -76,5 +72,9 @@ class SearchActivity : AppCompatActivity() {
         } else {
             View.VISIBLE
         }
+    }
+    companion object {
+        private const val TEXT = "TEXT"
+        private const val TEXT_DEFAULT = ""
     }
 }

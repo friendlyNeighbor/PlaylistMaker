@@ -4,10 +4,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
@@ -24,9 +26,9 @@ class SettingsActivity : AppCompatActivity() {
         val buttonShare = findViewById<TextView>(R.id.share)
         buttonShare.setOnClickListener {
             val message = getString(R.string.link)
-            val intent = Intent(android.content.Intent.ACTION_SEND);
+            val intent = Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(android.content.Intent.EXTRA_TEXT, message);
+            intent.putExtra(Intent.EXTRA_TEXT, message);
             startActivity(intent)
         }
         val buttonSupport = findViewById<TextView>(R.id.support)
@@ -47,5 +49,15 @@ class SettingsActivity : AppCompatActivity() {
             intent.setData(Uri.parse(url))
             startActivity(intent)
         }
+
+        val switchDarkTheme = findViewById<Switch>(R.id.switch_dark_theme)
+        switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+        }
+
         }
     }
