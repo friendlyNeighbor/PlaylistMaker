@@ -8,7 +8,7 @@
     android:orientation="vertical">
 
     <TextView
-        style="@style/header"
+        style="@style/toolbar"
         android:paddingLeft="@dimen/inner_pad"
         android:text="@string/app_name"
         android:textColor="@color/white" />

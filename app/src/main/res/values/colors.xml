@@ -6,4 +6,9 @@
     <color name="yp_black">#1A1B22</color>
     <color name="yp_light_grey">#E6E8EB</color>
     <color name="yp_text_grey">#AEAFB4</color>
+
+    <color name="test">#CC0000</color>
+    <color name="test1">#009900</color>
+    <color name="test2">#FF00FF</color>
+    <color name="test3">#FFFF33</color>
 </resources>
