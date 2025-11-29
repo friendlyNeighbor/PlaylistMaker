@@ -33,12 +33,12 @@
     <style name="toolbar">
         <item name="android:layout_height"> @dimen/toolbar_height </item>
         <item name="android:layout_width"> match_parent </item>
-        <item name="android:textSize"> @dimen/text_size_22 </item>
+        <item name="android:textSize"> @dimen/text_size_22</item>
         <item name="android:gravity"> center_vertical </item>
-        <item name ="android:fontFamily"> @font/ys_display_medium </item>
+        <item name="android:fontFamily"> @font/ys_display_medium </item>
         <item name="android:textFontWeight">500</item>
         <item name="android:letterSpacing"> 0 </item>
-        <item name="android:navigationIcon"> @drawable/ic_arrow_back_24 </item>
+        <item name="navigationIcon"> @drawable/ic_arrow_back_24 </item>
     </style>
 
     <style name= "searchField">
@@ -66,7 +66,7 @@
     </style>
 
     <style name="colorToolbar" parent="toolbar">
-        <item name="android:titleTextColor">@color/yp_black</item>
+        <item name="titleTextColor">@color/yp_black</item>
     </style>
 
 </resources>

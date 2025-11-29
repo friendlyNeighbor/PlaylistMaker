@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/settings_back"
         style="@style/colorToolbar"
-        android:title="@string/settings" />
+        app:title="@string/settings" />
 
     <Switch
         android:id="@+id/switch_dark_theme"
@@ -35,4 +35,5 @@
         style="@style/settingButtons"
         android:text="@string/agreement"
         app:drawableEndCompat="@drawable/ic_arrow_forward_24" />
+
 </LinearLayout>

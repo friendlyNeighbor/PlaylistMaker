@@ -27,7 +27,7 @@ class SearchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
 
-        val buttonBack = findViewById<Toolbar>(R.id.search_back)
+        val buttonBack = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.search_back)
         buttonBack.setOnClickListener {
             finish()
         }

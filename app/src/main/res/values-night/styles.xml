@@ -11,6 +11,6 @@
     </style>
 
     <style name="colorToolbar" parent="toolbar">
-        <item name="android:titleTextColor">@color/white</item>
+        <item name="titleTextColor">@color/white</item>
     </style>
 </resources>

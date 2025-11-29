@@ -18,7 +18,7 @@ class SettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_settings)
 
-        val buttonBack = findViewById<Toolbar>(R.id.settings_back)
+        val buttonBack = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.settings_back)
         buttonBack.setOnClickListener {
             finish()
         }

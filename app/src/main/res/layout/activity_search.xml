@@ -5,10 +5,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/search_back"
         style="@style/colorToolbar"
-        android:title="@string/search"/>
+        app:title="@string/search" />
 
     <FrameLayout
         android:layout_width="match_parent"
