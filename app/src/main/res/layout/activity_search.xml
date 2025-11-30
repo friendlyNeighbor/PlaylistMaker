@@ -3,16 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:gravity="center" >
+    android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ПОИСК"  />
-    <Button
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/search_back"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="назад" />
+        style="@style/colorToolbar"
+        app:title="@string/search" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/edit_text_height">
+
+        <EditText
+            android:id="@+id/edit_text"
+            style="@style/colorSearchField"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/pad_36"
+            android:layout_marginTop="@dimen/pad_8"
+            android:layout_marginBottom="@dimen/pad_8"
+            android:drawableStart="@drawable/ic_search_16"
+            android:hint="@string/search"
+            android:inputType="text"
+            android:lines="1"
+            android:saveEnabled="false" />
+
+        <ImageView
+            android:id="@+id/clear_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:padding="@dimen/pad_18"
+            android:paddingEnd="@dimen/pad_28"
+            android:src="@drawable/ic_clear_16"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>

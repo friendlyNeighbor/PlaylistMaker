@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name= "colorSearchField" parent="searchField">
+        <item name="android:textColorHint">@color/yp_black</item>
+        <item name= "android:backgroundTint"> @color/white</item>
+    </style>
+
+    <style name="colorSwitch" parent="settingButtons">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="colorToolbar" parent="toolbar">
+        <item name="titleTextColor">@color/white</item>
+    </style>
+</resources>
