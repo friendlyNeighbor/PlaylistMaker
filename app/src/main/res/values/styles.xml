@@ -1,64 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name = "mainButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name = "android:layout_width"> match_parent </item>
-        <item name = "android:layout_height"> @dimen/zero_height </item>
-        <item name = "android:layout_weight"> @dimen/full_weight </item>
-        <item name = "android:gravity"> center </item>
-        <item name = "android:background"> @drawable/bg_shapes </item>
-        <item name = "android:layout_marginHorizontal"> @dimen/inner_pad </item>
-        <item name = "android:layout_marginTop"> @dimen/button_margin_top_bottom </item>
-        <item name = "android:layout_marginBottom"> @dimen/button_margin_top_bottom </item>
-        <item name = "android:textAllCaps"> false </item>
-        <item name = "android:textSize"> @dimen/text_size_22 </item>
-        <item name = "iconGravity"> textStart </item>
-        <item name = "android:fontFamily"> @font/ys_display_medium </item>
-        <item name= "android:textFontWeight">500</item>
-        <item name= "android:letterSpacing"> 0 </item>
+
+    <style name="mainButton" parent="Widget.MaterialComponents.Button.UnelevatedButton">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/zero_height</item>
+        <item name="android:layout_weight">@dimen/full_weight</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/bg_shapes</item>
+        <item name="android:layout_marginHorizontal">@dimen/inner_pad</item>
+        <item name="android:layout_marginTop">@dimen/button_margin_top_bottom</item>
+        <item name="android:layout_marginBottom">@dimen/button_margin_top_bottom</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
     <style name="settingButtons">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height"> wrap_content </item>
-        <item name="android:minHeight"> @dimen/height_view </item>
-        <item name="android:textSize"> @dimen/text_size_16 </item>
-        <item name="android:gravity"> center_vertical </item>
-        <item name="android:paddingEnd"> @dimen/margin_end </item>
-        <item name="android:paddingStart"> @dimen/inner_pad </item>
-        <item name ="android:fontFamily"> @font/ys_display_regular </item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/height_view</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingEnd">@dimen/margin_end</item>
+        <item name="android:paddingStart">@dimen/inner_pad</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
         <item name="android:textFontWeight">400</item>
-        <item name="android:letterSpacing"> 0 </item>
-        </style>
+        <item name="android:letterSpacing">0</item>
+    </style>
 
     <style name="toolbar">
-        <item name="android:layout_height"> @dimen/toolbar_height </item>
-        <item name="android:layout_width"> match_parent </item>
-        <item name="android:textSize"> @dimen/text_size_22</item>
-        <item name="android:gravity"> center_vertical </item>
-        <item name="android:fontFamily"> @font/ys_display_medium </item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">@dimen/text_size_22</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
-        <item name="android:letterSpacing"> 0 </item>
-        <item name="navigationIcon"> @drawable/ic_arrow_back_24 </item>
+        <item name="android:letterSpacing">0</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
     </style>
 
-    <style name= "searchField">
-        <item name= "android:background"> @drawable/bg_shapes_radius_8 </item>
-        <item name= "android:paddingStart"> @dimen/pad_13 </item>
-        <item name= "android:drawablePadding"> @dimen/pad_8</item>
-        <item name= "android:textSize"> @dimen/text_size_16 </item>
-        <item name= "iconGravity"> textStart </item>
-        <item name= "android:gravity"> center_vertical </item>
-        <item name= "android:fontFamily"> @font/ys_display_regular </item>
-        <item name= "android:textFontWeight">500</item>
-        <item name= "android:letterSpacing"> 0 </item>
+    <style name="searchField">
+        <item name="android:background">@drawable/bg_shapes_radius_8</item>
+        <item name="android:paddingStart">@dimen/pad_13</item>
+        <item name="android:drawablePadding">@dimen/pad_8</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="iconGravity">textStart</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:letterSpacing">0</item>
         <item name="android:textColor">@color/yp_black</item>
-        <item name= "android:layout_marginStart"> @dimen/inner_pad</item>
-        <item name= "android:layout_marginEnd"> @dimen/inner_pad</item>
+        <item name="android:layout_marginStart">@dimen/inner_pad</item>
+        <item name="android:layout_marginEnd">@dimen/inner_pad</item>
     </style>
 
-    <style name= "colorSearchField" parent="searchField">
+    <style name="colorSearchField" parent="searchField">
         <item name="android:textColorHint">@color/yp_text_grey</item>
-        <item name= "android:backgroundTint"> @color/yp_light_grey</item>
+        <item name="android:backgroundTint">@color/yp_light_grey</item>
     </style>
 
     <style name="colorSwitch" parent="settingButtons">
@@ -67,6 +68,11 @@
 
     <style name="colorToolbar" parent="toolbar">
         <item name="titleTextColor">@color/yp_black</item>
+    </style>
+
+    <style name="roundCorners">
+        <item name="cornerSize">2dp</item>
+        <item name="cornerFamily">rounded</item>
     </style>
 
 </resources>
