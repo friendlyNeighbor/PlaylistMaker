@@ -16,4 +16,6 @@
     <string name="not_found">Ничего не нашлось</string>
     <string name="connection_problem">Проблемы со связью "\n\n" Загрузка не удалась. Проверьте подключение к интернету</string>
     <string name="reload">Обновить</string>
+    <string name="mediateka">Медиатека</string>
+    <string name="back">Назад</string>
 </resources>
