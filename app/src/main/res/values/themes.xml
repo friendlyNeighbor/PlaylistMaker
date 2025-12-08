@@ -4,5 +4,6 @@
         <item name="colorOnPrimary">@color/yp_black</item>
         <item name="android:statusBarColor">@color/blue</item>
         <item name="android:textColor"> @color/yp_black </item>
+        <item name="colorAccent"> @color/switcher </item>
     </style>
 </resources>

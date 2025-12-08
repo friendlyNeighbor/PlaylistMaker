@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="yp_text_grey">#FFFFFF</color>
+    <color name="switcher">@color/blue</color>
+
 </resources>

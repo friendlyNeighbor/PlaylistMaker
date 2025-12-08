@@ -4,16 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center"
+    android:id="@+id/mediateka"
+    android:paddingTop="22dp">
 
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="МЕДИАТЕКА"
+    android:text="@string/mediateka"
     />
 <Button
     android:id="@+id/media_back"
     android:layout_height="wrap_content"
     android:layout_width="wrap_content"
-    android:text="назад" />
+    android:text="@string/back"
+    style="@style/buttonReloadColor"/>
 </LinearLayout>

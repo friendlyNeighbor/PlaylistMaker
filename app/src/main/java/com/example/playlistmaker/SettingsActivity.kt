@@ -12,11 +12,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.settings)) { view, insets ->
+            val statusBar = insets.getInsets(WindowInsetsCompat.Type.statusBars())
+            view.updatePadding(top = statusBar.top)
+            insets
+        }
 
         val buttonBack = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_back)
         buttonBack.setOnClickListener {
@@ -50,7 +58,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val switchDarkTheme = findViewById<Switch>(R.id.switch_dark_theme)
+        val switchDarkTheme = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_dark_theme)
         switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)

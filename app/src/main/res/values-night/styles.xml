@@ -12,5 +12,12 @@
 
     <style name="colorToolbar" parent="toolbar">
         <item name="titleTextColor">@color/white</item>
+        <item name="backgroundTint">@color/yp_black</item>
     </style>
+
+    <style name="buttonReloadColor" parent="buttonReload">
+        <item name="android:textColor">@color/yp_black</item>
+        <item name="backgroundTint">@color/white</item>
+    </style>
+
 </resources>

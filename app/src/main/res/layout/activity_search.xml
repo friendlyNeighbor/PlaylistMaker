@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/search"
+    android:paddingTop="22dp">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/search_back"
@@ -23,9 +26,13 @@
             android:layout_marginBottom="@dimen/pad_8"
             android:drawableStart="@drawable/ic_search_16"
             android:hint="@string/search"
+            android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
-            android:saveEnabled="false" />
+            android:saveEnabled="false"
+            android:singleLine="true"
+            android:textCursorDrawable="@drawable/cursor"
+            tools:ignore="TouchTargetSizeCheck" />
 
         <ImageView
             android:id="@+id/clear_search"
@@ -38,11 +45,66 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+        android:layout_height="match_parent">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/track_view"
+            android:visibility="gone"
+            />
+
+            <LinearLayout
+                android:id="@+id/not_found"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="102dp"
+                android:src="@drawable/ic_not_found_120"
+                android:gravity="center"/>
+            <TextView
+                android:text="@string/not_found"
+                style="@style/errorText"/>
+            </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/connection_problem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="102dp"
+                android:src="@drawable/ic_connection_problem_120"/>
+            <TextView
+                android:text="@string/connection_problem"
+                style="@style/errorText"/>
+
+            <Button
+                android:id="@+id/reload"
+                style="@style/buttonReloadColor"
+                android:layout_width="91dp"
+                android:layout_height="36dp"
+                android:layout_marginTop="24dp"
+                android:text="@string/reload"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
 
 </LinearLayout>
