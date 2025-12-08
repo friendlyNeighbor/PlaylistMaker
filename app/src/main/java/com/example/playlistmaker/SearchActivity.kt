@@ -126,11 +126,9 @@ class SearchActivity : AppCompatActivity() {
         viewErrorConnection.visibility = View.GONE
         viewTracks.visibility = View.GONE
         when (reason) {
-            "CONNECTION_PROBLEM" -> viewErrorConnection.visibility = View.VISIBLE
-
-            "NOT_FOUND" -> viewErrorSearch.visibility = View.VISIBLE
-
-            "OK" -> viewTracks.visibility = View.VISIBLE
+            CONNECTION_PROBLEM -> viewErrorConnection.visibility = View.VISIBLE
+            NOT_FOUND -> viewErrorSearch.visibility = View.VISIBLE
+            OK -> viewTracks.visibility = View.VISIBLE
         }
     }
 
