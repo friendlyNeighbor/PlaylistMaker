@@ -3,16 +3,14 @@ package com.example.playlistmaker
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.Button
-import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toolbar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
+import com.example.playlistmaker.App.Companion.SP_SWITCHER_THEME_KEY
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,23 +47,27 @@ class SettingsActivity : AppCompatActivity() {
             intent.putExtra(Intent.EXTRA_TEXT, text)
             intent.putExtra(Intent.EXTRA_SUBJECT, subject)
             startActivity(intent)
-            }
+        }
         val buttonAgreement = findViewById<TextView>(R.id.agreement)
         buttonAgreement.setOnClickListener {
             val url = getString(R.string.link_offer)
-            intent  = Intent(Intent.ACTION_VIEW)
+            intent = Intent(Intent.ACTION_VIEW)
             intent.setData(Uri.parse(url))
             startActivity(intent)
         }
 
-        val switchDarkTheme = findViewById<androidx.appcompat.widget.SwitchCompat>(R.id.switch_dark_theme)
-        switchDarkTheme.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
+        if ((applicationContext as App).shrdPrefNightMode.getBoolean(
+                SP_SWITCHER_THEME_KEY,
+                false
+            )
+        ) {
+            themeSwitcher.setChecked(true)
+        }
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            (applicationContext as App).switchTheme(checked)
         }
 
-        }
     }
+
+}

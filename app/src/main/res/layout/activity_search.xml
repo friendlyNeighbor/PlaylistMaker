@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/search"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:id="@+id/search"
     android:paddingTop="22dp">
 
     <androidx.appcompat.widget.Toolbar
@@ -48,50 +48,52 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/track_view"
             android:visibility="gone"
-            />
-
-            <LinearLayout
-                android:id="@+id/not_found"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:visibility="gone">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="102dp"
-                android:src="@drawable/ic_not_found_120"
-                android:gravity="center"/>
-            <TextView
-                android:text="@string/not_found"
-                style="@style/errorText"/>
-            </LinearLayout>
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/track_view" />
 
         <LinearLayout
-            android:id="@+id/connection_problem"
+            android:id="@+id/not_found"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
             android:gravity="center_horizontal"
+            android:orientation="vertical"
             android:visibility="gone">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="102dp"
-                android:src="@drawable/ic_connection_problem_120"/>
+                android:gravity="center"
+                android:src="@drawable/ic_not_found_120" />
+
             <TextView
-                android:text="@string/connection_problem"
-                style="@style/errorText"/>
+                style="@style/errorText"
+                android:text="@string/not_found" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/connection_problem"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="102dp"
+                android:src="@drawable/ic_connection_problem_120" />
+
+            <TextView
+                style="@style/errorText"
+                android:text="@string/connection_problem" />
 
             <Button
                 android:id="@+id/reload"
@@ -104,6 +106,47 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/history_of_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="35dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/ys_display_medium"
+                android:gravity="center"
+                android:letterSpacing="0"
+                android:text="@string/history_of_search"
+                android:textColor="@color/black_white_color"
+                android:textFontWeight="500"
+                android:textSize="19sp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_history"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/track_view" />
+
+            <Button
+                android:id="@+id/clear_history"
+                style="@style/buttonReloadColor"
+                android:layout_width="148dp"
+                android:layout_height="36dp"
+                android:layout_gravity="center_horizontal|top"
+                android:layout_marginTop="24dp"
+                android:text="@string/clear_history"
+                tools:ignore="TouchTargetSizeCheck" />
+
+        </LinearLayout>
     </FrameLayout>
 
 

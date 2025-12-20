@@ -13,14 +13,12 @@
         style="@style/colorToolbar"
         app:title="@string/settings" />
 
-    <androidx.appcompat.widget.SwitchCompat
+    <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switch_dark_theme"
         style="@style/colorSwitch"
         android:layout_marginTop="@dimen/button_top"
         android:paddingEnd="@dimen/switch_end"
-        android:text="@string/dark"
-
-/>
+        android:text="@string/dark" />
 
     <TextView
         android:id="@+id/share"
