@@ -2,5 +2,6 @@
 <resources>
     <color name="yp_text_grey">#FFFFFF</color>
     <color name="switcher">@color/blue</color>
+    <color name="black_white_color">#FFFFFF</color>
 
 </resources>

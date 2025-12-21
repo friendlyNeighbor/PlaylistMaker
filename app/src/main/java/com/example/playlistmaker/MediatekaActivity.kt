@@ -6,7 +6,6 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
 
 class MediatekaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,12 +19,10 @@ class MediatekaActivity : AppCompatActivity() {
             insets
         }
 
-
-
         val buttonBack = findViewById<Button>(R.id.media_back)
 
         buttonBack.setOnClickListener {
-           finish()
+            finish()
         }
 
     }

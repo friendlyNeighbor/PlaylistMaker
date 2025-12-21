@@ -7,8 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.updatePadding
-import com.bumptech.glide.Glide
+
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,19 +26,16 @@ class MainActivity : AppCompatActivity() {
         val buttonSearch = findViewById<Button>(R.id.button_search)
 
         buttonSettings.setOnClickListener {
-            val displayIntent1 = Intent(this, SettingsActivity::class.java)
-            startActivity(displayIntent1)
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
 
         buttonMedia.setOnClickListener {
-            val displayIntent2 = Intent(this, MediatekaActivity::class.java)
-            startActivity(displayIntent2)
+            startActivity(Intent(this, MediatekaActivity::class.java))
         }
 
         buttonSearch.setOnClickListener {
-            val displayIntent3 = Intent(this, SearchActivity::class.java)
-            startActivity(displayIntent3)
+            startActivity(Intent(this, SearchActivity::class.java))
         }
 
-        }
     }
+}
