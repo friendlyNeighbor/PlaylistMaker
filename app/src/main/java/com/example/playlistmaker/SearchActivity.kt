@@ -158,8 +158,7 @@ class SearchActivity : AppCompatActivity() {
     fun readSP() {
         val list = searchHistory.getTrackListHistory()
         trackListHistory.clear()
-        for (track in list)
-            trackListHistory.add(track)
+        trackListHistory.addAll(0,list)
     }
 
     @SuppressLint("NotifyDataSetChanged")
