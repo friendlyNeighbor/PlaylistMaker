@@ -20,5 +20,11 @@
     <string name="back">Назад</string>
     <string name="history_of_search">Вы искали</string>
     <string name="clear_history">Очистить историю</string>
+    <string name="trackTime">Длительность</string>
+    <string name="album">Альбом</string>
+    <string name="year">Год</string>
+    <string name="genre">Жанр</string>
+    <string name="country">Страна</string>
+    <string name="timer">00:30</string>
 
 </resources>

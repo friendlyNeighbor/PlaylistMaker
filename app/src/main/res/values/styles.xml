@@ -79,6 +79,11 @@
         <item name="cornerFamily">rounded</item>
     </style>
 
+    <style name="roundCorners8">
+        <item name="cornerSize">8dp</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+
     <style name ="errorText">
         <item name= "android:layout_width">312dp</item>
         <item name= "android:layout_height">wrap_content</item>
@@ -107,5 +112,12 @@
         <item name="backgroundTint">@color/yp_black</item>
     </style>
 
+    <style name="textTrackAttributes">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
+    </style>
 </resources>
 

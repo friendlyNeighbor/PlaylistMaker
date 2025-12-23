@@ -12,7 +12,7 @@ class SearchHistory(private val sharedPreference: SharedPreferences) {
         val trackListHistory = getTrackListHistory().toMutableList()
         trackListHistory.removeAll { it.trackId == track.trackId }
         trackListHistory.add(0, track)
-        if (trackListHistory.size > 10) {
+        if (trackListHistory.size > MAX_LENGTH_HISTORY) {
             trackListHistory.removeAt(trackListHistory.lastIndex)
         }
         val trackListHistoryJson = gson.toJson(trackListHistory)
@@ -35,6 +35,7 @@ class SearchHistory(private val sharedPreference: SharedPreferences) {
 
     companion object {
         private const val KEY_SP_SEARCH_HISTORY = "KEY_SP_SEARCH_HISTORY"
+        private const val MAX_LENGTH_HISTORY = 10
     }
 
 }
