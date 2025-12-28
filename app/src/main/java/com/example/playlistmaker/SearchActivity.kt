@@ -2,6 +2,7 @@ package com.example.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -144,6 +145,14 @@ class SearchActivity : AppCompatActivity() {
                 searchTrack(text)
             }
         }
+
+        tracksAdapter.onTrackClick = { track ->
+            goToAudioPlayer(track)
+        }
+        historyAdapter.onTrackClick = { track ->
+            goToAudioPlayer(track)
+        }
+
     } // <- end of onCreate
 
 
@@ -158,8 +167,7 @@ class SearchActivity : AppCompatActivity() {
     fun readSP() {
         val list = searchHistory.getTrackListHistory()
         trackListHistory.clear()
-        for (track in list)
-            trackListHistory.add(track)
+        trackListHistory.addAll(0,list)
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -197,7 +205,11 @@ class SearchActivity : AppCompatActivity() {
                                 result.artistName,
                                 formattedTime,
                                 result.artworkUrl100,
-                                result.trackId
+                                result.trackId,
+                                result.collectionName,
+                                result.releaseDate,
+                                result.primaryGenreName,
+                                result.country
                             )
                         )
                     }
@@ -213,6 +225,12 @@ class SearchActivity : AppCompatActivity() {
                 setViewSearch(CONNECTION_PROBLEM)
             }
         })
+    }
+
+    private fun goToAudioPlayer(track: Track) {
+        val intent = Intent(this, AudioPlayerActivity::class.java)
+        intent.putExtra("track", track)
+        startActivity(intent)
     }
 
     companion object {

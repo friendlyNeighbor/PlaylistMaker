@@ -21,5 +21,5 @@
     <dimen name="pad_18">18dp</dimen>
     <dimen name="pad_28">28dp</dimen>
     <dimen name="pad_36">36dp</dimen>
-
+    <dimen name="heightTextAttributes">32dp</dimen>
 </resources>
