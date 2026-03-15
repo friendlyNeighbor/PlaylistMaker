@@ -1,7 +1,12 @@
 package com.example.playlistmaker
 
+import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
@@ -9,8 +14,73 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
+
+    private lateinit var buttonPlay: ImageButton
+    private lateinit var viewTimer: TextView
+
+    private lateinit var time: String
+    private var mediaPlayer = MediaPlayer()
+    private var playerState = STATE_DEFAULT
+    private lateinit var url: String
+
+    val handler = Handler(Looper.getMainLooper())
+    val runSetTime = Runnable { setTime() }
+    fun setTime() {
+        time = SimpleDateFormat("mm:ss", Locale.getDefault()).format(mediaPlayer.currentPosition)
+        viewTimer.text = time
+        runTimer()
+    }
+
+    private fun runTimer() {
+        handler.postDelayed(runSetTime, 250)
+    }
+
+    private fun stopTimer() {
+        handler.removeCallbacks(runSetTime)
+    }
+
+    private fun preparePlayer() {
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            buttonPlay.isEnabled = true
+            playerState = STATE_PREPARED
+        }
+        mediaPlayer.setOnCompletionListener {
+            pausePlayer()
+            time = "00:00"
+            viewTimer.text = time
+        }
+    }
+
+    private fun startPlayer() {
+        mediaPlayer.start()
+        buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
+        playerState = STATE_PLAYING
+        runTimer()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+        playerState = STATE_PAUSED
+        stopTimer()
+    }
+
+    private fun playbackControl() {
+        when (playerState) {
+            STATE_PLAYING -> {
+                pausePlayer()
+            }
+
+            STATE_PREPARED, STATE_PAUSED -> {
+                startPlayer()
+            }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +98,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        val placeholder = findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.placeholder)
+        val placeholder =
+            findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.placeholder)
 
         val viewTrackName = findViewById<TextView>(R.id.trackName)
         val viewArtistName = findViewById<TextView>(R.id.artistName)
@@ -44,7 +115,8 @@ class AudioPlayerActivity : AppCompatActivity() {
             intent.getSerializableExtra("track") as Track
         }
 
-        Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/',"512x512bb.jpg")).into(placeholder)
+        Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
+            .into(placeholder)
         viewTrackName.text = track.trackName
         viewArtistName.text = track.artistName
         viewTrackTime.text = track.trackTime
@@ -52,6 +124,34 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewAlbum.text = track.collectionName
         viewGenre.text = track.primaryGenreName
         viewCountry.text = track.country
+        url = track.previewUrl
+        buttonPlay = findViewById(R.id.buttonPlay)
+        viewTimer = findViewById(R.id.timer)
+
+        preparePlayer()
+
+        buttonPlay.setOnClickListener {
+            playbackControl()
+        }
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        pausePlayer()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stopTimer()
+        mediaPlayer.release()
+    }
+
+    companion object {
+        private const val STATE_DEFAULT = 0
+        private const val STATE_PREPARED = 1
+        private const val STATE_PLAYING = 2
+        private const val STATE_PAUSED = 3
+    }
+
 }
