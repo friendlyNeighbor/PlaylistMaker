@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -16,18 +16,18 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import java.text.SimpleDateFormat
-import java.util.Locale
-
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
+import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.domain.models.Track
+import com.example.playlistmaker.domain.api.TrackInteractor
 
 class SearchActivity : AppCompatActivity() {
-    private val iTunesService = RetrofitClient.iTunesService
 
     private lateinit var inputEditText: EditText
     private lateinit var buttonClear: ImageView
@@ -76,9 +76,9 @@ class SearchActivity : AppCompatActivity() {
         buttonReload = findViewById(R.id.reload)
         progressBar = findViewById(R.id.progressBar)
 
-        searchHistory = SearchHistory(getSharedPreferences(SP_SEARCH_HISTORY, MODE_PRIVATE))
+        searchHistory = Creator.provideSearchHistoryInteractor(applicationContext)
 
-        val buttonBack = findViewById<androidx.appcompat.widget.Toolbar>(R.id.search_back)
+        val buttonBack = findViewById<Toolbar>(R.id.search_back)
         buttonBack.setOnClickListener {
             finish()
         }
@@ -202,45 +202,30 @@ class SearchActivity : AppCompatActivity() {
         handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
-    val searchRunnable = Runnable {
-        iTunesService.searchSong(text).enqueue(object : Callback<SearchResponse> {
-            override fun onResponse(
-                call: Call<SearchResponse>,
-                response: Response<SearchResponse>
-            ) {
-                if (response.isSuccessful) {
-                    val body = response.body()
-                    trackList.clear()
-                    body?.results?.forEach { result ->
-                        val formattedTime = SimpleDateFormat("mm:ss", Locale.getDefault())
-                            .format(result.trackTimeMillis)
-                        trackList.add(
-                            Track(
-                                result.trackName,
-                                result.artistName,
-                                formattedTime,
-                                result.artworkUrl100,
-                                result.trackId,
-                                result.collectionName,
-                                result.releaseDate,
-                                result.primaryGenreName,
-                                result.country,
-                                result.previewUrl
-                            )
-                        )
-                    }
-                    if (trackList.isEmpty()) {
-                        setViewSearch(NOT_FOUND)
-                    } else {
-                        setViewSearch(SEARCH_SUCCESSFUL)
+    val trackInteractor = Creator.provideTrackInteractor(this)
+    val searchRunnable = Runnable {searchTrack()}
+
+    fun searchTrack() {
+        trackInteractor.searchTrack(
+            text,
+            object : TrackInteractor.TrackConsumer {
+                override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
+                    handler.post {
+                        if (errorMessage != null || foundTrack == null) {
+                            setViewSearch(CONNECTION_PROBLEM)
+                        }
+                        else {
+                            trackList.clear()
+                            trackList.addAll(foundTrack)
+                            if (trackList.isEmpty()) {
+                                setViewSearch(NOT_FOUND)
+                            }
+                            else
+                                setViewSearch(SEARCH_SUCCESSFUL)
+                        }
                     }
                 }
-            }
-
-            override fun onFailure(call: Call<SearchResponse>, t: Throwable) {
-                setViewSearch(CONNECTION_PROBLEM)
-            }
-        })
+            })
     }
 
     private fun goToAudioPlayer(track: Track) {
@@ -260,10 +245,10 @@ class SearchActivity : AppCompatActivity() {
         private const val HISTORY = "HISTORY"
         private const val PROGRESS = "PROGRESS"
 
-        private const val SP_SEARCH_HISTORY = "SP_SEARCH_HISTORY"
-        lateinit var searchHistory: SearchHistory
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
         private const val CLICK_DEBOUNCE_DELAY = 1000L
+
+        lateinit var searchHistory: SearchHistoryInteractor
     }
 
 }

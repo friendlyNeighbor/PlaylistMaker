@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingTop="22dp"
-    tools:context=".AudioPlayerActivity">
+    tools:context=".presentation.AudioPlayerActivity">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/baselineLeft16"

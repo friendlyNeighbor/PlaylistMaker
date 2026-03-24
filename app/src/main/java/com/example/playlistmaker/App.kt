@@ -1,36 +1,21 @@
 package com.example.playlistmaker
 
+import android.annotation.SuppressLint
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
 
 class App : Application() {
-
-    lateinit var shrdPrefNightMode: SharedPreferences
+    @SuppressLint("SuspiciousIndentation")
 
     override fun onCreate() {
         super.onCreate()
-
-        shrdPrefNightMode = getSharedPreferences(SP_SWITCHER_THEME, MODE_PRIVATE)
-        var darkTheme = shrdPrefNightMode.getBoolean(SP_SWITCHER_THEME_KEY, false)
-        switchTheme(darkTheme)
-    }
-
-    fun switchTheme(darkThemeEnabled: Boolean) {
-        AppCompatDelegate.setDefaultNightMode(
-            if (darkThemeEnabled) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
-        )
-        shrdPrefNightMode.edit()
-            .putBoolean(SP_SWITCHER_THEME_KEY, darkThemeEnabled)
-            .apply()
+        val storageTheme = Creator.provideStorageInteractor(applicationContext, DARK_THEME)
+        val themeIsDark=storageTheme.get()
+        if(themeIsDark!=null && themeIsDark as Boolean)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 
     companion object {
-        val SP_SWITCHER_THEME = "SP_SWITCHER_THEME"
-        val SP_SWITCHER_THEME_KEY = "SP_SWITCHER_THEME_KEY"
+        const val DARK_THEME = "DARK_THEME"
     }
 }

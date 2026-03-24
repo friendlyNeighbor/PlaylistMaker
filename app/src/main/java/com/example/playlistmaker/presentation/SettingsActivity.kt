@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import android.net.Uri
@@ -6,13 +6,17 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import com.example.playlistmaker.App.Companion.SP_SWITCHER_THEME_KEY
+import com.example.playlistmaker.Creator
+import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_back)
+        val buttonBack = findViewById<Toolbar>(R.id.settings_back)
         buttonBack.setOnClickListener {
             finish()
         }
@@ -56,18 +60,26 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
-        if ((applicationContext as App).shrdPrefNightMode.getBoolean(
-                SP_SWITCHER_THEME_KEY,
-                false
-            )
-        ) {
-            themeSwitcher.setChecked(true)
-        }
-        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
-            (applicationContext as App).switchTheme(checked)
-        }
+        val storageTheme= Creator.provideStorageInteractor(applicationContext,DARK_THEME)
 
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
+        val themeIsDark=storageTheme.get()
+        if(themeIsDark!=null && themeIsDark as Boolean)
+            themeSwitcher.setChecked(true)
+
+        themeSwitcher.setOnCheckedChangeListener { switcher, checked ->
+            if(checked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            storageTheme.save(checked)
+        }
+    }
+
+    companion object {
+        const val DARK_THEME = "DARK_THEME"
     }
 
 }
