@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
@@ -11,9 +11,13 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.bumptech.glide.Glide
+import com.example.playlistmaker.R
+import com.example.playlistmaker.domain.models.Track
+import com.google.android.material.imageview.ShapeableImageView
 import java.util.Locale
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -93,13 +97,13 @@ class AudioPlayerActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar)
+        val buttonBack = findViewById<Toolbar>(R.id.toolbar)
         buttonBack.setOnClickListener {
             finish()
         }
 
         val placeholder =
-            findViewById<com.google.android.material.imageview.ShapeableImageView>(R.id.placeholder)
+            findViewById<ShapeableImageView>(R.id.placeholder)
 
         val viewTrackName = findViewById<TextView>(R.id.trackName)
         val viewArtistName = findViewById<TextView>(R.id.artistName)

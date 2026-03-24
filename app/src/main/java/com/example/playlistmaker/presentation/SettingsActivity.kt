@@ -1,4 +1,4 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.presentation
 
 import android.content.Intent
 import android.net.Uri
@@ -6,10 +6,12 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import com.example.playlistmaker.App.Companion.SP_SWITCHER_THEME_KEY
+import com.example.playlistmaker.App
+import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
@@ -24,7 +26,7 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val buttonBack = findViewById<androidx.appcompat.widget.Toolbar>(R.id.settings_back)
+        val buttonBack = findViewById<Toolbar>(R.id.settings_back)
         buttonBack.setOnClickListener {
             finish()
         }
@@ -58,7 +60,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
         if ((applicationContext as App).shrdPrefNightMode.getBoolean(
-                SP_SWITCHER_THEME_KEY,
+                App.Companion.SP_SWITCHER_THEME_KEY,
                 false
             )
         ) {
