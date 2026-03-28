@@ -1,42 +1,38 @@
-package com.example.playlistmaker
+package com.example.playlistmaker.domain
 
-import android.content.SharedPreferences
+import android.content.Context
+import com.example.playlistmaker.Creator
 import com.example.playlistmaker.domain.models.Track
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlin.collections.removeAll
 
-class SearchHistory(private val sharedPreference: SharedPreferences) {
-
+class SearchHistory(context: Context) {
     private val gson = Gson()
+    val storageTrack = Creator.provideStorageInteractor(context, TRACK_HISTORY)
 
     fun addTrackInHistory(track: Track) {
-        val trackListHistory = getTrackListHistory().toMutableList()
+        val trackListHistory = getTrackListHistory()
         trackListHistory.removeAll { it.trackId == track.trackId }
         trackListHistory.add(0, track)
         if (trackListHistory.size > MAX_LENGTH_HISTORY) {
             trackListHistory.removeAt(trackListHistory.lastIndex)
         }
         val trackListHistoryJson = gson.toJson(trackListHistory)
-        sharedPreference.edit()
-            .putString(KEY_SP_SEARCH_HISTORY, trackListHistoryJson)
-            .apply()
-    }
+        storageTrack.save(trackListHistoryJson)
+        }
 
     fun clearHistory() {
-        sharedPreference.edit()
-            .remove(KEY_SP_SEARCH_HISTORY)
-            .apply()
+        storageTrack.clear()
     }
 
     fun getTrackListHistory(): MutableList<Track> {
-        val trackListHistoryJson = sharedPreference.getString(KEY_SP_SEARCH_HISTORY, null) ?: return mutableListOf()
+        val trackListHistoryJson = storageTrack.get() ?: return mutableListOf()
         val type = object : TypeToken<ArrayList<Track>>() {}.type
-        return gson.fromJson<List<Track>?>(trackListHistoryJson, type).toMutableList()
+        return gson.fromJson<List<Track>?>(trackListHistoryJson as String, type).toMutableList()
     }
-
     companion object {
-        private const val KEY_SP_SEARCH_HISTORY = "KEY_SP_SEARCH_HISTORY"
         private const val MAX_LENGTH_HISTORY = 10
+        private const val TRACK_HISTORY = "TRACK_HISTORY"
     }
-
 }

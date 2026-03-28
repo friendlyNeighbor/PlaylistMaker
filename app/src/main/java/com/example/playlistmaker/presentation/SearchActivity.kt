@@ -22,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.SearchHistory
+import com.example.playlistmaker.domain.SearchHistory
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.TrackInteractor
 
@@ -75,7 +75,7 @@ class SearchActivity : AppCompatActivity() {
         buttonReload = findViewById(R.id.reload)
         progressBar = findViewById(R.id.progressBar)
 
-        searchHistory = SearchHistory(getSharedPreferences(SP_SEARCH_HISTORY, MODE_PRIVATE))
+        searchHistory = SearchHistory(this)
 
         val buttonBack = findViewById<Toolbar>(R.id.search_back)
         buttonBack.setOnClickListener {

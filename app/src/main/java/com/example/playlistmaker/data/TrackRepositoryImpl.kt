@@ -37,29 +37,5 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient): TrackReposi
                     Resource.Error("Ошибка сервера")
                 }
             }
-
-
-/*
-
-
-            if (response.resultCode == 200) {
-                return (response as TrackSearchResponse).results.map {
-                    Track(
-                        it.trackName,
-                        it.artistName,
-                        SimpleDateFormat("mm:ss", Locale.getDefault()).format(it.trackTimeMillis),
-                        it.artworkUrl100,
-                        it.trackId,
-                        it.collectionName,
-                        it.releaseDate,
-                        it.primaryGenreName,
-                        it.country,
-                        it.previewUrl
-                    )
-                }
-            } else {
-                return emptyList()
-            }
-            */
         }
     }
