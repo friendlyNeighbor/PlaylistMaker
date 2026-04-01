@@ -3,17 +3,13 @@ package com.example.playlistmaker.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-//import com.example.playlistmaker.App
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.Response
 import com.example.playlistmaker.data.dto.TrackSearchRequest
 
 class RetrofitClient(var context: Context): NetworkClient {
-  // val app = App()
-  // val context = app.contextApplication
     private val networkLibrary = Creator.libraryNetwork
-
     private val iTunesService: ITunesApiService = networkLibrary.create(ITunesApiService::class.java)
 
     override fun doRequest(dto: Any): Response {

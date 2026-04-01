@@ -22,7 +22,6 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.domain.api.TrackInteractor
@@ -203,7 +202,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     val trackInteractor = Creator.provideTrackInteractor(this)
-    val searchRunnable = Runnable {searchTrack()}
+    val searchRunnable = Runnable { searchTrack() }
 
     fun searchTrack() {
         trackInteractor.searchTrack(
@@ -213,14 +212,12 @@ class SearchActivity : AppCompatActivity() {
                     handler.post {
                         if (errorMessage != null || foundTrack == null) {
                             setViewSearch(CONNECTION_PROBLEM)
-                        }
-                        else {
+                        } else {
                             trackList.clear()
                             trackList.addAll(foundTrack)
                             if (trackList.isEmpty()) {
                                 setViewSearch(NOT_FOUND)
-                            }
-                            else
+                            } else
                                 setViewSearch(SEARCH_SUCCESSFUL)
                         }
                     }

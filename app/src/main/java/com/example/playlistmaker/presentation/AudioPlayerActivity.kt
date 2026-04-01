@@ -102,9 +102,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             finish()
         }
 
-        val placeholder =
-            findViewById<ShapeableImageView>(R.id.placeholder)
-
+        val placeholder = findViewById<ShapeableImageView>(R.id.placeholder)
         val viewTrackName = findViewById<TextView>(R.id.trackName)
         val viewArtistName = findViewById<TextView>(R.id.artistName)
         val viewTrackTime = findViewById<TextView>(R.id.valueTrackTime)
