@@ -3,7 +3,7 @@ package com.example.playlistmaker.data.network
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import com.example.playlistmaker.App
+import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.data.NetworkClient
 import com.example.playlistmaker.data.dto.Response

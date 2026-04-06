@@ -20,7 +20,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.App
+import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
@@ -28,7 +28,7 @@ import com.example.playlistmaker.domain.models.Track
 import com.example.playlistmaker.mvvm.search.domain.SearchState
 import com.example.playlistmaker.mvvm.search.domain.SearchStatus
 import com.example.playlistmaker.mvvm.search.domain.SearchViewModel
-import com.example.playlistmaker.presentation.AudioPlayerActivity
+import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
 
