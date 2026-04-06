@@ -17,16 +17,16 @@
             android:name=".presentation.AudioPlayerActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.SearchActivity"
+            android:name=".mvvm.search.ui.SearchActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.MediatekaActivity"
+            android:name=".mvvm.media.ui.MediatekaActivity"
             android:exported="false" />
         <activity
             android:name=".presentation.SettingsActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.MainActivity"
+            android:name=".mvvm.main.ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

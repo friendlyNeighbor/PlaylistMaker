@@ -1,6 +1,6 @@
 package com.example.playlistmaker.data
 
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.domain.api.Storage
 import com.example.playlistmaker.domain.models.Track

@@ -1,7 +1,7 @@
 package com.example.playlistmaker.domain.impl
 
 import android.content.Context
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.domain.models.Track
 

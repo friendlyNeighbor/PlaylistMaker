@@ -11,8 +11,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updatePadding
-import com.example.playlistmaker.Creator
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.R
+import com.example.playlistmaker.mvvm.main.ui.MainActivity
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {
