@@ -10,12 +10,20 @@ class App : Application() {
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate() {
         super.onCreate()
+        updateTheme()
+    }
+
+    fun updateTheme() {
         instance = this
-        val storageTheme = Creator.provideStorageInteractor(applicationContext, DARK_THEME)
-        val themeIsDark=storageTheme.get()
-        if(themeIsDark!=null && themeIsDark as Boolean)
+        val storageThemeInteractor = Creator.provideStorageInteractor(DARK_THEME)
+        val themeIsDark=storageThemeInteractor.get()
+        val isDarkMode = (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
+
+        if(themeIsDark!=null && themeIsDark as Boolean && !isDarkMode)
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
+
 
     companion object {
         const val DARK_THEME = "DARK_THEME"

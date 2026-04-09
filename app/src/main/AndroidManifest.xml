@@ -23,7 +23,7 @@
             android:name=".mvvm.media.ui.MediatekaActivity"
             android:exported="false" />
         <activity
-            android:name=".presentation.SettingsActivity"
+            android:name=".mvvm.settings.ui.SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".mvvm.main.ui.MainActivity"

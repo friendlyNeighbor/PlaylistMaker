@@ -13,10 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.mvvm.player.domain.PlayerState
-import com.example.playlistmaker.mvvm.player.domain.PlayerViewModel
-import com.example.playlistmaker.mvvm.player.domain.PlayingStatus
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.google.android.material.imageview.ShapeableImageView
 
 class AudioPlayerActivity : AppCompatActivity() {
@@ -47,9 +44,9 @@ class AudioPlayerActivity : AppCompatActivity() {
         buttonBack.setOnClickListener { finish() }
 
         val track: Track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra("track", Track::class.java) as Track
+            intent.getSerializableExtra(TRACK, Track::class.java) as Track
         } else {
-            intent.getSerializableExtra("track") as Track
+            intent.getSerializableExtra(TRACK) as Track
         }
 
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
@@ -65,7 +62,7 @@ class AudioPlayerActivity : AppCompatActivity() {
         val buttonPlay = findViewById<ImageButton>(R.id.buttonPlay)
         val viewTimer = findViewById<TextView>(R.id.timer)
 
-        val primaryState = PlayerState(PlayingStatus.DEFAULT, track, "00:00")
+        val primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
         viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(primaryState))
             .get(PlayerViewModel::class.java)
 
@@ -89,7 +86,7 @@ class AudioPlayerActivity : AppCompatActivity() {
             if(it.playingStatus == PlayingStatus.PAUSED) {
                 buttonPlay.setImageResource(R.drawable.ic_button_play_100)
             }
-            if(it.playingStatus == PlayingStatus.DEFAULT) {                 // нужен ли?
+            if(it.playingStatus == PlayingStatus.DEFAULT) {
                 buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                 buttonPlay.isEnabled = false
             }
@@ -105,5 +102,9 @@ class AudioPlayerActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.release()
+    }
+
+    companion object {
+        private const val TRACK = "TRACK"
     }
 }

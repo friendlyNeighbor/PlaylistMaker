@@ -1,17 +1,17 @@
 package com.example.playlistmaker.mvvm.creator
 
 import android.content.Context
-import com.example.playlistmaker.data.SearchHistoryRepositoryImpl
-import com.example.playlistmaker.data.StorageSharedPrefImpl
-import com.example.playlistmaker.data.TrackRepositoryImpl
-import com.example.playlistmaker.data.network.RetrofitClient
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.api.SearchHistoryRepository
-import com.example.playlistmaker.domain.api.Storage
-import com.example.playlistmaker.domain.api.TrackInteractor
-import com.example.playlistmaker.domain.api.TrackRepository
-import com.example.playlistmaker.domain.impl.SearchHistoryInteractorImpl
-import com.example.playlistmaker.domain.impl.TrackInteractorImpl
+import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
+import com.example.playlistmaker.mvvm.settings.data.StorageSharedPrefImpl
+import com.example.playlistmaker.mvvm.search.data.TrackSearchRepositoryImpl
+import com.example.playlistmaker.mvvm.search.data.network.RetrofitClient
+import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryRepository
+import com.example.playlistmaker.mvvm.settings.domain.api.Storage
+import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
+import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchRepository
+import com.example.playlistmaker.mvvm.search.domain.impl.SearchHistoryInteractorImpl
+import com.example.playlistmaker.mvvm.search.domain.impl.TrackSearchInteractorImpl
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -26,27 +26,27 @@ object Creator {
         .build()
     val librarySerializable = Gson()
 
-    private fun getTrackRepository(context: Context): TrackRepository {
-        return TrackRepositoryImpl(RetrofitClient(context))
+    private fun getTrackSearchRepository(): TrackSearchRepository {
+        return TrackSearchRepositoryImpl(RetrofitClient())
     }
 
-    fun provideTrackInteractor(context: Context): TrackInteractor {
-        return TrackInteractorImpl(getTrackRepository(context))
+    fun provideTrackSearchInteractor(): TrackSearchInteractor {
+        return TrackSearchInteractorImpl(getTrackSearchRepository())
     }
 
-    fun provideStorageInteractor(context: Context, key: String): Storage {
-        return StorageSharedPrefImpl(context, key)
-    }
-
-
-    fun provideSearchHistoryRepository(context: Context, key: String): SearchHistoryRepository {
-        return SearchHistoryRepositoryImpl(StorageSharedPrefImpl(context, key))
-    }
-
-    fun provideSearchHistoryInteractor(context: Context): SearchHistoryInteractor {
-        return SearchHistoryInteractorImpl(context)
+    fun provideStorageInteractor(key: String): Storage {
+        return StorageSharedPrefImpl(key)
     }
 
 
+    private fun getSearchHistoryRepository(): SearchHistoryRepository {
+        return SearchHistoryRepositoryImpl(StorageSharedPrefImpl(HISTORY))
+    }
+
+    fun provideSearchHistoryInteractor(): SearchHistoryInteractor {
+        return SearchHistoryInteractorImpl(getSearchHistoryRepository())
+    }
+
+    private const val HISTORY = "HISTORY"
 
 }

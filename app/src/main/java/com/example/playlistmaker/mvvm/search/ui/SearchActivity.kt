@@ -23,16 +23,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.domain.api.SearchHistoryInteractor
-import com.example.playlistmaker.domain.models.Track
-import com.example.playlistmaker.mvvm.search.domain.SearchState
-import com.example.playlistmaker.mvvm.search.domain.SearchStatus
-import com.example.playlistmaker.mvvm.search.domain.SearchViewModel
+import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
 
 class SearchActivity : AppCompatActivity() {
-
-    // изменить логику text
 
     private lateinit var viewModel: SearchViewModel
 
@@ -108,7 +103,7 @@ class SearchActivity : AppCompatActivity() {
 
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
 
-        searchHistory = Creator.provideSearchHistoryInteractor(App.instance.applicationContext)
+        searchHistory = Creator.provideSearchHistoryInteractor()
 
         buttonBack.setOnClickListener {
             finish()
@@ -195,7 +190,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun goToAudioPlayer(track: Track) {
         val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra("track", track)
+        intent.putExtra(TRACK, track)
         startActivity(intent)
     }
 
@@ -204,6 +199,7 @@ class SearchActivity : AppCompatActivity() {
         private const val TEXT_DEFAULT = ""
         private const val CLICK_DEBOUNCE_DELAY = 1000L
         lateinit var searchHistory: SearchHistoryInteractor
+        private const val TRACK = "TRACK"
     }
 }
 
