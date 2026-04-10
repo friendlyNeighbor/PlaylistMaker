@@ -1,6 +1,7 @@
 package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
+import android.media.MediaPlayer
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -18,14 +19,12 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
     private val playerLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
-    val context = Creator.getAppContext()
-
     val handler = Handler(Looper.getMainLooper())
 
-    private var mediaPlayer = Creator.mediaPlayer
+    private var mediaPlayer = MediaPlayer()
 
     private lateinit var time: String
-    private val timerZero = context.getString(R.string.timer)
+    private val timerZero = Creator.getAppContext().getString(R.string.timer)
     private var playerState = STATE_DEFAULT
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
@@ -154,7 +153,6 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
     private fun stopTimer() {
         handler.removeCallbacks(runSetTime)
     }
-
 
     companion object {
         fun getFactory(value: PlayerState): ViewModelProvider.Factory = viewModelFactory {

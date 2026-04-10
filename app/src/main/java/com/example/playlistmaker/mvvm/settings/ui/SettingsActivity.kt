@@ -28,7 +28,7 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val primaryState = SettingsState.DEFAULT
-        viewModel = ViewModelProvider(this, SettingsViewModel.Companion.getFactory(primaryState))
+        viewModel = ViewModelProvider(this, SettingsViewModel.getFactory(primaryState))
             .get(SettingsViewModel::class.java)
 
         val buttonBack = findViewById<Toolbar>(R.id.settings_back)
@@ -51,7 +51,7 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.agreement()
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial >(R.id.switch_dark_theme)
+        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
         themeSwitcher.setOnClickListener {
                 viewModel.switchTheme()
         }

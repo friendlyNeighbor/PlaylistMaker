@@ -1,7 +1,6 @@
 package com.example.playlistmaker.mvvm.creator
 
 import android.content.Context
-import android.media.MediaPlayer
 import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.mvvm.settings.data.SharedPrefRepositoryImpl
@@ -29,7 +28,6 @@ object Creator {
         .addConverterFactory(libraryConverterJson)
         .build()
     val librarySerializable = Gson()
-    val mediaPlayer = MediaPlayer()
 
     fun getAppContext(): Context {
         return App.instance.applicationContext

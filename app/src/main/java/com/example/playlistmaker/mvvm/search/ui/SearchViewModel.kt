@@ -31,7 +31,7 @@ class SearchViewModel (primaryState: SearchState) : ViewModel() {
     }
 
     fun textWasChanged(incomingText:String) {
-        text = incomingText
+        text = incomingText.trimStart()
 
         if(textInFocus) {
             val trackListHistory=searchHistoryInteractor.getTrackListHistory()

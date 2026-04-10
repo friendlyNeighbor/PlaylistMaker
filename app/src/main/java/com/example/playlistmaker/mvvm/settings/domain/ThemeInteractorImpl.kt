@@ -6,13 +6,15 @@ import com.example.playlistmaker.mvvm.settings.domain.api.ThemeInteractor
 
 class ThemeInteractorImpl(val themeStorage: Storage): ThemeInteractor {
 
-    override fun getTheme():Boolean {
+    override fun getTheme():Boolean =
+        if(themeStorage.getValue() !is Boolean)
+            false
+        else
+            themeStorage.getValue() as Boolean
 
-        return themeStorage.getValue() as Boolean
-    }
 
     override fun updateTheme() {
-        val isDarkMode = themeStorage.getValue() as Boolean
+        val isDarkMode=getTheme()
 
         if (isDarkMode) {
                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -23,7 +25,7 @@ class ThemeInteractorImpl(val themeStorage: Storage): ThemeInteractor {
     }
 
     override fun switchTheme() {
-            themeStorage.save(!(themeStorage.getValue() as Boolean))
+            themeStorage.save(!(getTheme()))
             updateTheme()
         }
 }
