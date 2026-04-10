@@ -8,7 +8,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.media.ui.MediatekaViewModel
 
 class MediatekaActivity : AppCompatActivity() {
 

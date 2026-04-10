@@ -3,12 +3,12 @@ package com.example.playlistmaker.mvvm.settings.data
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
-import com.example.playlistmaker.mvvm.App
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.settings.domain.api.Storage
 
-class StorageSharedPrefImpl(val key: String) : Storage {
+class SharedPrefRepositoryImpl(val key: String) : Storage {
 
-    val prefs: SharedPreferences = App.instance.applicationContext.getSharedPreferences(key, Context.MODE_PRIVATE)
+    val prefs: SharedPreferences = Creator.getAppContext().getSharedPreferences(key, Context.MODE_PRIVATE)
 
     override fun save(value: Any?) {
         if (value is Boolean) {
@@ -23,7 +23,7 @@ class StorageSharedPrefImpl(val key: String) : Storage {
         }
     }
 
-    override fun get(): Any? {
+    override fun getValue(): Any? {
         val all = prefs.all
         val value = all[key]
 

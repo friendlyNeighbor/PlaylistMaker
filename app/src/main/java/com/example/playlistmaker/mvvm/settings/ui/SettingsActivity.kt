@@ -1,11 +1,9 @@
 package com.example.playlistmaker.mvvm.settings.ui
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -53,25 +51,16 @@ class SettingsActivity : AppCompatActivity() {
             viewModel.agreement()
         }
 
-        val themeSwitcher = findViewById<SwitchMaterial>(R.id.switch_dark_theme)
-        themeSwitcher.setOnCheckedChangeListener { _, checked -> viewModel.switchTheme(checked) }
-
-        viewModel.updateTheme()
-
-
-        viewModel.getLiveData().observe(this) {
-            if(it == SettingsState.DAY) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-            if(it == SettingsState.NIGHT) {
-                val isDarkMode = (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) ==
-                        Configuration.UI_MODE_NIGHT_YES
-                if(!isDarkMode)
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                themeSwitcher.setChecked(true)
-            }
+        val themeSwitcher = findViewById<SwitchMaterial >(R.id.switch_dark_theme)
+        themeSwitcher.setOnClickListener {
+                viewModel.switchTheme()
         }
 
-    }
+        viewModel.updateSwitcher()
 
+        viewModel.getLiveData().observe(this) {
+            if(it == SettingsState.NIGHT && !themeSwitcher.isChecked)
+                themeSwitcher.setChecked(true)
+        }
+    }
 }

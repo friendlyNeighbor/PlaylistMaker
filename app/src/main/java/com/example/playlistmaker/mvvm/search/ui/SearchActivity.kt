@@ -20,7 +20,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor

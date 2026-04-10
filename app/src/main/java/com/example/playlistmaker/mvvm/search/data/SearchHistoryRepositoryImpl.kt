@@ -26,7 +26,7 @@ class SearchHistoryRepositoryImpl(private val storageSearchHistory: Storage): Se
     }
 
     override fun getTrackListHistory(): MutableList<Track> {
-        val trackListHistoryJson = storageSearchHistory.get() ?: return mutableListOf()
+        val trackListHistoryJson = storageSearchHistory.getValue() ?: return mutableListOf()
         val type = object : TypeToken<ArrayList<Track>>() {}.type
         return librarySerializable.fromJson<List<Track>?>(trackListHistoryJson as String, type).toMutableList()
     }

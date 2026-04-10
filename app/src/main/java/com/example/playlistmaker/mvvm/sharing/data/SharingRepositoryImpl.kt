@@ -1,14 +1,14 @@
 package com.example.playlistmaker.mvvm.sharing.data
 
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.App
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.settings.data.EmailData
 import com.example.playlistmaker.mvvm.sharing.ExternalNavigator
-import com.example.playlistmaker.mvvm.sharing.domain.SharingInteractor
+import com.example.playlistmaker.mvvm.sharing.domain.SharingRepository
 
-class SharingInteractorImpl ( private val externalNavigator: ExternalNavigator): SharingInteractor {
+class SharingRepositoryImpl (private val externalNavigator: ExternalNavigator): SharingRepository {
 
-    val context = App.Companion.instance.applicationContext
+    val context = Creator.getAppContext()
 
     override fun shareApp() {
         externalNavigator.shareLink(getShareAppLink())
@@ -31,7 +31,6 @@ class SharingInteractorImpl ( private val externalNavigator: ExternalNavigator):
         val subject = context.getString(R.string.subject_message)
         val address = context.getString(R.string.mail_adress)
         return EmailData(text, subject, address)
-
     }
 
     private fun getTermsLink(): String {

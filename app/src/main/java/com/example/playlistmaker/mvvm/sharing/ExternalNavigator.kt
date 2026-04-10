@@ -2,11 +2,11 @@ package com.example.playlistmaker.mvvm.sharing
 
 import android.content.Intent
 import androidx.core.net.toUri
-import com.example.playlistmaker.mvvm.App
+import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.settings.data.EmailData
 
 class ExternalNavigator() {
-    val context = App.Companion.instance.applicationContext
+    val context = Creator.getAppContext()
 
     fun shareLink(message:String) {
         val intent = Intent(Intent.ACTION_SEND)

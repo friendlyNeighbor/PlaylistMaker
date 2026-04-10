@@ -9,8 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.main.ui.MainState
-import com.example.playlistmaker.mvvm.main.ui.MainViewModel
 import com.example.playlistmaker.mvvm.media.ui.MediatekaActivity
 import com.example.playlistmaker.mvvm.search.ui.SearchActivity
 import com.example.playlistmaker.mvvm.settings.ui.SettingsActivity
