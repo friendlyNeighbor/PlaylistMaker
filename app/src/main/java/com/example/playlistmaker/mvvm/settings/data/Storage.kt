@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.settings.domain.api
+package com.example.playlistmaker.mvvm.settings.data
 
 interface Storage {
     fun save(value: Any?)

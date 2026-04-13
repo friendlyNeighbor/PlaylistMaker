@@ -2,38 +2,25 @@ package com.example.playlistmaker.mvvm.sharing.data
 
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.creator.Creator
-import com.example.playlistmaker.mvvm.settings.data.EmailData
-import com.example.playlistmaker.mvvm.sharing.ExternalNavigator
-import com.example.playlistmaker.mvvm.sharing.domain.SharingRepository
 
-class SharingRepositoryImpl (private val externalNavigator: ExternalNavigator): SharingRepository {
+class SharingRepositoryImpl():SharingRepository {
 
     val context = Creator.getAppContext()
 
-    override fun shareApp() {
-        externalNavigator.shareLink(getShareAppLink())
-    }
-
-    override fun openTerms() {
-        externalNavigator.openLink(getTermsLink())
-    }
-
-    override fun openSupport() {
-        externalNavigator.openEmail(getSupportEmailData())
-    }
-
-    private fun getShareAppLink(): String {
+    override fun provideLink():String {
         return context.getString(R.string.link)
     }
-
-    private fun getSupportEmailData(): EmailData {
-        val text = context.getString(R.string.text_message)
-        val subject = context.getString(R.string.subject_message)
-        val address = context.getString(R.string.mail_adress)
-        return EmailData(text, subject, address)
+    override fun provideTextMessage():String {
+        return context.getString(R.string.text_message)
     }
-
-    private fun getTermsLink(): String {
+    override fun provideSubjectMessage():String {
+        return context.getString(R.string.subject_message)
+    }
+    override fun provideEmailAddress():String {
+        return context.getString(R.string.mail_adress)
+    }
+    override fun provideLinkOffer():String {
         return context.getString(R.string.link_offer)
     }
+
 }

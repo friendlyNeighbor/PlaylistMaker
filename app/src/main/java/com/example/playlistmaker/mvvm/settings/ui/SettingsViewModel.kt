@@ -7,17 +7,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.mvvm.creator.Creator
-import com.example.playlistmaker.mvvm.sharing.ExternalNavigator
-import com.example.playlistmaker.mvvm.sharing.data.SharingRepositoryImpl
-import com.example.playlistmaker.mvvm.sharing.domain.SharingRepository
 
 class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
 
     private val settingsLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SettingsState> = settingsLiveData
 
-    val externalNavigator = ExternalNavigator()
-    val sharingRepository: SharingRepository = SharingRepositoryImpl(externalNavigator)
+    val sharingInteractor = Creator.provideSharingInteractor()
     val themeInteractor = Creator.provideThemeInteractor()
 
     fun updateSwitcher() {
@@ -30,15 +26,15 @@ class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
     }
 
     fun share() {
-        sharingRepository.shareApp()
+        sharingInteractor.shareApp()
     }
 
     fun support() {
-        sharingRepository.openSupport()
+        sharingInteractor.openSupport()
     }
 
     fun agreement() {
-        sharingRepository.openTerms()
+        sharingInteractor.openTerms()
     }
 
     fun switchTheme() {

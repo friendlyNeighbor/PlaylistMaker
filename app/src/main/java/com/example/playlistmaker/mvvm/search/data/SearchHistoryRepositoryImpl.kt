@@ -3,7 +3,7 @@ package com.example.playlistmaker.mvvm.search.data
 import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.settings.domain.api.Storage
+import com.example.playlistmaker.mvvm.settings.data.Storage
 import com.google.gson.reflect.TypeToken
 import kotlin.collections.removeAll
 

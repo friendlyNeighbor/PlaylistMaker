@@ -1,9 +1,8 @@
-package com.example.playlistmaker.mvvm.sharing
+package com.example.playlistmaker.mvvm.sharing.data
 
 import android.content.Intent
 import androidx.core.net.toUri
 import com.example.playlistmaker.mvvm.creator.Creator
-import com.example.playlistmaker.mvvm.settings.data.EmailData
 
 class ExternalNavigator() {
     val context = Creator.getAppContext()

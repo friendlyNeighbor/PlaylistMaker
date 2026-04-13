@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.core.content.edit
 import com.example.playlistmaker.mvvm.creator.Creator
-import com.example.playlistmaker.mvvm.settings.domain.api.Storage
 
 class SharedPrefRepositoryImpl(val key: String) : Storage {
 
