@@ -52,5 +52,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.constraintlayout:constraintlayout:2.2.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1")
+    implementation("androidx.activity:activity-ktx:1.6.1")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1")
 }
 
