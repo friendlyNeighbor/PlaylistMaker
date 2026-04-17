@@ -25,7 +25,7 @@ class MainViewModel(primaryState: MainState) : ViewModel() {
     fun resetState() {
         mainLiveData.postValue(MainState.WAIT)
     }
-
+/*
     companion object {
         fun getFactory(value: MainState): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -33,4 +33,6 @@ class MainViewModel(primaryState: MainState) : ViewModel() {
             }
         }
     }
+
+ */
 }

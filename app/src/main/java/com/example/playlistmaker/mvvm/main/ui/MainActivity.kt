@@ -12,9 +12,15 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.media.ui.MediatekaActivity
 import com.example.playlistmaker.mvvm.search.ui.SearchActivity
 import com.example.playlistmaker.mvvm.settings.ui.SettingsActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var viewModel: MainViewModel
+    //  private lateinit var viewModel: MainViewModel
+    private val primaryState = MainState.WAIT
+    private val viewModel: MainViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,11 +37,13 @@ class MainActivity : AppCompatActivity() {
         val buttonMedia = findViewById<Button>(R.id.button_media)
         val buttonSearch = findViewById<Button>(R.id.button_search)
 
-        val primaryState = MainState.WAIT
+        //       val primaryState = MainState.WAIT
+        /*
+                viewModel = ViewModelProvider(this,MainViewModel.getFactory(primaryState))
+                    .get(MainViewModel::class.java)
 
-        viewModel = ViewModelProvider(this,MainViewModel.getFactory(primaryState))
-            .get(MainViewModel::class.java)
 
+         */
         viewModel.getLiveData().observe(this) {
             when {
                 it == MainState.SEARCH -> {

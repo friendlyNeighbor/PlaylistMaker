@@ -1,0 +1,35 @@
+package com.example.playlistmaker.mvvm.di
+
+import com.example.playlistmaker.mvvm.main.ui.MainState
+import com.example.playlistmaker.mvvm.main.ui.MainViewModel
+import com.example.playlistmaker.mvvm.media.ui.MediatekaViewModel
+import com.example.playlistmaker.mvvm.player.ui.PlayerState
+import com.example.playlistmaker.mvvm.player.ui.PlayerViewModel
+import com.example.playlistmaker.mvvm.search.ui.SearchState
+import com.example.playlistmaker.mvvm.search.ui.SearchViewModel
+import com.example.playlistmaker.mvvm.settings.ui.SettingsState
+import com.example.playlistmaker.mvvm.settings.ui.SettingsViewModel
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.dsl.module
+
+val viewModelModule = module {
+    viewModel { (primaryState: MainState) ->
+        MainViewModel(primaryState)
+    }
+
+    viewModel { (primaryState: Boolean) ->
+        MediatekaViewModel(primaryState)
+    }
+
+    viewModel { (primaryState: PlayerState) ->
+        PlayerViewModel(primaryState)
+    }
+
+    viewModel { (primaryState: SearchState) ->
+        SearchViewModel(primaryState)
+    }
+
+    viewModel { (primaryState: SettingsState) ->
+        SettingsViewModel(primaryState)
+    }
+}

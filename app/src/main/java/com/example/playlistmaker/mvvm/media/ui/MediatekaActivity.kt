@@ -8,11 +8,20 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MediatekaActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: MediatekaViewModel
+    private val primaryState = false
+    private val viewModel: MediatekaViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
+
+//    private lateinit var viewModel: MediatekaViewModel
     private lateinit var button: Button
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,11 +33,13 @@ class MediatekaActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
+/*
         val primaryState = false
         viewModel = ViewModelProvider(this,MediatekaViewModel.getFactory(primaryState))
             .get(MediatekaViewModel::class.java)
 
+
+ */
         viewModel.getLiveData().observe(this) {
             if(it)
                 finish()

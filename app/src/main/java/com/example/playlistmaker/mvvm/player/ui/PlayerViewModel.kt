@@ -155,11 +155,13 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
     }
 
     companion object {
-        fun getFactory(value: PlayerState): ViewModelProvider.Factory = viewModelFactory {
+    /*    fun getFactory(value: PlayerState): ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 PlayerViewModel(value)
             }
         }
+
+     */
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2

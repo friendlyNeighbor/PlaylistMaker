@@ -25,10 +25,12 @@ import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SearchActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SearchViewModel
+    //private lateinit var viewModel: SearchViewModel
 
     private lateinit var inputEditText: EditText
     private lateinit var buttonClear: ImageView
@@ -49,6 +51,11 @@ class SearchActivity : AppCompatActivity() {
     private val historyAdapter = TrackAdapter(trackListHistory)
 
     private var text: String = TEXT_DEFAULT
+
+    private val primaryState = SearchState(SearchStatus.CLEAR, trackList)
+    private val viewModel: SearchViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -95,10 +102,12 @@ class SearchActivity : AppCompatActivity() {
                 goToAudioPlayer(track)
             }
         }
-
+/*
         val primaryState = SearchState(SearchStatus.CLEAR, trackList)
         viewModel = ViewModelProvider(this, SearchViewModel.getFactory(primaryState))
             .get(SearchViewModel::class.java)
+
+ */
 
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
 

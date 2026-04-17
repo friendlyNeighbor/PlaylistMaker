@@ -86,11 +86,14 @@ class SearchViewModel (primaryState: SearchState) : ViewModel() {
     }
 
         companion object {
+            /*
             fun getFactory(value: SearchState): ViewModelProvider.Factory = viewModelFactory {
                 initializer {
                     SearchViewModel(value)
                 }
             }
+
+             */
 
             private const val SEARCH_DEBOUNCE_DELAY = 2000L
         }

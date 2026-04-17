@@ -40,7 +40,7 @@ class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
     fun switchTheme() {
         themeInteractor.switchTheme()
     }
-
+/*
     companion object {
         fun getFactory(value: SettingsState): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -48,4 +48,6 @@ class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
             }
         }
     }
+
+ */
 }

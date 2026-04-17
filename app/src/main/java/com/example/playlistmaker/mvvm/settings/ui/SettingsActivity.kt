@@ -11,10 +11,16 @@ import androidx.core.view.updatePadding
 import androidx.lifecycle.ViewModelProvider
 import com.example.playlistmaker.R
 import com.google.android.material.switchmaterial.SwitchMaterial
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class SettingsActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: SettingsViewModel
+    private val primaryState = SettingsState.DEFAULT
+    private val viewModel: SettingsViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,9 +33,11 @@ class SettingsActivity : AppCompatActivity() {
             insets
         }
 
-        val primaryState = SettingsState.DEFAULT
+        /*
         viewModel = ViewModelProvider(this, SettingsViewModel.getFactory(primaryState))
             .get(SettingsViewModel::class.java)
+
+         */
 
         val buttonBack = findViewById<Toolbar>(R.id.settings_back)
         buttonBack.setOnClickListener {

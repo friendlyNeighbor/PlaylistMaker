@@ -15,7 +15,7 @@ class MediatekaViewModel(primaryState: Boolean) : ViewModel() {
     fun finishActivity() {
         mediatekaLiveData.postValue(true)
     }
-
+/*
     companion object {
         fun getFactory(value: Boolean): ViewModelProvider.Factory = viewModelFactory {
             initializer {
@@ -23,4 +23,6 @@ class MediatekaViewModel(primaryState: Boolean) : ViewModel() {
             }
         }
     }
+
+ */
 }

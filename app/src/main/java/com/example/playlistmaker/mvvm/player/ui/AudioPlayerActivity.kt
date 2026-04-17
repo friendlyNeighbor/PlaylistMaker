@@ -15,10 +15,20 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.google.android.material.imageview.ShapeableImageView
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class AudioPlayerActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: PlayerViewModel
+    private lateinit var primaryState:PlayerState
+    private val viewModel: PlayerViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
+  //
+  //  private val primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
+  //  private val viewModel: PlayerViewModel by viewModel() {
+  //      parametersOf(primaryState)
+  //  }
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,9 +72,11 @@ class AudioPlayerActivity : AppCompatActivity() {
         val buttonPlay = findViewById<ImageButton>(R.id.buttonPlay)
         val viewTimer = findViewById<TextView>(R.id.timer)
 
-        val primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
+        primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
+        /*
         viewModel = ViewModelProvider(this, PlayerViewModel.Companion.getFactory(primaryState))
             .get(PlayerViewModel::class.java)
+       */
 
         viewModel.prepared()
 
