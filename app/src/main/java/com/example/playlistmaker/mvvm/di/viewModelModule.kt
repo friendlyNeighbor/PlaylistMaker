@@ -13,6 +13,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
+
     viewModel { (primaryState: MainState) ->
         MainViewModel(primaryState)
     }
@@ -22,14 +23,15 @@ val viewModelModule = module {
     }
 
     viewModel { (primaryState: PlayerState) ->
-        PlayerViewModel(primaryState)
+        PlayerViewModel(primaryState, get())
     }
 
     viewModel { (primaryState: SearchState) ->
-        SearchViewModel(primaryState)
+        SearchViewModel(primaryState, get(), get())
     }
 
     viewModel { (primaryState: SettingsState) ->
-        SettingsViewModel(primaryState)
+        SettingsViewModel(primaryState, get(), get())
     }
+
 }

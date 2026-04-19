@@ -1,14 +1,13 @@
 package com.example.playlistmaker.mvvm.search.data
 
-import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryRepository
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.settings.data.Storage
+import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlin.collections.removeAll
 
-class SearchHistoryRepositoryImpl(private val storageSearchHistory: Storage): SearchHistoryRepository {
-    private val librarySerializable = Creator.librarySerializable
+class SearchHistoryRepositoryImpl(private val storageSearchHistory: Storage, private val librarySerializable:Gson): SearchHistoryRepository {
 
     override fun addTrackInHistory(track: Track) {
         val trackListHistory = getTrackListHistory()

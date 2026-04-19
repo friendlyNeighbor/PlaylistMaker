@@ -5,14 +5,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import com.example.playlistmaker.mvvm.search.data.dto.Response
 import com.example.playlistmaker.mvvm.search.data.dto.TrackSearchRequest
-import com.example.playlistmaker.mvvm.App
-import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 
-class RetrofitClient(): NetworkClient {
-    val context = App.Companion.instance.applicationContext
-    private val networkLibrary = Creator.libraryNetwork
-    private val iTunesService: ITunesApiService = networkLibrary.create(ITunesApiService::class.java)
+
+class RetrofitClient(val iTunesApiService:ITunesApiService, private val context: Context): NetworkClient {
 
     override fun doRequest(dto: Any): Response {
         if (isConnected() == false) {
@@ -21,7 +17,7 @@ class RetrofitClient(): NetworkClient {
         if (dto !is TrackSearchRequest) {
             return Response().apply { resultCode = 400 }
         }
-        val response = iTunesService.searchSong(dto.expression).execute()
+        val response = iTunesApiService.searchSong(dto.expression).execute()
         val body = response.body()
         return if (body != null) {
             body.apply { resultCode = response.code() }
@@ -43,4 +39,5 @@ class RetrofitClient(): NetworkClient {
         }
         return false
     }
+
 }

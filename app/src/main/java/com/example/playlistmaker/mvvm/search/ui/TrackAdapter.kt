@@ -20,7 +20,6 @@ class TrackAdapter(val trackList: MutableList<Track>): RecyclerView.Adapter<Trac
         holder.bind(track)
         holder.itemView.setOnClickListener {
                 onTrackClick?.invoke(track)
-                SearchActivity.searchHistory.addTrackInHistory(track)
         }
     }
 

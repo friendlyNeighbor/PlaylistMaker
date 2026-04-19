@@ -1,10 +1,12 @@
 package com.example.playlistmaker.mvvm.creator
 
+/*
 import android.content.Context
 import com.example.playlistmaker.mvvm.App
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.mvvm.settings.data.SharedPrefRepositoryImpl
 import com.example.playlistmaker.mvvm.search.data.TrackSearchRepositoryImpl
+import com.example.playlistmaker.mvvm.search.data.network.ITunesApiService
 import com.example.playlistmaker.mvvm.search.data.network.RetrofitClient
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryRepository
@@ -23,16 +25,17 @@ import com.example.playlistmaker.mvvm.sharing.domain.SharingInteractorImpl
 import com.google.gson.Gson
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
+*/
 object Creator {
-
+/*
     private const val BASE_URL = "https://itunes.apple.com/"
     val libraryConverterJson = GsonConverterFactory.create()
     val libraryNetwork = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(libraryConverterJson)
         .build()
-    val librarySerializable = Gson()
+
+     val librarySerializable = Gson()
 
     fun getAppContext(): Context {
         return App.instance.applicationContext
@@ -66,4 +69,6 @@ object Creator {
     private const val HISTORY = "HISTORY"
     private const val DARK_THEME = "DARK_THEME"
 
+
+     */
 }
