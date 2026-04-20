@@ -1,11 +1,10 @@
 package com.example.playlistmaker.mvvm.sharing.data
 
+import android.content.Context
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.creator.Creator
 
-class SharingRepositoryImpl():SharingRepository {
 
-    val context = Creator.getAppContext()
+class SharingRepositoryImpl(private val context: Context):SharingRepository {
 
     override fun provideLink():String {
         return context.getString(R.string.link)

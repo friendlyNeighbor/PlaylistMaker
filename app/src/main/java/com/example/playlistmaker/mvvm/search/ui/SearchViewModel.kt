@@ -1,21 +1,22 @@
 package com.example.playlistmaker.mvvm.search.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.creator.Creator
+import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
+import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 
-class SearchViewModel (primaryState: SearchState) : ViewModel() {
 
-    private val searchHistoryInteractor = Creator.provideSearchHistoryInteractor()
-    private val trackSearchInteractor = Creator.provideTrackSearchInteractor()
+class SearchViewModel (
+    val primaryState: SearchState,
+    val trackSearchInteractor: TrackSearchInteractor,
+    val searchHistoryInteractor: SearchHistoryInteractor) : ViewModel() {
 
     private val searchLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SearchState> = searchLiveData
@@ -85,13 +86,15 @@ class SearchViewModel (primaryState: SearchState) : ViewModel() {
             })
     }
 
-        companion object {
-            fun getFactory(value: SearchState): ViewModelProvider.Factory = viewModelFactory {
-                initializer {
-                    SearchViewModel(value)
-                }
-            }
+    fun goToPlayer(track:Track, context: Context) {
+        searchHistoryInteractor.addTrackInHistory(track)
+        val intent = Intent(context, AudioPlayerActivity::class.java)
+        intent.putExtra(TRACK, track)
+        context.startActivity(intent)
+    }
 
+        companion object {
             private const val SEARCH_DEBOUNCE_DELAY = 2000L
+            private const val TRACK = "TRACK"
         }
     }

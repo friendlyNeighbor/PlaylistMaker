@@ -7,24 +7,16 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.creator.Creator
 import java.util.Locale
 
-class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
+class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPlayer) : ViewModel() {
 
     private val playerLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
     val handler = Handler(Looper.getMainLooper())
 
-    private var mediaPlayer = MediaPlayer()
-
     private lateinit var time: String
-    private val timerZero = Creator.getAppContext().getString(R.string.timer)
     private var playerState = STATE_DEFAULT
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
@@ -38,7 +30,7 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
             val url: String = currentState.playingTrack.previewUrl
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
-            time=timerZero
+            time=TIMER_ZERO
             mediaPlayer.setOnPreparedListener {
                 playerLiveData.postValue(
                     PlayerState(
@@ -50,19 +42,18 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
                 playerState = STATE_PREPARED
             }
             mediaPlayer.setOnCompletionListener {
-                time=timerZero
+                time=TIMER_ZERO
                 pausePlayer()
                 playerLiveData.postValue(
                     PlayerState(
                         PlayingStatus.PREPARED,
                         currentState.playingTrack,
-                        timerZero
+                        TIMER_ZERO
                     )
                 )
             }
         }
     }
-
 
     fun pause() {
         pausePlayer()
@@ -83,7 +74,6 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
         }
     }
 
-
     fun playbackControl() {
         when (playerState) {
             STATE_PLAYING -> {
@@ -94,7 +84,6 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
             }
         }
     }
-
     private fun startPlayer() {
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
@@ -110,7 +99,6 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
             runTimer()
         }
     }
-
 
     private fun runTimer() {
         handler.postDelayed(runSetTime, 250)
@@ -133,13 +121,12 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
         }
     }
 
-
     fun release() {
         stopTimer()
         mediaPlayer.release()
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
-            time=timerZero
+            time=TIMER_ZERO
             playerLiveData.postValue(
                 PlayerState(
                     PlayingStatus.DEFAULT,
@@ -149,20 +136,16 @@ class PlayerViewModel(primaryState: PlayerState) : ViewModel() {
             )
         }
     }
-
     private fun stopTimer() {
         handler.removeCallbacks(runSetTime)
     }
 
     companion object {
-        fun getFactory(value: PlayerState): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                PlayerViewModel(value)
-            }
-        }
         private const val STATE_DEFAULT = 0
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
+
+        private val TIMER_ZERO = "00:00"
     }
 }

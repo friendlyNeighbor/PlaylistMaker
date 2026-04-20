@@ -1,6 +1,5 @@
 package com.example.playlistmaker.mvvm.search.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,39 +7,19 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.RecyclerView
-import com.example.playlistmaker.mvvm.creator.Creator
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
+import com.example.playlistmaker.databinding.ActivitySearchBinding
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
-class SearchActivity : AppCompatActivity() {
+class SearchActivity: AppCompatActivity() {
 
-    private lateinit var viewModel: SearchViewModel
-
-    private lateinit var inputEditText: EditText
-    private lateinit var buttonClear: ImageView
-    private lateinit var recyclerTrackList: RecyclerView
-    private lateinit var viewErrorSearch: LinearLayout
-    private lateinit var viewErrorConnection: LinearLayout
-    private lateinit var buttonReload: View
-    private lateinit var viewHistorySearch: LinearLayout
-    private lateinit var recyclerHistory: RecyclerView
-    private lateinit var progressBar: ProgressBar
-    private lateinit var buttonBack: Toolbar
-    private lateinit var buttonClearHistory: Button
+    private lateinit var binding: ActivitySearchBinding
 
     private val trackList: MutableList<Track> = mutableListOf()
     private val tracksAdapter = TrackAdapter(trackList)
@@ -49,6 +28,11 @@ class SearchActivity : AppCompatActivity() {
     private val historyAdapter = TrackAdapter(trackListHistory)
 
     private var text: String = TEXT_DEFAULT
+
+    private val primaryState = SearchState(SearchStatus.CLEAR, trackList)
+    private val viewModel: SearchViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -62,53 +46,37 @@ class SearchActivity : AppCompatActivity() {
         }
 
         enableEdgeToEdge()
-        setContentView(R.layout.activity_search)
+        binding = ActivitySearchBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
 
-        recyclerTrackList = findViewById(R.id.recycler)
-        recyclerHistory = findViewById(R.id.recycler_history)
-        viewErrorSearch = findViewById(R.id.not_found)
-        viewErrorConnection = findViewById(R.id.connection_problem)
-        viewHistorySearch = findViewById(R.id.history_of_search)
-        buttonReload = findViewById(R.id.reload)
-        progressBar = findViewById(R.id.progressBar)
-        buttonBack = findViewById(R.id.search_back)
-        inputEditText = findViewById(R.id.edit_text)
-        buttonClear = findViewById(R.id.clear_search)
-        buttonClearHistory = findViewById(R.id.clear_history)
-
-        recyclerTrackList.adapter = tracksAdapter
-        recyclerHistory.adapter = historyAdapter
+        binding.recycler.adapter = tracksAdapter
+        binding.recyclerHistory.adapter = historyAdapter
 
         tracksAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
-                goToAudioPlayer(track)
+                viewModel.goToPlayer(track, this@SearchActivity)
             }
         }
 
         historyAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
-                goToAudioPlayer(track)
+                viewModel.goToPlayer(track, this@SearchActivity)
             }
         }
 
-        val primaryState = SearchState(SearchStatus.CLEAR, trackList)
-        viewModel = ViewModelProvider(this, SearchViewModel.getFactory(primaryState))
-            .get(SearchViewModel::class.java)
-
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
 
-        searchHistory = Creator.provideSearchHistoryInteractor()
-
-        buttonBack.setOnClickListener {
+        binding.searchBack.setOnClickListener {
             finish()
         }
 
         val simpleTextWatcher = object : TextWatcher {
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 text=s.toString()
@@ -116,26 +84,25 @@ class SearchActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {}
         }
-        inputEditText.addTextChangedListener(simpleTextWatcher)
-        inputEditText.setOnFocusChangeListener { _, hasFocus ->
+        binding.editText.addTextChangedListener(simpleTextWatcher)
+        binding.editText.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 viewModel.editTextInFocus()
                 viewModel.textWasChanged(text)
             }
         }
-        buttonClear.setOnClickListener {
-            inputEditText.setText("")
-            inputMethodManager?.hideSoftInputFromWindow(inputEditText.windowToken, 0)
+        binding.clearSearch.setOnClickListener {
+            binding.editText.setText("")
+            inputMethodManager?.hideSoftInputFromWindow(binding.editText.windowToken, 0)
         }
 
-        buttonClearHistory.setOnClickListener {
+        binding.clearHistory.setOnClickListener {
             viewModel.clearHistory()
         }
 
-        buttonReload.setOnClickListener {
+        binding.reload.setOnClickListener {
             viewModel.textWasChanged(text)
         }
-
 
         viewModel.getLiveData().observe(this) {
            if(it.searchStatus == SearchStatus.HISTORY) {
@@ -152,29 +119,30 @@ class SearchActivity : AppCompatActivity() {
     } // end of onCreate()
 
     private fun setViewSearch(reason: SearchStatus) {
-
         tracksAdapter.notifyDataSetChanged()
         historyAdapter.notifyDataSetChanged()
 
-        viewErrorSearch.visibility = View.GONE
-        viewErrorConnection.visibility = View.GONE
-        recyclerTrackList.visibility = View.GONE
-        viewHistorySearch.visibility = View.GONE
+    binding.apply {
+        notFound.visibility = View.GONE
+        connectionProblem.visibility = View.GONE
+        recycler.visibility = View.GONE
+        historyOfSearch.visibility = View.GONE
         progressBar.visibility = View.GONE
-        buttonClear.visibility = View.VISIBLE
-
+        clearSearch.visibility = View.VISIBLE
+    }
         when (reason) {
-            SearchStatus.CONNECTION_PROBLEM -> viewErrorConnection.visibility = View.VISIBLE
-            SearchStatus.NOT_FOUND -> viewErrorSearch.visibility = View.VISIBLE
-            SearchStatus.SEARCH_SUCCESSFUL -> recyclerTrackList.visibility = View.VISIBLE
+            SearchStatus.CONNECTION_PROBLEM -> binding.connectionProblem.visibility = View.VISIBLE
+            SearchStatus.NOT_FOUND -> binding.notFound.visibility = View.VISIBLE
+            SearchStatus.SEARCH_SUCCESSFUL -> binding.recycler.visibility = View.VISIBLE
             SearchStatus.HISTORY -> {
-                viewHistorySearch.visibility = View.VISIBLE
-                buttonClear.visibility = View.GONE
+                binding.historyOfSearch.visibility = View.VISIBLE
+                binding.clearSearch.visibility = View.GONE
             }
-            SearchStatus.PROGRESS ->  progressBar.visibility = View.VISIBLE
-            SearchStatus.CLEAR ->  buttonClear.visibility = View.GONE
+            SearchStatus.PROGRESS ->  binding.progressBar.visibility = View.VISIBLE
+            SearchStatus.CLEAR ->  binding.clearSearch.visibility = View.GONE
         }
     }
+
     private val handler = Handler(Looper.getMainLooper())
     private var isClickAllowed = true
 
@@ -187,18 +155,10 @@ class SearchActivity : AppCompatActivity() {
         return current
     }
 
-    private fun goToAudioPlayer(track: Track) {
-        val intent = Intent(this, AudioPlayerActivity::class.java)
-        intent.putExtra(TRACK, track)
-        startActivity(intent)
-    }
-
     companion object {
         private const val TEXT = "TEXT"
         private const val TEXT_DEFAULT = ""
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        lateinit var searchHistory: SearchHistoryInteractor
-        private const val TRACK = "TRACK"
     }
 }
 

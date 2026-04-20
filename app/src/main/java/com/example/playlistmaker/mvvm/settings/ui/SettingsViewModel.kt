@@ -3,18 +3,13 @@ package com.example.playlistmaker.mvvm.settings.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
-import com.example.playlistmaker.mvvm.creator.Creator
+import com.example.playlistmaker.mvvm.settings.domain.api.ThemeInteractor
+import com.example.playlistmaker.mvvm.sharing.domain.SharingInteractor
 
-class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
+class SettingsViewModel(primaryState: SettingsState, private val sharingInteractor: SharingInteractor, private val themeInteractor: ThemeInteractor) : ViewModel() {
 
     private val settingsLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SettingsState> = settingsLiveData
-
-    val sharingInteractor = Creator.provideSharingInteractor()
-    val themeInteractor = Creator.provideThemeInteractor()
 
     fun updateSwitcher() {
         val darkModeOn = themeInteractor.getTheme()
@@ -39,13 +34,5 @@ class SettingsViewModel(primaryState: SettingsState) : ViewModel() {
 
     fun switchTheme() {
         themeInteractor.switchTheme()
-    }
-
-    companion object {
-        fun getFactory(value: SettingsState): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SettingsViewModel(value)
-            }
-        }
     }
 }
