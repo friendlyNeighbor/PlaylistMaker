@@ -19,7 +19,7 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
 
-    single<TrackSearchRepository> {
+    factory<TrackSearchRepository> {
         TrackSearchRepositoryImpl(get())
     }
 
@@ -27,7 +27,7 @@ val repositoryModule = module {
         RetrofitClient(get(), get())
     }
 
-    single<SearchHistoryRepository> {
+    factory<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(get(named(HISTORY)), get())
     }
 
@@ -35,7 +35,7 @@ val repositoryModule = module {
         SharedPrefRepositoryImpl(HISTORY, get())
     }
 
-    single<ThemeSwitcher> {
+    factory<ThemeSwitcher> {
         ThemeSwitcherImpl()
     }
 
@@ -43,11 +43,11 @@ val repositoryModule = module {
         SharedPrefRepositoryImpl(DARK_THEME, get())
     }
 
-    single {
+    factory {
         ExternalNavigator(get())
     }
 
-    single<SharingRepository> {
+    factory<SharingRepository> {
         SharingRepositoryImpl(get())
     }
 

@@ -27,7 +27,7 @@ class SearchHistoryRepositoryImpl(private val storageSearchHistory: Storage, pri
     override fun getTrackListHistory(): MutableList<Track> {
         val trackListHistoryJson = storageSearchHistory.getValue() ?: return mutableListOf()
         val type = object : TypeToken<ArrayList<Track>>() {}.type
-        return librarySerializable.fromJson<List<Track>?>(trackListHistoryJson as String, type).toMutableList()
+        return librarySerializable.fromJson<List<Track>>(trackListHistoryJson as String, type).toMutableList()
     }
     companion object {
         private const val MAX_LENGTH_HISTORY = 10
