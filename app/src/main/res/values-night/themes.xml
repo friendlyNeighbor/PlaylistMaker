@@ -13,7 +13,7 @@
 
         <item name="android:navigationBarColor">@color/yp_black</item>
         <item name="android:statusBarColor">@color/yp_black</item>
-        <item name="colorAccent"> @color/switcher </item> -->
+        <item name="colorAccent"> @color/switcher </item>
 
       </style>
   </resources>
