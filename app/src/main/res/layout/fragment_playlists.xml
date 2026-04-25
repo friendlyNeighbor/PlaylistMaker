@@ -15,7 +15,7 @@
 
         <Button
             android:id="@+id/reload"
-            style="@style/buttonReloadColor"
+            style="@style/buttonReload"
             android:layout_width="133dp"
             android:layout_height="36dp"
             android:layout_marginTop="24dp"

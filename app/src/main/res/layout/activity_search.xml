@@ -97,7 +97,7 @@
 
             <Button
                 android:id="@+id/reload"
-                style="@style/buttonReloadColor"
+                style="@style/buttonReload"
                 android:layout_width="91dp"
                 android:layout_height="36dp"
                 android:layout_marginTop="24dp"
@@ -138,7 +138,7 @@
 
             <Button
                 android:id="@+id/clear_history"
-                style="@style/buttonReloadColor"
+                style="@style/buttonReload"
                 android:layout_width="148dp"
                 android:layout_height="36dp"
                 android:layout_gravity="center_horizontal|top"
