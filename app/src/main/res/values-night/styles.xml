@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name= "colorSearchField" parent="searchField">
+    <style name="colorSearchField" parent="searchField">
         <item name="android:textColorHint">@color/yp_black</item>
-        <item name= "android:backgroundTint"> @color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 
     <style name="colorSwitch" parent="settingButtons">
@@ -13,11 +13,6 @@
     <style name="colorToolbar" parent="toolbar">
         <item name="titleTextColor">@color/white</item>
         <item name="backgroundTint">@color/yp_black</item>
-    </style>
-
-    <style name="buttonReloadColor" parent="buttonReload">
-        <item name="android:textColor">@color/yp_black</item>
-        <item name="backgroundTint">@color/white</item>
     </style>
 
 </resources>

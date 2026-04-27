@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.ActivityMediatekaBinding
+import com.google.android.material.tabs.TabLayoutMediator
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -16,6 +17,7 @@ class MediatekaActivity : AppCompatActivity() {
     private val viewModel: MediatekaViewModel by viewModel() {
         parametersOf(primaryState)
     }
+    private lateinit var tabMediator: TabLayoutMediator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,13 +30,28 @@ class MediatekaActivity : AppCompatActivity() {
             insets
         }
 
+        val adapter = PagerAdapter(this)
+        binding.pager.adapter = adapter
 
-        binding.mediaBack.setOnClickListener {
+        tabMediator=TabLayoutMediator(binding.tabLayout, binding.pager) { tab, position ->
+            when(position) {
+                0 -> tab.text = getString(R.string.favorites)
+                1 -> tab.text = getString(R.string.playlists)
+            }
+        }
+        tabMediator.attach()
+
+        binding.toolbar.setOnClickListener {
             viewModel.finishActivity()
         }
         viewModel.getLiveData().observe(this) {
             if(it)
                 finish()
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        tabMediator.detach()
     }
 }
