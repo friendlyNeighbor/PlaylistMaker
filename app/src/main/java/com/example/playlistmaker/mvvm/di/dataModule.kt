@@ -17,7 +17,7 @@ val dataModule = module {
             .create(ITunesApiService::class.java)
     }
 
-    factory{ Gson() }
+    factory { Gson() }
 
-    factory{ MediaPlayer() }
+    factory { MediaPlayer() }
 }

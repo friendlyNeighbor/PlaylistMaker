@@ -9,7 +9,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.Locale
 
-class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPlayer) : ViewModel() {
+class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer) :
+    ViewModel() {
 
     private val playerLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
@@ -24,13 +25,14 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
     fun prepared() {
         preparePlayer()
     }
+
     private fun preparePlayer() {
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
             val url: String = currentState.playingTrack.previewUrl
             mediaPlayer.setDataSource(url)
             mediaPlayer.prepareAsync()
-            time=TIMER_ZERO
+            time = TIMER_ZERO
             mediaPlayer.setOnPreparedListener {
                 playerLiveData.postValue(
                     PlayerState(
@@ -42,7 +44,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
                 playerState = STATE_PREPARED
             }
             mediaPlayer.setOnCompletionListener {
-                time=TIMER_ZERO
+                time = TIMER_ZERO
                 pausePlayer()
                 playerLiveData.postValue(
                     PlayerState(
@@ -58,6 +60,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
     fun pause() {
         pausePlayer()
     }
+
     private fun pausePlayer() {
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
@@ -79,11 +82,13 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
             STATE_PLAYING -> {
                 pausePlayer()
             }
+
             STATE_PREPARED, STATE_PAUSED -> {
                 startPlayer()
             }
         }
     }
+
     private fun startPlayer() {
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
@@ -126,7 +131,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
         mediaPlayer.release()
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
-            time=TIMER_ZERO
+            time = TIMER_ZERO
             playerLiveData.postValue(
                 PlayerState(
                     PlayingStatus.DEFAULT,
@@ -136,6 +141,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer:MediaPl
             )
         }
     }
+
     private fun stopTimer() {
         handler.removeCallbacks(runSetTime)
     }

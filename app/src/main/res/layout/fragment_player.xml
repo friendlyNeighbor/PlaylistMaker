@@ -6,8 +6,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="22dp"
-    tools:context=".mvvm.player.ui.AudioPlayerActivity">
+    tools:context=".mvvm.player.ui.PlayerFragment">
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/baselineLeft16"
@@ -43,7 +42,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        style="@style/colorToolbar"
+        style="@style/colorToolbarWithArrow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

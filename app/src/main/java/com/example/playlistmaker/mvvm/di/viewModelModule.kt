@@ -1,9 +1,6 @@
 package com.example.playlistmaker.mvvm.di
 
-import com.example.playlistmaker.mvvm.main.ui.MainState
-import com.example.playlistmaker.mvvm.main.ui.MainViewModel
 import com.example.playlistmaker.mvvm.media.ui.FavoritesViewModel
-import com.example.playlistmaker.mvvm.media.ui.MediatekaViewModel
 import com.example.playlistmaker.mvvm.media.ui.PlaylistsViewModel
 import com.example.playlistmaker.mvvm.player.ui.PlayerState
 import com.example.playlistmaker.mvvm.player.ui.PlayerViewModel
@@ -15,14 +12,6 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-
-    viewModel { (primaryState: MainState) ->
-        MainViewModel(primaryState)
-    }
-
-    viewModel { (primaryState: Boolean) ->
-        MediatekaViewModel(primaryState)
-    }
 
     viewModel { (primaryState: PlayerState) ->
         PlayerViewModel(primaryState, get())

@@ -3,6 +3,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:name=".mvvm.App"
         android:allowBackup="true"
@@ -13,24 +14,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlaylistMaker">
+
         <activity
-            android:name=".mvvm.player.ui.AudioPlayerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".mvvm.search.ui.SearchActivity"
-            android:exported="false" />
-        <activity
-            android:name=".mvvm.media.ui.MediatekaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".mvvm.settings.ui.SettingsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".fragments.MainActivity"
-            android:exported="true">
+            android:name=".mvvm.main.ui.MainActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

@@ -1,25 +1,25 @@
 package com.example.playlistmaker.mvvm.search.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.activity.enableEdgeToEdge
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivitySearchBinding
+import com.example.playlistmaker.databinding.FragmentSearchBinding
+import com.example.playlistmaker.mvvm.player.ui.PlayerFragment
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class SearchActivity: AppCompatActivity() {
-
-    private lateinit var binding: ActivitySearchBinding
+class SearchFragment : Fragment() {
 
     private val trackList: MutableList<Track> = mutableListOf()
     private val tracksAdapter = TrackAdapter(trackList)
@@ -34,47 +34,43 @@ class SearchActivity: AppCompatActivity() {
         parametersOf(primaryState)
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(TEXT, text)
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if (savedInstanceState != null) {
-            text = savedInstanceState.getString(TEXT, TEXT_DEFAULT)
-        }
-
-        enableEdgeToEdge()
-        binding = ActivitySearchBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.search)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.recycler.adapter = tracksAdapter
         binding.recyclerHistory.adapter = historyAdapter
 
         tracksAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
-                viewModel.goToPlayer(track, this@SearchActivity)
+                viewModel.addTrackInHistory(track)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerFragment,
+                    PlayerFragment.Companion.createArgs(track))
             }
         }
 
         historyAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
-                viewModel.goToPlayer(track, this@SearchActivity)
+                viewModel.addTrackInHistory(track)
+                findNavController().navigate(
+                    R.id.action_searchFragment_to_playerFragment,
+                    PlayerFragment.Companion.createArgs(track))
             }
         }
 
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
-
-        binding.searchBack.setOnClickListener {
-            finish()
-        }
-
+        val inputMethodManager = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
         val simpleTextWatcher = object : TextWatcher {
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -104,32 +100,37 @@ class SearchActivity: AppCompatActivity() {
             viewModel.textWasChanged(text)
         }
 
-        viewModel.getLiveData().observe(this) {
-           if(it.searchStatus == SearchStatus.HISTORY) {
-               trackListHistory.clear()
-               trackListHistory.addAll(it.searchResult)
-           }
-           else {
-               trackList.clear()
-               trackList.addAll(it.searchResult)
-           }
+        viewModel.getLiveData().observe(viewLifecycleOwner) {
+            if(it.searchStatus == SearchStatus.HISTORY) {
+                trackListHistory.clear()
+                trackListHistory.addAll(it.searchResult)
+            }
+            else {
+                trackList.clear()
+                trackList.addAll(it.searchResult)
+            }
             setViewSearch(it.searchStatus)
         }
+    }
 
-    } // end of onCreate()
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 
     private fun setViewSearch(reason: SearchStatus) {
         tracksAdapter.notifyDataSetChanged()
         historyAdapter.notifyDataSetChanged()
 
-    binding.apply {
-        notFound.visibility = View.GONE
-        connectionProblem.visibility = View.GONE
-        recycler.visibility = View.GONE
-        historyOfSearch.visibility = View.GONE
-        progressBar.visibility = View.GONE
-        clearSearch.visibility = View.VISIBLE
-    }
+        binding.apply {
+            notFound.visibility = View.GONE
+            connectionProblem.visibility = View.GONE
+            recycler.visibility = View.GONE
+            historyOfSearch.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            clearSearch.visibility = View.VISIBLE
+        }
         when (reason) {
             SearchStatus.CONNECTION_PROBLEM -> binding.connectionProblem.visibility = View.VISIBLE
             SearchStatus.NOT_FOUND -> binding.notFound.visibility = View.VISIBLE
@@ -161,5 +162,3 @@ class SearchActivity: AppCompatActivity() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
-
-

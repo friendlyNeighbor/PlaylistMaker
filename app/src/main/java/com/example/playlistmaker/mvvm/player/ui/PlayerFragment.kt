@@ -1,45 +1,41 @@
 package com.example.playlistmaker.mvvm.player.ui
 
-import android.os.Build
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
-import com.example.playlistmaker.databinding.ActivityAudioPlayerBinding
+import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
-class AudioPlayerActivity : AppCompatActivity() {
+class PlayerFragment : Fragment() {
 
-    private lateinit var binding: ActivityAudioPlayerBinding
-    private lateinit var primaryState:PlayerState
+    private var _binding: FragmentPlayerBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var primaryState: PlayerState
     private val viewModel: PlayerViewModel by viewModel() {
         parametersOf(primaryState)
     }
 
-    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        binding = ActivityAudioPlayerBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentPlayerBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val track: Track = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getSerializableExtra(TRACK, Track::class.java) as Track
-        } else {
-            intent.getSerializableExtra(TRACK) as Track
-        }
+        val track: Track = requireArguments().get(TRACK) as Track
 
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
@@ -55,12 +51,11 @@ class AudioPlayerActivity : AppCompatActivity() {
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
             }
-            toolbar.setOnClickListener { finish() }
         }
         primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
         viewModel.prepared()
 
-        viewModel.getLiveData().observe(this) {
+        viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {
                 if (it.playingStatus == PlayingStatus.PREPARED) {
                     binding.buttonPlay.isEnabled = true
@@ -78,9 +73,12 @@ class AudioPlayerActivity : AppCompatActivity() {
                     binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                     binding.buttonPlay.isEnabled = false
                 }
+
+                toolbar.setOnClickListener { findNavController().navigateUp() }
             }
         }
-    } // <- onCreate
+
+    }
 
     override fun onPause() {
         super.onPause()
@@ -92,7 +90,16 @@ class AudioPlayerActivity : AppCompatActivity() {
         viewModel.release()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     companion object {
         private const val TRACK = "TRACK"
+
+        fun createArgs(track: Track): Bundle =
+            bundleOf(TRACK to track)
     }
+
 }
