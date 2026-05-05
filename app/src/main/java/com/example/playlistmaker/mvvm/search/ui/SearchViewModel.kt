@@ -1,7 +1,5 @@
 package com.example.playlistmaker.mvvm.search.ui
 
-import android.content.Context
-import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import androidx.lifecycle.LiveData
@@ -9,12 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.player.ui.AudioPlayerActivity
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 
 
 class SearchViewModel (
-    val primaryState: SearchState,
+    primaryState: SearchState,
     val trackSearchInteractor: TrackSearchInteractor,
     val searchHistoryInteractor: SearchHistoryInteractor) : ViewModel() {
 
@@ -86,15 +83,11 @@ class SearchViewModel (
             })
     }
 
-    fun goToPlayer(track:Track, context: Context) {
+    fun addTrackInHistory(track:Track) {
         searchHistoryInteractor.addTrackInHistory(track)
-        val intent = Intent(context, AudioPlayerActivity::class.java)
-        intent.putExtra(TRACK, track)
-        context.startActivity(intent)
     }
 
         companion object {
             private const val SEARCH_DEBOUNCE_DELAY = 2000L
-            private const val TRACK = "TRACK"
         }
     }

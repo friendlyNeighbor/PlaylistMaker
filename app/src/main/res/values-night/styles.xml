@@ -15,4 +15,11 @@
         <item name="backgroundTint">@color/yp_black</item>
     </style>
 
+    <style name="colorToolbarWithArrow" parent="toolbar">
+        <item name="titleTextColor">@color/white</item>
+        <item name="backgroundTint">@color/yp_black</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+
 </resources>

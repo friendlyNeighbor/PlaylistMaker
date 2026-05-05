@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingTop="22dp">
+    tools:context=".mvvm.search.ui.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/search_back"
@@ -29,7 +29,7 @@
             android:imeOptions="actionDone"
             android:inputType="text"
             android:lines="1"
-            android:saveEnabled="false"
+            android:saveEnabled="true"
             android:singleLine="true"
             android:textCursorDrawable="@drawable/cursor"
             tools:ignore="TouchTargetSizeCheck" />

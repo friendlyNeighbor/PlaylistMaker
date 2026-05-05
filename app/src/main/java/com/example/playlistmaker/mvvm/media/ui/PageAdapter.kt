@@ -1,10 +1,9 @@
 package com.example.playlistmaker.mvvm.media.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 
-class PagerAdapter(activity: AppCompatActivity) : FragmentStateAdapter(activity) {
+class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
     override fun getItemCount(): Int = 2
 

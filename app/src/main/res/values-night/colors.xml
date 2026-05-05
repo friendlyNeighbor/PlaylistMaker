@@ -3,6 +3,6 @@
     <color name="yp_text_grey">#FFFFFF</color>
     <color name="switcher">@color/blue</color>
     <color name="black_white_color">#FFFFFF</color>
+    <color name="black_white_color_inverse">#1A1B22</color>
     <color name="background_main">#1A1B22</color>
-
 </resources>

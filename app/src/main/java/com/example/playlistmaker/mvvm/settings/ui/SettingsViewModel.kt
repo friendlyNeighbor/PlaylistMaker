@@ -13,10 +13,12 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
 
     fun updateSwitcher() {
         val darkModeOn = themeInteractor.getTheme()
-        if (darkModeOn)
+        if (darkModeOn) {
             settingsLiveData.postValue(SettingsState.NIGHT)
-        else
+        }
+        else {
             settingsLiveData.postValue(SettingsState.DAY)
+        }
 
     }
 

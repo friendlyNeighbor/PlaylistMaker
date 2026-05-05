@@ -44,9 +44,8 @@
         <item name="android:fontFamily">@font/ys_display_medium</item>
         <item name="android:textFontWeight">500</item>
         <item name="android:letterSpacing">0</item>
-        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
-        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
+
 
     <style name="searchField">
         <item name="android:background">@drawable/bg_shapes_radius_8</item>
@@ -75,6 +74,13 @@
     <style name="colorToolbar" parent="toolbar">
         <item name="titleTextColor">@color/yp_black</item>
         <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="colorToolbarWithArrow" parent="toolbar">
+        <item name="titleTextColor">@color/yp_black</item>
+        <item name="android:background">@color/white</item>
+        <item name="navigationIcon">@drawable/ic_arrow_back_24</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
     </style>
 
     <style name="roundCorners">
@@ -124,6 +130,13 @@
         <item name="android:textFontWeight">500</item>
         <item name="android:letterSpacing">0</item>
         <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="BottomNavigationView" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:letterSpacing">0</item>
     </style>
 
 </resources>
