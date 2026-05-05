@@ -19,19 +19,19 @@ class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): Track
                 200 -> {
                     Resource.Success((response as TrackSearchResponse).results.map {
                         Track(
-                            it.trackName,
-                            it.artistName,
+                            it.trackName?:"",
+                            it.artistName?:"",
                             SimpleDateFormat(
                                 "mm:ss",
                                 Locale.getDefault()
-                            ).format(it.trackTimeMillis),
-                            it.artworkUrl100,
-                            it.trackId,
-                            it.collectionName,
-                            it.releaseDate,
-                            it.primaryGenreName,
-                            it.country,
-                            it.previewUrl
+                            ).format(it.trackTimeMillis?:0),
+                            it.artworkUrl100?:"",
+                            it.trackId?:0,
+                            it.collectionName?:"",
+                            it.releaseDate?:"",
+                            it.primaryGenreName?:"",
+                            it.country?:"",
+                            it.previewUrl?:""
                         )
                     })
                 }

@@ -11,7 +11,7 @@ import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 
 
 class SearchViewModel (
-    val primaryState: SearchState,
+    primaryState: SearchState,
     val trackSearchInteractor: TrackSearchInteractor,
     val searchHistoryInteractor: SearchHistoryInteractor) : ViewModel() {
 
@@ -89,6 +89,5 @@ class SearchViewModel (
 
         companion object {
             private const val SEARCH_DEBOUNCE_DELAY = 2000L
-            private const val TRACK = "TRACK"
         }
     }

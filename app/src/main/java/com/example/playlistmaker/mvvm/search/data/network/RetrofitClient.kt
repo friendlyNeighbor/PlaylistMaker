@@ -11,7 +11,7 @@ import com.example.playlistmaker.mvvm.search.data.NetworkClient
 class RetrofitClient(val iTunesApiService:ITunesApiService, private val context: Context): NetworkClient {
 
     override fun doRequest(dto: Any): Response {
-        if (isConnected() == false) {
+        if (!isConnected()) {
             return Response().apply { resultCode = -1 }
         }
         if (dto !is TrackSearchRequest) {
