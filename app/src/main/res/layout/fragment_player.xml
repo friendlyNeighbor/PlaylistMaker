@@ -97,7 +97,8 @@
         app:layout_constraintBottom_toTopOf="@id/trackTime"
         app:layout_constraintEnd_toStartOf="@id/buttonLike"
         app:layout_constraintStart_toEndOf="@id/buttonAdd"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintTop_toBottomOf="@id/artistName"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/timer"
@@ -123,7 +124,8 @@
         android:src="@drawable/ic_button_add_in_playlist"
         app:layout_constraintBottom_toTopOf="@id/trackTime"
         app:layout_constraintStart_toStartOf="@id/baselineLeft24"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintTop_toBottomOf="@id/artistName"
+        tools:ignore="ContentDescription"/>
 
     <ImageButton
         android:id="@+id/buttonLike"
@@ -135,7 +137,8 @@
         android:src="@drawable/ic_button_like_51"
         app:layout_constraintBottom_toTopOf="@id/trackTime"
         app:layout_constraintEnd_toEndOf="@id/baselineRight24"
-        app:layout_constraintTop_toBottomOf="@id/artistName" />
+        app:layout_constraintTop_toBottomOf="@id/artistName"
+        tools:ignore="ContentDescription"/>
 
     <TextView
         android:id="@+id/trackTime"
