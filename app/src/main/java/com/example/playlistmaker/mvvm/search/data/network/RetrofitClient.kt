@@ -19,16 +19,6 @@ class RetrofitClient(val iTunesApiService:ITunesApiService, private val context:
         if (dto !is TrackSearchRequest) {
             return Response().apply { resultCode = 400 }
         }
-        /*
-        val response = iTunesApiService.searchSong(dto.expression).execute()
-        val body = response.body()
-        return if (body != null) {
-            body.apply { resultCode = response.code() }
-        } else {
-            Response().apply { resultCode = response.code() }
-        }
-        */
-
         return withContext(Dispatchers.IO) {
             try {
                 val response = iTunesApiService.searchSong(dto.expression)

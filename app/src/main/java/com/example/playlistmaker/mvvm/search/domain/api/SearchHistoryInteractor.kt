@@ -5,4 +5,5 @@ import com.example.playlistmaker.mvvm.search.domain.model.Track
 interface SearchHistoryInteractor {
     fun addTrackInHistory(track: Track)
     fun clearHistory()
-    fun getTrackListHistory(): MutableList<Track>}
+    fun getTrackListHistory(): MutableList<Track>
+}

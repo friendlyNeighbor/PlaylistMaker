@@ -11,40 +11,8 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): TrackSearchRepository {
-  /*      override fun searchTrack(expression: String): Resource<List<Track>> {
-            val response = networkClient.doRequest(TrackSearchRequest(expression))
-
-            return when (response.resultCode) {
-                -1 -> {
-                    Resource.Error("Проверьте подключение к интернету")
-                }
-                200 -> {
-                    Resource.Success((response as TrackSearchResponse).results.map {
-                        Track(
-                            it.trackName?:"",
-                            it.artistName?:"",
-                            SimpleDateFormat(
-                                "mm:ss",
-                                Locale.getDefault()
-                            ).format(it.trackTimeMillis?:0),
-                            it.artworkUrl100?:"",
-                            it.trackId?:0,
-                            it.collectionName?:"",
-                            it.releaseDate?:"",
-                            it.primaryGenreName?:"",
-                            it.country?:"",
-                            it.previewUrl?:""
-                        )
-                    })
-                }
-                else -> {
-                    Resource.Error("Ошибка сервера")
-                }
-            }
-        } */
   override fun searchTrack(expression: String): Flow<Resource<List<Track>>> = flow {
       val response = networkClient.doRequest(TrackSearchRequest(expression))
-
       when (response.resultCode) {
           -1 -> {
               emit(Resource.Error("Проверьте подключение к интернету"))
@@ -53,7 +21,7 @@ class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): Track
               emit(Resource.Success((response as TrackSearchResponse).results.map {
                   Track(
                       it.trackName?:"",
-                      it.artistName?:"",
+                      it.artistName?.trim()?:"",
                       SimpleDateFormat(
                           "mm:ss",
                           Locale.getDefault()

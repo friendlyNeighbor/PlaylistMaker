@@ -12,10 +12,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class SearchViewModel (
+class SearchViewModel(
     primaryState: SearchState,
     val trackSearchInteractor: TrackSearchInteractor,
-    val searchHistoryInteractor: SearchHistoryInteractor) : ViewModel() {
+    val searchHistoryInteractor: SearchHistoryInteractor
+) : ViewModel() {
 
     private val searchLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SearchState> = searchLiveData
@@ -30,21 +31,19 @@ class SearchViewModel (
         textWasChanged("")
     }
 
-    fun textWasChanged(incomingText:String) {
+    fun textWasChanged(incomingText: String) {
         text = incomingText.trimStart()
 
-        if(textInFocus) {
-            val trackListHistory=searchHistoryInteractor.getTrackListHistory()
+        if (textInFocus) {
+            val trackListHistory = searchHistoryInteractor.getTrackListHistory()
             if (text.isEmpty()) {
                 searchJob?.cancel()
-                if(trackListHistory.isEmpty()) {
+                if (trackListHistory.isEmpty()) {
                     searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+                } else {
+                    searchLiveData.postValue(SearchState(SearchStatus.HISTORY, trackListHistory))
                 }
-                else {
-                   searchLiveData.postValue(SearchState(SearchStatus.HISTORY, trackListHistory))
-                }
-            }
-            else {
+            } else {
                 searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
                 debounceSearchTrack()
             }
@@ -62,48 +61,14 @@ class SearchViewModel (
             searchTrack()
         }
     }
-/*
+
     private fun searchTrack() {
-        val trackList: MutableList<Track> = mutableListOf()
-        trackSearchInteractor.searchTrack(
-            text,
-            object : TrackSearchInteractor.TrackConsumer {
-                override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
-                    viewModelScope.launch {
-                        if (errorMessage != null || foundTrack == null) {
-                            searchLiveData.postValue(SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
-                        } else {
-                            trackList.clear()
-                            trackList.addAll(foundTrack)
-                            if (trackList.isEmpty()) {
-                                searchLiveData.postValue(SearchState(SearchStatus.NOT_FOUND, trackList))
-                            } else {
-                                searchLiveData.postValue(
-                                    SearchState(
-                                        SearchStatus.SEARCH_SUCCESSFUL,
-                                        trackList
-                                    )
-                                )
-                            }
-                        }
-                    }
-                }
-            })
-    }
-    */
-private fun searchTrack() {
-    //val trackList: MutableList<Track> = mutableListOf()
-   // trackSearchInteractor.searchTrack(
-     //   text
-     //   ,
-     //   object : TrackSearchInteractor.TrackConsumer {
-     //       override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
-                viewModelScope.launch {
-                    trackSearchInteractor.searchTrack(text)
-                        .collect { pair -> processResult(pair.first, pair.second) }
+        viewModelScope.launch {
+            trackSearchInteractor.searchTrack(text)
+                .collect { pair -> processResult(pair.first, pair.second) }
         }
-    //)
-}
+    }
+
     private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
         val trackList: MutableList<Track> = mutableListOf()
         if (errorMessage != null || foundTrack == null) {
@@ -121,18 +86,14 @@ private fun searchTrack() {
                     )
                 )
             }
-            //               }
-            //           }
         }
-
-
     }
 
-    fun addTrackInHistory(track:Track) {
+    fun addTrackInHistory(track: Track) {
         searchHistoryInteractor.addTrackInHistory(track)
     }
 
-        companion object {
-            private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        }
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
+}
