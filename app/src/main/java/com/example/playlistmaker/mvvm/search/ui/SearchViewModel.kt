@@ -1,19 +1,22 @@
 package com.example.playlistmaker.mvvm.search.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-class SearchViewModel (
+class SearchViewModel(
     primaryState: SearchState,
     val trackSearchInteractor: TrackSearchInteractor,
-    val searchHistoryInteractor: SearchHistoryInteractor) : ViewModel() {
+    val searchHistoryInteractor: SearchHistoryInteractor
+) : ViewModel() {
 
     private val searchLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SearchState> = searchLiveData
@@ -21,28 +24,26 @@ class SearchViewModel (
     private var textInFocus = false
     private var text = ""
 
-    private val handler = Handler(Looper.getMainLooper())
+    private var searchJob: Job? = null
 
     fun editTextInFocus() {
         textInFocus = true
         textWasChanged("")
     }
 
-    fun textWasChanged(incomingText:String) {
+    fun textWasChanged(incomingText: String) {
         text = incomingText.trimStart()
 
-        if(textInFocus) {
-            val trackListHistory=searchHistoryInteractor.getTrackListHistory()
+        if (textInFocus) {
+            val trackListHistory = searchHistoryInteractor.getTrackListHistory()
             if (text.isEmpty()) {
-                handler.removeCallbacks(searchRunnable)
-                if(trackListHistory.isEmpty()) {
+                searchJob?.cancel()
+                if (trackListHistory.isEmpty()) {
                     searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+                } else {
+                    searchLiveData.postValue(SearchState(SearchStatus.HISTORY, trackListHistory))
                 }
-                else {
-                   searchLiveData.postValue(SearchState(SearchStatus.HISTORY, trackListHistory))
-                }
-            }
-            else {
+            } else {
                 searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
                 debounceSearchTrack()
             }
@@ -55,39 +56,44 @@ class SearchViewModel (
     }
 
     private fun debounceSearchTrack() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_DELAY)
+            searchTrack()
+        }
     }
-
-    private val searchRunnable = Runnable { searchTrack() }
 
     private fun searchTrack() {
-        val trackList: MutableList<Track> = mutableListOf()
-        trackSearchInteractor.searchTrack(
-            text,
-            object : TrackSearchInteractor.TrackConsumer {
-                override fun consume(foundTrack: List<Track>?, errorMessage: String?) {
-                    handler.post {
-                        if (errorMessage != null || foundTrack == null) {
-                            searchLiveData.postValue(SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
-                        } else {
-                            trackList.clear()
-                            trackList.addAll(foundTrack)
-                            if (trackList.isEmpty()) {
-                                searchLiveData.postValue(SearchState(SearchStatus.NOT_FOUND, trackList))
-                            } else
-                                searchLiveData.postValue(SearchState(SearchStatus.SEARCH_SUCCESSFUL, trackList))
-                        }
-                    }
-                }
-            })
+        viewModelScope.launch {
+            trackSearchInteractor.searchTrack(text)
+                .collect { pair -> processResult(pair.first, pair.second) }
+        }
     }
 
-    fun addTrackInHistory(track:Track) {
+    private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
+        val trackList: MutableList<Track> = mutableListOf()
+        if (errorMessage != null || foundTrack == null) {
+            searchLiveData.postValue(SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
+        } else {
+            trackList.clear()
+            trackList.addAll(foundTrack)
+            if (trackList.isEmpty()) {
+                searchLiveData.postValue(SearchState(SearchStatus.NOT_FOUND, trackList))
+            } else {
+                searchLiveData.postValue(
+                    SearchState(
+                        SearchStatus.SEARCH_SUCCESSFUL,
+                        trackList
+                    )
+                )
+            }
+        }
+    }
+
+    fun addTrackInHistory(track: Track) {
         searchHistoryInteractor.addTrackInHistory(track)
     }
 
-        companion object {
-            private const val SEARCH_DEBOUNCE_DELAY = 2000L
-        }
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
+}

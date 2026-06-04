@@ -2,8 +2,6 @@ package com.example.playlistmaker.mvvm.search.ui
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -11,11 +9,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.mvvm.player.ui.PlayerFragment
 import com.example.playlistmaker.mvvm.search.domain.model.Track
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -37,6 +38,8 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
+    private var isClickAllowed = true
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +54,8 @@ class SearchFragment : Fragment() {
 
         binding.recycler.adapter = tracksAdapter
         binding.recyclerHistory.adapter = historyAdapter
+
+        isClickAllowed = true
 
         tracksAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
@@ -144,20 +149,19 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private val handler = Handler(Looper.getMainLooper())
-    private var isClickAllowed = true
-
     private fun clickDebounce(): Boolean {
         val current = isClickAllowed
         if (isClickAllowed) {
             isClickAllowed = false
-            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(CLICK_DEBOUNCE_DELAY)
+                isClickAllowed = true
+            }
         }
         return current
     }
 
     companion object {
-        private const val TEXT = "TEXT"
         private const val TEXT_DEFAULT = ""
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }

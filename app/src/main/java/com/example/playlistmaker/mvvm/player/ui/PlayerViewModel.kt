@@ -2,11 +2,13 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.Locale
 
 class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer) :
@@ -15,7 +17,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
     private val playerLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
-    val handler = Handler(Looper.getMainLooper())
+    private var timerJob: Job? = null
 
     private lateinit var time: String
     private var playerState = STATE_DEFAULT
@@ -106,10 +108,13 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
     }
 
     private fun runTimer() {
-        handler.postDelayed(runSetTime, 250)
+        timerJob = viewModelScope.launch {
+            while (mediaPlayer.isPlaying) {
+                delay(250L)
+                setTime()
+            }
+        }
     }
-
-    private val runSetTime = Runnable { setTime() }
 
     private fun setTime() {
         val currentState = playerLiveData.value
@@ -122,7 +127,6 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                     time
                 )
             )
-            runTimer()
         }
     }
 
@@ -143,7 +147,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
     }
 
     private fun stopTimer() {
-        handler.removeCallbacks(runSetTime)
+        timerJob?.cancel()
     }
 
     companion object {
