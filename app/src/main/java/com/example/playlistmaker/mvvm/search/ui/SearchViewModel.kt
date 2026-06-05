@@ -56,19 +56,19 @@ class SearchViewModel(
     }
 
     private fun debounceSearchTrack() {
+        searchJob?.cancel()
         searchJob = viewModelScope.launch {
             delay(SEARCH_DEBOUNCE_DELAY)
             searchTrack()
         }
     }
 
-    private fun searchTrack() {
-        viewModelScope.launch {
-            trackSearchInteractor.searchTrack(text)
-                .collect { pair -> processResult(pair.first, pair.second) }
+private suspend fun searchTrack() {
+    trackSearchInteractor.searchTrack(text)
+        .collect { pair ->
+            processResult(pair.first, pair.second)
         }
-    }
-
+}
     private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
         val trackList: MutableList<Track> = mutableListOf()
         if (errorMessage != null || foundTrack == null) {

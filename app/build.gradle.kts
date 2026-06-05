@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.glide)
     implementation(libs.cronet.embedded)
+    implementation(libs.androidx.room.ktx)
     annotationProcessor(libs.compiler)
     implementation(libs.gson)
     implementation(libs.retrofit)

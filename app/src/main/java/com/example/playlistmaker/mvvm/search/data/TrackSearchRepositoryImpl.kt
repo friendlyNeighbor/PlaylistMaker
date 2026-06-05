@@ -21,7 +21,7 @@ class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): Track
               emit(Resource.Success((response as TrackSearchResponse).results.map {
                   Track(
                       it.trackName?:"",
-                      it.artistName?.trim()?:"",
+                      it.artistName?:"",
                       SimpleDateFormat(
                           "mm:ss",
                           Locale.getDefault()

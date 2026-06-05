@@ -27,7 +27,7 @@ class PlayerFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,7 +41,7 @@ class PlayerFragment : Fragment() {
             .into(binding.placeholder)
         binding.apply {
             trackName.text = track.trackName
-            artistName.text = track.artistName
+            artistName.text = track.artistName.trim()
             valueTrackTime.text = track.trackTime
             valueYear.text = track.releaseDate.take(4)
             valueAlbum.text = track.collectionName

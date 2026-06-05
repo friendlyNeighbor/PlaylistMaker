@@ -108,9 +108,10 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
     }
 
     private fun runTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
-                delay(250L)
+                delay(TIMER_UPDATE_DELAY)
                 setTime()
             }
         }
@@ -155,7 +156,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-
-        private val TIMER_ZERO = "00:00"
+        private const val TIMER_UPDATE_DELAY = 250L
+        private const val TIMER_ZERO = "00:00"
     }
 }

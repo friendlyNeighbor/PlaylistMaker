@@ -8,6 +8,7 @@ import com.example.playlistmaker.mvvm.search.data.dto.TrackSearchRequest
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.coroutines.cancellation.CancellationException
 
 
 class RetrofitClient(val iTunesApiService:ITunesApiService, private val context: Context): NetworkClient {
@@ -23,6 +24,8 @@ class RetrofitClient(val iTunesApiService:ITunesApiService, private val context:
             try {
                 val response = iTunesApiService.searchSong(dto.expression)
                 response.apply { resultCode = 200 }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Throwable) {
                 Response().apply { resultCode = 500 }
             }
