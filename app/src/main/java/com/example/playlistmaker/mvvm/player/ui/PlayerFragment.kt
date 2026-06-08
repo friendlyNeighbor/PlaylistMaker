@@ -51,12 +51,21 @@ class PlayerFragment : Fragment() {
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
             }
+
+            buttonLike.setOnClickListener {
+                viewModel.insertToOrDeleteFromFavorites()
+            }
         }
-        primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
+        primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
         viewModel.prepared()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {
+                if (it.favoriteTrack)
+                    binding.buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
+                else
+                    binding.buttonLike.setImageResource(R.drawable.ic_button_like_51)
+
                 if (it.playingStatus == PlayingStatus.PREPARED) {
                     binding.buttonPlay.isEnabled = true
                     binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)

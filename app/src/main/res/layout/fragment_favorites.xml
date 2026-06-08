@@ -23,4 +23,17 @@
             style="@style/errorText"
             android:text="@string/mediateka_is_empty" />
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/favoritesNotEmpty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/errorText"
+            android:text="Ваша медиатека не пуста" />
+    </LinearLayout>
 </FrameLayout>

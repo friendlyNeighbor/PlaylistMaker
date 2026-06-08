@@ -1,5 +1,7 @@
 package com.example.playlistmaker.mvvm.di
 
+import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.impl.FavoritesInteractorImpl
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.impl.SearchHistoryInteractorImpl
@@ -28,6 +30,10 @@ val interactorModule = module {
 
     factory<SharingInteractor> {
         SharingInteractorImpl(get(), get())
+    }
+
+    single<FavoritesInteractor> {
+        FavoritesInteractorImpl(get())
     }
 
 }

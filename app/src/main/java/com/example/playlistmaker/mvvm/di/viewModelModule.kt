@@ -14,7 +14,7 @@ import org.koin.dsl.module
 val viewModelModule = module {
 
     viewModel { (primaryState: PlayerState) ->
-        PlayerViewModel(primaryState, get())
+        PlayerViewModel(primaryState, get(), get())
     }
 
     viewModel { (primaryState: SearchState) ->

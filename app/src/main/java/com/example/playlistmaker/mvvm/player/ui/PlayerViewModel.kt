@@ -6,12 +6,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer) :
+class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer, private val favoritesInteractor: FavoritesInteractor) :
     ViewModel() {
 
     private val playerLiveData = MutableLiveData(primaryState)
@@ -26,6 +28,7 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
 
     fun prepared() {
         preparePlayer()
+        checkOnFavorite()
     }
 
     private fun preparePlayer() {
@@ -40,7 +43,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                     PlayerState(
                         PlayingStatus.PREPARED,
                         currentState.playingTrack,
-                        time
+                        time,
+                        currentState.favoriteTrack
                     )
                 )
                 playerState = STATE_PREPARED
@@ -52,7 +56,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                     PlayerState(
                         PlayingStatus.PREPARED,
                         currentState.playingTrack,
-                        TIMER_ZERO
+                        TIMER_ZERO,
+                        currentState.favoriteTrack
                     )
                 )
             }
@@ -71,7 +76,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                 PlayerState(
                     PlayingStatus.PAUSED,
                     currentState.playingTrack,
-                    time
+                    time,
+                    currentState.favoriteTrack
                 )
             )
             playerState = STATE_PAUSED
@@ -99,7 +105,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                 PlayerState(
                     PlayingStatus.PLAYING,
                     currentState.playingTrack,
-                    time
+                    time,
+                    currentState.favoriteTrack
                 )
             )
             playerState = STATE_PLAYING
@@ -125,7 +132,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                 PlayerState(
                     PlayingStatus.PLAYING,
                     currentState.playingTrack,
-                    time
+                    time,
+                    currentState.favoriteTrack
                 )
             )
         }
@@ -141,7 +149,8 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
                 PlayerState(
                     PlayingStatus.DEFAULT,
                     currentState.playingTrack,
-                    time
+                    time,
+                    currentState.favoriteTrack
                 )
             )
         }
@@ -149,6 +158,42 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
 
     private fun stopTimer() {
         timerJob?.cancel()
+    }
+
+    fun insertToOrDeleteFromFavorites() {
+        val currentState = playerLiveData.value
+        if (currentState?.playingTrack != null) {
+        val isFavorite=currentState.favoriteTrack
+            if (isFavorite)  {
+                favoritesInteractor.deleteTrackFromFavorites(currentState.playingTrack)
+            }
+            else
+                favoritesInteractor.addTrackInFavorites(currentState.playingTrack)
+            checkOnFavorite()
+        }
+
+    }
+
+    private fun checkOnFavorite() {
+        val currentState = playerLiveData.value
+        var isFavorite = false
+        if (currentState?.playingTrack != null) {
+            val track = currentState.playingTrack
+            val id = track.trackId
+            viewModelScope.launch {
+                favoritesInteractor.getFavoritesIdList().collect { list ->
+                isFavorite = list.contains(id)
+                }
+            }
+            playerLiveData.postValue(
+                PlayerState(
+                    currentState.playingStatus,
+                    currentState.playingTrack,
+                    currentState.playedTime,
+                    isFavorite
+                )
+            )
+        }
     }
 
     companion object {
