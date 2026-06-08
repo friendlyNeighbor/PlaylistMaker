@@ -7,13 +7,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
-import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
 
-class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer, private val favoritesInteractor: FavoritesInteractor) :
+class PlayerViewModel(
+    primaryState: PlayerState,
+    private val mediaPlayer: MediaPlayer,
+    private val favoritesInteractor: FavoritesInteractor
+) :
     ViewModel() {
 
     private val playerLiveData = MutableLiveData(primaryState)
@@ -163,12 +166,12 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
     fun insertToOrDeleteFromFavorites() {
         val currentState = playerLiveData.value
         if (currentState?.playingTrack != null) {
-        val isFavorite=currentState.favoriteTrack
-            if (isFavorite)  {
+            val isFavorite = currentState.favoriteTrack
+            if (isFavorite) {
                 favoritesInteractor.deleteTrackFromFavorites(currentState.playingTrack)
-            }
-            else
+            } else
                 favoritesInteractor.addTrackInFavorites(currentState.playingTrack)
+
             checkOnFavorite()
         }
 
@@ -181,18 +184,20 @@ class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaP
             val track = currentState.playingTrack
             val id = track.trackId
             viewModelScope.launch {
+                delay(300L)
                 favoritesInteractor.getFavoritesIdList().collect { list ->
-                isFavorite = list.contains(id)
+                    isFavorite = list.contains(id)
                 }
-            }
-            playerLiveData.postValue(
-                PlayerState(
-                    currentState.playingStatus,
-                    currentState.playingTrack,
-                    currentState.playedTime,
-                    isFavorite
+                playerLiveData.postValue(
+                    PlayerState(
+                        currentState.playingStatus,
+                        currentState.playingTrack,
+                        currentState.playedTime,
+                        isFavorite
+                    )
                 )
-            )
+            }
+
         }
     }
 

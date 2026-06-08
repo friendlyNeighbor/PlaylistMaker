@@ -20,6 +20,7 @@ class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): Track
           200 -> {
               emit(Resource.Success((response as TrackSearchResponse).results.map {
                   Track(
+                      0,
                       it.trackId?:0,
                       it.trackName?:"",
                       it.artistName?:"",
@@ -28,7 +29,6 @@ class TrackSearchRepositoryImpl(private val networkClient: NetworkClient): Track
                           Locale.getDefault()
                       ).format(it.trackTimeMillis?:0),
                       it.artworkUrl100?:"",
-
                       it.collectionName?:"",
                       it.releaseDate?:"",
                       it.primaryGenreName?:"",

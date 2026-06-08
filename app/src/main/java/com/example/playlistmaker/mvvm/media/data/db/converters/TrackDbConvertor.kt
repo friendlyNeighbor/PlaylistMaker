@@ -7,6 +7,7 @@ import com.example.playlistmaker.mvvm.search.domain.model.Track
 class TrackDbConvertor {
     fun map(track: Track): TrackEntity {
         return TrackEntity(
+            track.number,
             track.trackId,
             track.trackName,
             track.artistName,
@@ -21,6 +22,7 @@ class TrackDbConvertor {
 
     fun map(track: TrackEntity): Track {
         return Track(
+            track.number,
             track.trackId,
             track.trackName,
             track.artistName,

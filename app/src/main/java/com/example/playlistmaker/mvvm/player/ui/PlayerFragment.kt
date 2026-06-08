@@ -55,6 +55,8 @@ class PlayerFragment : Fragment() {
             buttonLike.setOnClickListener {
                 viewModel.insertToOrDeleteFromFavorites()
             }
+
+            toolbar.setOnClickListener { findNavController().navigateUp() }
         }
         primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
         viewModel.prepared()
@@ -62,28 +64,28 @@ class PlayerFragment : Fragment() {
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {
                 if (it.favoriteTrack)
-                    binding.buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
+                    buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
                 else
-                    binding.buttonLike.setImageResource(R.drawable.ic_button_like_51)
+                    buttonLike.setImageResource(R.drawable.ic_button_like_51)
 
                 if (it.playingStatus == PlayingStatus.PREPARED) {
-                    binding.buttonPlay.isEnabled = true
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                    binding.timer.text = it.playedTime
+                    buttonPlay.isEnabled = true
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    timer.text = it.playedTime
                 }
                 if (it.playingStatus == PlayingStatus.PLAYING) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
-                    binding.timer.text = it.playedTime
+                    buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
+                    timer.text = it.playedTime
                 }
                 if (it.playingStatus == PlayingStatus.PAUSED) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                 }
                 if (it.playingStatus == PlayingStatus.DEFAULT) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                    binding.buttonPlay.isEnabled = false
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    buttonPlay.isEnabled = false
                 }
 
-                toolbar.setOnClickListener { findNavController().navigateUp() }
+
             }
         }
 

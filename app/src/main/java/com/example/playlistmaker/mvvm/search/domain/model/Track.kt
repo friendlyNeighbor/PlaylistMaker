@@ -2,7 +2,7 @@ package com.example.playlistmaker.mvvm.search.domain.model
 
 import java.io.Serializable
 
-class Track(
+class Track(val number:Long=0,
             val trackId:Long,
             val trackName: String,
             val artistName: String,
