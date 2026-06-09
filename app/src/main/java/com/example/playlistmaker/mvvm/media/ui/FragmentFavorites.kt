@@ -43,7 +43,7 @@ class FragmentFavorites : Fragment() {
         tracksAdapter.onTrackClick = { track ->
              findNavController().navigate(
                     R.id.action_mediatekaFragment_to_playerFragment,
-                    PlayerFragment.Companion.createArgs(track))
+                    PlayerFragment.createArgs(track))
 
         }
 

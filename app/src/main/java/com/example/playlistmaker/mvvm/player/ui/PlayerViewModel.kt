@@ -2,24 +2,30 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.player.ui.PlayingStatus
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    primaryState: PlayerState,
+    track: Track,
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor
 ) :
     ViewModel() {
 
-    private val playerLiveData = MutableLiveData(primaryState)
+    //private val playerLiveData = MutableLiveData(primaryState)
+    val primaryState = PlayerState(PlayingStatus.DEFAULT, track, TIMER_ZERO, false)
+    private val playerLiveData = MutableLiveData(primaryState) //
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
     private var timerJob: Job? = null
@@ -32,6 +38,8 @@ class PlayerViewModel(
     fun prepared() {
         preparePlayer()
         checkOnFavorite()
+        Log.d("MyError", "fun prepared()")
+        Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 
     private fun preparePlayer() {
@@ -69,6 +77,8 @@ class PlayerViewModel(
 
     fun pause() {
         pausePlayer()
+        Log.d("MyError", "fun pause()")
+        Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 
     private fun pausePlayer() {
@@ -98,6 +108,8 @@ class PlayerViewModel(
                 startPlayer()
             }
         }
+        Log.d("MyError", "fun playbackControl()")
+        Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 
     private fun startPlayer() {
@@ -121,7 +133,7 @@ class PlayerViewModel(
         timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
-                delay(TIMER_UPDATE_DELAY)
+                delay(TIMER_UPDATE_DELAY.milliseconds)
                 setTime()
             }
         }
@@ -157,6 +169,8 @@ class PlayerViewModel(
                 )
             )
         }
+        Log.d("MyError", "fun release()")
+        Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 
     private fun stopTimer() {
@@ -174,7 +188,8 @@ class PlayerViewModel(
 
             checkOnFavorite()
         }
-
+        Log.d("MyError", "fun insertorDelete()")
+        Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 
     private fun checkOnFavorite() {
@@ -184,7 +199,7 @@ class PlayerViewModel(
             val track = currentState.playingTrack
             val id = track.trackId
             viewModelScope.launch {
-                delay(300L)
+                delay(TIMER_UPDATE_DELAY.milliseconds)
                 favoritesInteractor.getFavoritesIdList().collect { list ->
                     isFavorite = list.contains(id)
                 }
@@ -206,7 +221,7 @@ class PlayerViewModel(
         private const val STATE_PREPARED = 1
         private const val STATE_PLAYING = 2
         private const val STATE_PAUSED = 3
-        private const val TIMER_UPDATE_DELAY = 250L
+        private const val TIMER_UPDATE_DELAY = 300L
         private const val TIMER_ZERO = "00:00"
     }
 }

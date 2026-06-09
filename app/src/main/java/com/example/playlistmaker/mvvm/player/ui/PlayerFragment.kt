@@ -1,6 +1,7 @@
 package com.example.playlistmaker.mvvm.player.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,10 +19,14 @@ class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var primaryState: PlayerState
+ //   private lateinit var primaryState: PlayerState
+ //   private val viewModel: PlayerViewModel by viewModel() {
+ //       parametersOf(primaryState)
+ //   }
+    private val track: Track by lazy { requireArguments().get(TRACK) as Track }
     private val viewModel: PlayerViewModel by viewModel() {
-        parametersOf(primaryState)
-    }
+            parametersOf(track)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +40,8 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val track: Track = requireArguments().get(TRACK) as Track
+
+      //  val track: Track = requireArguments().get(TRACK) as Track
 
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
@@ -50,15 +56,17 @@ class PlayerFragment : Fragment() {
 
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
+                Log.d("MyError", "PLAY button")
             }
 
             buttonLike.setOnClickListener {
                 viewModel.insertToOrDeleteFromFavorites()
+                Log.d("MyError", "LIKE button")
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }
         }
-        primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
+      //  primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
         viewModel.prepared()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {

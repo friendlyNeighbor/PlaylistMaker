@@ -1,9 +1,11 @@
 package com.example.playlistmaker.mvvm.media.data.db.entity
 
 import androidx.room.Entity
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "favorites_table")
+@Entity(tableName = "favorites_table", indices = [Index(value = ["trackId"], unique = true)])
+
 data class TrackEntity(
     @PrimaryKey(autoGenerate = true)
     val number:Long,

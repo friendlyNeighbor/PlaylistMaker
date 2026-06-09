@@ -9,7 +9,7 @@ import androidx.room.Query
 
 @Dao
 interface TrackDao {
-    @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
+    @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: TrackEntity)
 
     @Delete(entity = TrackEntity::class)
