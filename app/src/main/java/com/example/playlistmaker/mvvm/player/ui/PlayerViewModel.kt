@@ -8,7 +8,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
-import com.example.playlistmaker.mvvm.player.ui.PlayingStatus
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -17,27 +16,34 @@ import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    track: Track,
+    private val track: Track,
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor
 ) :
     ViewModel() {
 
-    //private val playerLiveData = MutableLiveData(primaryState)
-    val primaryState = PlayerState(PlayingStatus.DEFAULT, track, TIMER_ZERO, false)
-    private val playerLiveData = MutableLiveData(primaryState) //
+    private val playerLiveData = MutableLiveData<PlayerState>()
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
-
-    private var timerJob: Job? = null
-
-    private lateinit var time: String
-    private var playerState = STATE_DEFAULT
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
+    //private var timerJob: Job? = null
+
+   // private lateinit var time: String
+
+    private var isFavorite=false
+    init {
+        checkOnFavorite()
+    }
+
+   // private var playerState = STATE_DEFAULT // ?
+   // val currentState by lazy { playerLiveData.value }
+   val currentState = PlayerState(PlayingStatus.DEFAULT, track, TIMER_ZERO, false)
+
+/*
     fun prepared() {
         preparePlayer()
-        checkOnFavorite()
+        //checkOnFavorite()
         Log.d("MyError", "fun prepared()")
         Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
@@ -191,29 +197,39 @@ class PlayerViewModel(
         Log.d("MyError", "fun insertorDelete()")
         Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
-
+*/
     private fun checkOnFavorite() {
-        val currentState = playerLiveData.value
-        var isFavorite = false
-        if (currentState?.playingTrack != null) {
-            val track = currentState.playingTrack
-            val id = track.trackId
             viewModelScope.launch {
-                delay(TIMER_UPDATE_DELAY.milliseconds)
                 favoritesInteractor.getFavoritesIdList().collect { list ->
-                    isFavorite = list.contains(id)
+                    isFavorite = list.contains(track.trackId)
+                    setLike(isFavorite)
                 }
-                playerLiveData.postValue(
-                    PlayerState(
-                        currentState.playingStatus,
-                        currentState.playingTrack,
-                        currentState.playedTime,
-                        isFavorite
-                    )
-                )
             }
 
-        }
+    }
+
+    fun changeLike() {
+        Log.d("MyError", "fun changeLike()")
+        isFavorite = !isFavorite
+            setLike(isFavorite)
+
+    }
+
+    private fun setLike(isFavorite: Boolean){
+        playerLiveData.postValue(
+            PlayerState(
+                currentState.playingStatus,
+                currentState.playingTrack,
+                currentState.playedTime,
+                isFavorite
+            )
+        )
+    }
+    fun refreshDataBase() {
+        if(isFavorite)
+            favoritesInteractor.addTrackInFavorites(track)
+        else
+            favoritesInteractor.deleteTrackFromFavorites(track)
     }
 
     companion object {

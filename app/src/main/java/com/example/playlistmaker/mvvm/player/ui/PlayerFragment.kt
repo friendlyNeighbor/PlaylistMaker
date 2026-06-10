@@ -53,29 +53,34 @@ class PlayerFragment : Fragment() {
             valueAlbum.text = track.collectionName
             valueGenre.text = track.primaryGenreName
             valueCountry.text = track.country
-
+/*
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
                 Log.d("MyError", "PLAY button")
             }
-
+*/
             buttonLike.setOnClickListener {
-                viewModel.insertToOrDeleteFromFavorites()
+                viewModel.changeLike()
                 Log.d("MyError", "LIKE button")
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }
-        }
+        } // binding apply
       //  primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
+        /*
         viewModel.prepared()
+        Log.d("MyError", "Frag:prepared")
 
+         */
         viewModel.getLiveData().observe(viewLifecycleOwner) {
+            Log.d("MyError", "Frag:observe")
+
             binding.apply {
-                if (it.favoriteTrack)
+                if (it.favoriteTrack==true)
                     buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
                 else
                     buttonLike.setImageResource(R.drawable.ic_button_like_51)
-
+/*
                 if (it.playingStatus == PlayingStatus.PREPARED) {
                     buttonPlay.isEnabled = true
                     buttonPlay.setImageResource(R.drawable.ic_button_play_100)
@@ -92,7 +97,7 @@ class PlayerFragment : Fragment() {
                     buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                     buttonPlay.isEnabled = false
                 }
-
+*/
 
             }
         }
@@ -101,12 +106,13 @@ class PlayerFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        viewModel.pause()
+        viewModel.refreshDataBase()
+    //    viewModel.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.release()
+    //    viewModel.release()
     }
 
     override fun onDestroyView() {

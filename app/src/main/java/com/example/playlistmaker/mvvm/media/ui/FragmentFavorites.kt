@@ -39,7 +39,6 @@ class FragmentFavorites : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.recycler.adapter = tracksAdapter
-
         tracksAdapter.onTrackClick = { track ->
              findNavController().navigate(
                     R.id.action_mediatekaFragment_to_playerFragment,

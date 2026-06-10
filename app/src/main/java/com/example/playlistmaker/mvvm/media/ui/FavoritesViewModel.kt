@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -15,6 +16,7 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor): 
 
     fun favoritesIsEmpty() {
         viewModelScope.launch {
+        //delay(100L)
         favoritesInteractor.getFavoritesTrackList().collect { list ->
             if (list.isEmpty())
                 favoritesLiveData.postValue(null)
