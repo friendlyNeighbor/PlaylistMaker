@@ -19,10 +19,6 @@ class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
- //   private lateinit var primaryState: PlayerState
- //   private val viewModel: PlayerViewModel by viewModel() {
- //       parametersOf(primaryState)
- //   }
     private val track: Track by lazy { requireArguments().get(TRACK) as Track }
     private val viewModel: PlayerViewModel by viewModel {
             parametersOf(track)
@@ -40,9 +36,6 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-      //  val track: Track = requireArguments().get(TRACK) as Track
-
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
         binding.apply {
@@ -53,36 +46,29 @@ class PlayerFragment : Fragment() {
             valueAlbum.text = track.collectionName
             valueGenre.text = track.primaryGenreName
             valueCountry.text = track.country
-/*
+
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
-                Log.d("MyError", "PLAY button")
             }
-*/
+
             buttonLike.setOnClickListener {
                 viewModel.changeLike()
-                Log.d("MyError", "LIKE button")
-               // viewModel.refreshDataBase()
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }
         } // binding apply
-      //  primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer), false)
-        /*
-        viewModel.prepared()
-        Log.d("MyError", "Frag:prepared")
 
-         */
+        viewModel.prepared()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             Log.d("MyError", "Frag:observe")
 
             binding.apply {
-                if (it.favoriteTrack)
+                if (it.isFavoriteTrack)
                     buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
                 else
                     buttonLike.setImageResource(R.drawable.ic_button_like_51)
-/*
+
                 if (it.playingStatus == PlayingStatus.PREPARED) {
                     buttonPlay.isEnabled = true
                     buttonPlay.setImageResource(R.drawable.ic_button_play_100)
@@ -99,26 +85,18 @@ class PlayerFragment : Fragment() {
                     buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                     buttonPlay.isEnabled = false
                 }
-*/
-
             }
         }
-
-        //viewModel.checkOnFavorite()
-
     }
 
     override fun onPause() {
         viewModel.refreshDataBase()
         super.onPause()
-
-        Log.d("MyError","PlayerFrag = onPause(), refreshDB()")
-    //    viewModel.pause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-    //    viewModel.release()
+        viewModel.release()
     }
 
     override fun onDestroyView() {
@@ -132,5 +110,4 @@ class PlayerFragment : Fragment() {
         fun createArgs(track: Track): Bundle =
             bundleOf(TRACK to track)
     }
-
 }
