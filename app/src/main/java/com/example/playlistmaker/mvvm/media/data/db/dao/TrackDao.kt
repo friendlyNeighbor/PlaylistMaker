@@ -12,8 +12,8 @@ interface TrackDao {
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertTrack(track: TrackEntity)
 
-    @Delete(entity = TrackEntity::class)
-    suspend fun deleteTrack(track: TrackEntity)
+    @Query("DELETE FROM favorites_table WHERE trackId = :id")
+    suspend fun deleteTrackById(id: Long)
 
     @Query("SELECT * FROM favorites_table ORDER BY number DESC")
     suspend fun getFavoritesList(): List<TrackEntity>

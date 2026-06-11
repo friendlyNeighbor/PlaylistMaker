@@ -24,7 +24,7 @@ class PlayerFragment : Fragment() {
  //       parametersOf(primaryState)
  //   }
     private val track: Track by lazy { requireArguments().get(TRACK) as Track }
-    private val viewModel: PlayerViewModel by viewModel() {
+    private val viewModel: PlayerViewModel by viewModel {
             parametersOf(track)
         }
 
@@ -62,6 +62,7 @@ class PlayerFragment : Fragment() {
             buttonLike.setOnClickListener {
                 viewModel.changeLike()
                 Log.d("MyError", "LIKE button")
+               // viewModel.refreshDataBase()
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }
@@ -72,11 +73,12 @@ class PlayerFragment : Fragment() {
         Log.d("MyError", "Frag:prepared")
 
          */
+
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             Log.d("MyError", "Frag:observe")
 
             binding.apply {
-                if (it.favoriteTrack==true)
+                if (it.favoriteTrack)
                     buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
                 else
                     buttonLike.setImageResource(R.drawable.ic_button_like_51)
@@ -102,11 +104,15 @@ class PlayerFragment : Fragment() {
             }
         }
 
+        //viewModel.checkOnFavorite()
+
     }
 
     override fun onPause() {
-        super.onPause()
         viewModel.refreshDataBase()
+        super.onPause()
+
+        Log.d("MyError","PlayerFrag = onPause(), refreshDB()")
     //    viewModel.pause()
     }
 

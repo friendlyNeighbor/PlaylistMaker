@@ -46,10 +46,10 @@ class FragmentFavorites : Fragment() {
 
         }
 
-        viewModel.favoritesIsEmpty()
+        viewModel.setFavoritesLayout()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
-            if (it == null) {
+            if (it.isEmpty()) {
                 binding.favoritesIsEmpty.visibility = VISIBLE
                 binding.recycler.visibility = GONE
             }

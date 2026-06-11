@@ -11,6 +11,7 @@ import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
@@ -198,24 +199,22 @@ class PlayerViewModel(
         Log.d("MyError", "PlayingStatus = ${playerLiveData.value?.playingStatus}")
     }
 */
-    private fun checkOnFavorite() {
+    fun checkOnFavorite() {
             viewModelScope.launch {
-                favoritesInteractor.getFavoritesIdList().collect { list ->
+               val list = favoritesInteractor.getFavoritesIdList().first()
                     isFavorite = list.contains(track.trackId)
-                    setLike(isFavorite)
-                }
+                    setLike()
             }
-
     }
 
     fun changeLike() {
         Log.d("MyError", "fun changeLike()")
         isFavorite = !isFavorite
-            setLike(isFavorite)
-
+        setLike()
     }
 
-    private fun setLike(isFavorite: Boolean){
+    private fun setLike(){
+        if(currentState!=null) {
         playerLiveData.postValue(
             PlayerState(
                 currentState.playingStatus,
@@ -223,13 +222,19 @@ class PlayerViewModel(
                 currentState.playedTime,
                 isFavorite
             )
-        )
+        )}
     }
     fun refreshDataBase() {
-        if(isFavorite)
+        if(isFavorite) {
             favoritesInteractor.addTrackInFavorites(track)
-        else
-            favoritesInteractor.deleteTrackFromFavorites(track)
+            Log.d("MyError", "fun refreshDataBase() - addTrackInFavorites(track)      ${track.number} ${track.trackId} ${track.trackName} ${track.artistName} ${track.trackTime} ${track.artworkUrl100} ${track.artworkUrl100} ${track.collectionName} ${track.releaseDate} ${track.primaryGenreName} ${track.country} ${track.previewUrl}")
+            Log.d("MyError", "fun refreshDataBase() - isFavorite = $isFavorite")
+        }
+        else if(!isFavorite){
+            favoritesInteractor.deleteTrackFromFavoritesById(track.trackId)
+            Log.d("MyError", "fun refreshDataBase() - deleteTrackFromFavorites(track) ${track.number} ${track.trackId} ${track.trackName} ${track.artistName} ${track.trackTime} ${track.artworkUrl100} ${track.artworkUrl100} ${track.collectionName} ${track.releaseDate} ${track.primaryGenreName} ${track.country} ${track.previewUrl}")
+            Log.d("MyError", "fun refreshDataBase() - isFavorite = $isFavorite")
+        }
     }
 
     companion object {

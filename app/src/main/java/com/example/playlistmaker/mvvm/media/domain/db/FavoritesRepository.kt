@@ -9,7 +9,7 @@ interface FavoritesRepository {
 
     fun addTrackInFavorites(track: Track)
 
-    fun deleteTrackFromFavorites(track: Track)
+    fun deleteTrackFromFavoritesById(id: Long)
 
     fun getFavoritesIdList(): Flow<List<Long>>
 }
