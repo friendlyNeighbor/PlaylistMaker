@@ -1,6 +1,7 @@
 package com.example.playlistmaker.mvvm.media.ui
 
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,6 +36,7 @@ class FragmentFavorites : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,7 +45,6 @@ class FragmentFavorites : Fragment() {
              findNavController().navigate(
                     R.id.action_mediatekaFragment_to_playerFragment,
                     PlayerFragment.createArgs(track))
-
         }
 
         viewModel.setFavoritesLayout()
@@ -71,5 +72,5 @@ class FragmentFavorites : Fragment() {
     companion object {
         fun newInstance() = FragmentFavorites()
     }
-
 }
+

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.mvvm.player.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,8 +60,6 @@ class PlayerFragment : Fragment() {
         viewModel.prepared()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
-            Log.d("MyError", "Frag:observe")
-
             binding.apply {
                 if (it.isFavoriteTrack)
                     buttonLike.setImageResource(R.drawable.ic_button_like_active_51)

@@ -14,8 +14,6 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor): 
     private val favoritesLiveData = MutableLiveData<List<Track>>()
     fun getLiveData(): LiveData<List<Track>> = favoritesLiveData
 
-
-
     fun setFavoritesLayout() {
         viewModelScope.launch {
             val listOfFavorites=favoritesInteractor.getFavoritesTrackList().first()

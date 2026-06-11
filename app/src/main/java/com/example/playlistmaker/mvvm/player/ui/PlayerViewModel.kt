@@ -2,7 +2,6 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -30,10 +29,10 @@ class PlayerViewModel(
 
     private var timerJob: Job? = null
 
-    private var playingStatus: PlayingStatus =PlayingStatus.DEFAULT
+    private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
     private var playingTrack: Track = track
-    private var playedTime:String =TIMER_ZERO
-    private var isFavoriteTrack=false
+    private var playedTime: String = TIMER_ZERO
+    private var isFavoriteTrack = false
 
     init {
         checkOnFavorite()
@@ -44,42 +43,34 @@ class PlayerViewModel(
     }
 
     private fun preparePlayer() {
-            val url: String = track.previewUrl
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-            mediaPlayer.setOnPreparedListener {
-                playingStatus = PlayingStatus.PREPARED
-                postLiveData()
-            }
-            mediaPlayer.setOnCompletionListener {
-                pausePlayer()
-                playingStatus = PlayingStatus.PREPARED
-                postLiveData()
-            }
+        val url: String = track.previewUrl
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playingStatus = PlayingStatus.PREPARED
+            postLiveData()
         }
-
-    fun pause() {
-        pausePlayer()
-    }
-
-    private fun pausePlayer() {
-            mediaPlayer.pause()
-            playingStatus = PlayingStatus.PAUSED
-            stopTimer()
+        mediaPlayer.setOnCompletionListener {
+            pausePlayer()
+            playingStatus = PlayingStatus.PREPARED
+            playedTime=TIMER_ZERO
+            postLiveData()
+        }
     }
 
     fun playbackControl() {
-        if (playingStatus == PlayingStatus.PLAYING)
-            pausePlayer()
-        if (playingStatus == PlayingStatus.PREPARED || playingStatus == PlayingStatus.PAUSED)
-                startPlayer()
+        when (playingStatus) {
+            PlayingStatus.PREPARED, PlayingStatus.PAUSED ->  startPlayer()
+            PlayingStatus.PLAYING                        ->  pausePlayer()
+            PlayingStatus.DEFAULT                        ->  pausePlayer()
+        }
     }
 
     private fun startPlayer() {
         mediaPlayer.start()
         playingStatus = PlayingStatus.PLAYING
-        postLiveData()
         runTimer()
+        postLiveData()
     }
 
     private fun runTimer() {
@@ -93,9 +84,20 @@ class PlayerViewModel(
     }
 
     private fun setTime() {
-            playedTime = dateFormat.format(mediaPlayer.currentPosition)
-            postLiveData()
-        }
+        playedTime = dateFormat.format(mediaPlayer.currentPosition)
+        postLiveData()
+    }
+
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playingStatus = PlayingStatus.PAUSED
+        stopTimer()
+        postLiveData()
+    }
+
+    private fun stopTimer() {
+        timerJob?.cancel()
+    }
 
     fun release() {
         stopTimer()
@@ -105,29 +107,23 @@ class PlayerViewModel(
         postLiveData()
     }
 
-    private fun stopTimer() {
-        timerJob?.cancel()
-    }
-
     fun checkOnFavorite() {
-            viewModelScope.launch {
-               val list = favoritesInteractor.getFavoritesIdList().first()
-                isFavoriteTrack = list.contains(track.trackId)
-                    postLiveData()
-            }
+        viewModelScope.launch {
+            val list = favoritesInteractor.getFavoritesIdList().first()
+            isFavoriteTrack = list.contains(track.trackId)
+            postLiveData()
+        }
     }
 
     fun changeLike() {
-        Log.d("MyError", "fun changeLike()")
         isFavoriteTrack = !isFavoriteTrack
         postLiveData()
     }
 
     fun refreshDataBase() {
-        if(isFavoriteTrack) {
+        if (isFavoriteTrack) {
             favoritesInteractor.addTrackInFavorites(track)
-        }
-        else if(!isFavoriteTrack){
+        } else {
             favoritesInteractor.deleteTrackFromFavoritesById(track.trackId)
         }
     }
@@ -142,6 +138,7 @@ class PlayerViewModel(
             )
         )
     }
+
     companion object {
         private const val TIMER_UPDATE_DELAY = 300L
         private const val TIMER_ZERO = "00:00"
