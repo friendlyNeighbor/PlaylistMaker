@@ -18,16 +18,16 @@ class PlayerFragment : Fragment() {
 
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
-    private lateinit var primaryState: PlayerState
-    private val viewModel: PlayerViewModel by viewModel() {
-        parametersOf(primaryState)
-    }
+    private val track: Track by lazy { requireArguments().get(TRACK) as Track }
+    private val viewModel: PlayerViewModel by viewModel {
+            parametersOf(track)
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentPlayerBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,13 +35,11 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val track: Track = requireArguments().get(TRACK) as Track
-
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
         binding.apply {
             trackName.text = track.trackName
-            artistName.text = track.artistName
+            artistName.text = track.artistName.trim()
             valueTrackTime.text = track.trackTime
             valueYear.text = track.releaseDate.take(4)
             valueAlbum.text = track.collectionName
@@ -51,38 +49,46 @@ class PlayerFragment : Fragment() {
             buttonPlay.setOnClickListener {
                 viewModel.playbackControl()
             }
-        }
-        primaryState = PlayerState(PlayingStatus.DEFAULT, track, getString(R.string.timer))
+
+            buttonLike.setOnClickListener {
+                viewModel.changeLike()
+            }
+
+            toolbar.setOnClickListener { findNavController().navigateUp() }
+        } // binding apply
+
         viewModel.prepared()
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {
+                if (it.isFavoriteTrack)
+                    buttonLike.setImageResource(R.drawable.ic_button_like_active_51)
+                else
+                    buttonLike.setImageResource(R.drawable.ic_button_like_51)
+
                 if (it.playingStatus == PlayingStatus.PREPARED) {
-                    binding.buttonPlay.isEnabled = true
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                    binding.timer.text = it.playedTime
+                    buttonPlay.isEnabled = true
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    timer.text = it.playedTime
                 }
                 if (it.playingStatus == PlayingStatus.PLAYING) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
-                    binding.timer.text = it.playedTime
+                    buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
+                    timer.text = it.playedTime
                 }
                 if (it.playingStatus == PlayingStatus.PAUSED) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                 }
                 if (it.playingStatus == PlayingStatus.DEFAULT) {
-                    binding.buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                    binding.buttonPlay.isEnabled = false
+                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
+                    buttonPlay.isEnabled = false
                 }
-
-                toolbar.setOnClickListener { findNavController().navigateUp() }
             }
         }
-
     }
 
     override fun onPause() {
+        viewModel.refreshDataBase()
         super.onPause()
-        viewModel.pause()
     }
 
     override fun onDestroy() {
@@ -101,5 +107,4 @@ class PlayerFragment : Fragment() {
         fun createArgs(track: Track): Bundle =
             bundleOf(TRACK to track)
     }
-
 }

@@ -62,7 +62,7 @@ class SearchFragment : Fragment() {
                 viewModel.addTrackInHistory(track)
                 findNavController().navigate(
                     R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.Companion.createArgs(track))
+                    PlayerFragment.createArgs(track))
             }
         }
 
@@ -71,7 +71,7 @@ class SearchFragment : Fragment() {
                 viewModel.addTrackInHistory(track)
                 findNavController().navigate(
                     R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.Companion.createArgs(track))
+                    PlayerFragment.createArgs(track))
             }
         }
 

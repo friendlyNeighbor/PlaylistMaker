@@ -6,156 +6,141 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
-class PlayerViewModel(primaryState: PlayerState, private val mediaPlayer: MediaPlayer) :
+class PlayerViewModel(
+    private val track: Track,
+    private val mediaPlayer: MediaPlayer,
+    private val favoritesInteractor: FavoritesInteractor
+) :
     ViewModel() {
 
-    private val playerLiveData = MutableLiveData(primaryState)
+    private val playerLiveData = MutableLiveData<PlayerState>()
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
+
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private var timerJob: Job? = null
 
-    private lateinit var time: String
-    private var playerState = STATE_DEFAULT
+    private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
+    private var playingTrack: Track = track
+    private var playedTime: String = TIMER_ZERO
+    private var isFavoriteTrack = false
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    init {
+        checkOnFavorite()
+    }
 
     fun prepared() {
         preparePlayer()
     }
 
     private fun preparePlayer() {
-        val currentState = playerLiveData.value
-        if (currentState?.playingTrack != null) {
-            val url: String = currentState.playingTrack.previewUrl
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.prepareAsync()
-            time = TIMER_ZERO
-            mediaPlayer.setOnPreparedListener {
-                playerLiveData.postValue(
-                    PlayerState(
-                        PlayingStatus.PREPARED,
-                        currentState.playingTrack,
-                        time
-                    )
-                )
-                playerState = STATE_PREPARED
-            }
-            mediaPlayer.setOnCompletionListener {
-                time = TIMER_ZERO
-                pausePlayer()
-                playerLiveData.postValue(
-                    PlayerState(
-                        PlayingStatus.PREPARED,
-                        currentState.playingTrack,
-                        TIMER_ZERO
-                    )
-                )
-            }
+        val url: String = track.previewUrl
+        mediaPlayer.setDataSource(url)
+        mediaPlayer.prepareAsync()
+        mediaPlayer.setOnPreparedListener {
+            playingStatus = PlayingStatus.PREPARED
+            postLiveData()
         }
-    }
-
-    fun pause() {
-        pausePlayer()
-    }
-
-    private fun pausePlayer() {
-        val currentState = playerLiveData.value
-        if (currentState?.playingTrack != null) {
-            mediaPlayer.pause()
-            playerLiveData.postValue(
-                PlayerState(
-                    PlayingStatus.PAUSED,
-                    currentState.playingTrack,
-                    time
-                )
-            )
-            playerState = STATE_PAUSED
-            stopTimer()
+        mediaPlayer.setOnCompletionListener {
+            pausePlayer()
+            playingStatus = PlayingStatus.PREPARED
+            playedTime=TIMER_ZERO
+            postLiveData()
         }
     }
 
     fun playbackControl() {
-        when (playerState) {
-            STATE_PLAYING -> {
-                pausePlayer()
-            }
-
-            STATE_PREPARED, STATE_PAUSED -> {
-                startPlayer()
-            }
+        when (playingStatus) {
+            PlayingStatus.PREPARED, PlayingStatus.PAUSED ->  startPlayer()
+            PlayingStatus.PLAYING                        ->  pausePlayer()
+            PlayingStatus.DEFAULT                        ->  pausePlayer()
         }
     }
 
     private fun startPlayer() {
-        val currentState = playerLiveData.value
-        if (currentState?.playingTrack != null) {
-            mediaPlayer.start()
-            playerLiveData.postValue(
-                PlayerState(
-                    PlayingStatus.PLAYING,
-                    currentState.playingTrack,
-                    time
-                )
-            )
-            playerState = STATE_PLAYING
-            runTimer()
-        }
+        mediaPlayer.start()
+        playingStatus = PlayingStatus.PLAYING
+        runTimer()
+        postLiveData()
     }
 
     private fun runTimer() {
+        timerJob?.cancel()
         timerJob = viewModelScope.launch {
             while (mediaPlayer.isPlaying) {
-                delay(250L)
+                delay(TIMER_UPDATE_DELAY.milliseconds)
                 setTime()
             }
         }
     }
 
     private fun setTime() {
-        val currentState = playerLiveData.value
-        if (currentState?.playingTrack != null) {
-            time = dateFormat.format(mediaPlayer.currentPosition)
-            playerLiveData.postValue(
-                PlayerState(
-                    PlayingStatus.PLAYING,
-                    currentState.playingTrack,
-                    time
-                )
-            )
-        }
+        playedTime = dateFormat.format(mediaPlayer.currentPosition)
+        postLiveData()
     }
 
-    fun release() {
+    private fun pausePlayer() {
+        mediaPlayer.pause()
+        playingStatus = PlayingStatus.PAUSED
         stopTimer()
-        mediaPlayer.release()
-        val currentState = playerLiveData.value
-        if (currentState?.playingTrack != null) {
-            time = TIMER_ZERO
-            playerLiveData.postValue(
-                PlayerState(
-                    PlayingStatus.DEFAULT,
-                    currentState.playingTrack,
-                    time
-                )
-            )
-        }
+        postLiveData()
     }
 
     private fun stopTimer() {
         timerJob?.cancel()
     }
 
-    companion object {
-        private const val STATE_DEFAULT = 0
-        private const val STATE_PREPARED = 1
-        private const val STATE_PLAYING = 2
-        private const val STATE_PAUSED = 3
+    fun release() {
+        stopTimer()
+        mediaPlayer.release()
+        playedTime = TIMER_ZERO
+        playingStatus = PlayingStatus.DEFAULT
+        postLiveData()
+    }
 
-        private val TIMER_ZERO = "00:00"
+    fun checkOnFavorite() {
+        viewModelScope.launch {
+            val list = favoritesInteractor.getFavoritesIdList().first()
+            isFavoriteTrack = list.contains(track.trackId)
+            postLiveData()
+        }
+    }
+
+    fun changeLike() {
+        isFavoriteTrack = !isFavoriteTrack
+        postLiveData()
+    }
+
+    fun refreshDataBase() {
+        if (isFavoriteTrack) {
+            favoritesInteractor.addTrackInFavorites(track)
+        } else {
+            favoritesInteractor.deleteTrackFromFavoritesById(track.trackId)
+        }
+    }
+
+    private fun postLiveData() {
+        playerLiveData.postValue(
+            PlayerState(
+                playingStatus,
+                playingTrack,
+                playedTime,
+                isFavoriteTrack
+            )
+        )
+    }
+
+    companion object {
+        private const val TIMER_UPDATE_DELAY = 300L
+        private const val TIMER_ZERO = "00:00"
     }
 }

@@ -2,8 +2,8 @@ package com.example.playlistmaker.mvvm.di
 
 import com.example.playlistmaker.mvvm.media.ui.FavoritesViewModel
 import com.example.playlistmaker.mvvm.media.ui.PlaylistsViewModel
-import com.example.playlistmaker.mvvm.player.ui.PlayerState
 import com.example.playlistmaker.mvvm.player.ui.PlayerViewModel
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.SearchState
 import com.example.playlistmaker.mvvm.search.ui.SearchViewModel
 import com.example.playlistmaker.mvvm.settings.ui.SettingsState
@@ -13,8 +13,8 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (primaryState: PlayerState) ->
-        PlayerViewModel(primaryState, get())
+    viewModel { (track: Track) ->
+        PlayerViewModel(track, get(), get())
     }
 
     viewModel { (primaryState: SearchState) ->
@@ -27,6 +27,6 @@ val viewModelModule = module {
 
     viewModel { PlaylistsViewModel() }
 
-    viewModel { FavoritesViewModel() }
+    viewModel { FavoritesViewModel(get()) }
 
 }

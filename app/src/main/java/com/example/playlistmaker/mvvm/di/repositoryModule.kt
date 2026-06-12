@@ -1,5 +1,8 @@
 package com.example.playlistmaker.mvvm.di
 
+import com.example.playlistmaker.mvvm.media.data.db.FavoritesRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
+import com.example.playlistmaker.mvvm.media.domain.db.FavoritesRepository
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.mvvm.search.data.TrackSearchRepositoryImpl
@@ -51,6 +54,13 @@ val repositoryModule = module {
         SharingRepositoryImpl(get())
     }
 
+    factory {
+        TrackDbConvertor()
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get(), get())
+    }
 }
 
 private const val HISTORY = "HISTORY"
