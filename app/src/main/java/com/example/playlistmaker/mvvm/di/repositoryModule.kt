@@ -3,6 +3,7 @@ package com.example.playlistmaker.mvvm.di
 import com.example.playlistmaker.mvvm.media.data.db.FavoritesRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesRepository
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverRepository
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.mvvm.search.data.TrackSearchRepositoryImpl
@@ -32,6 +33,10 @@ val repositoryModule = module {
 
     factory<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(get(named(HISTORY)), get())
+    }
+
+    factory<SearchHistoryRepository> {
+        SearchHistoryRepositoryImpl(get(named(PLAYER)), get())
     }
 
     single<Storage>(named(HISTORY)) {
@@ -65,5 +70,5 @@ val repositoryModule = module {
 
 private const val HISTORY = "HISTORY"
 private const val DARK_THEME = "DARK_THEME"
-
+private const val PLAYER= "PLAYER"
 

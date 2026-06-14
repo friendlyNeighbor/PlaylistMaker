@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -18,7 +19,8 @@ import kotlin.time.Duration.Companion.milliseconds
 class PlayerViewModel(
     private val track: Track,
     private val mediaPlayer: MediaPlayer,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesInteractor: FavoritesInteractor,
+    private val trackSaverInteractor: TrackSaverInteractor
 ) :
     ViewModel() {
 
@@ -137,6 +139,16 @@ class PlayerViewModel(
                 isFavoriteTrack
             )
         )
+    }
+
+
+    fun addTrackInMemory(track:Track) {
+        trackSaverInteractor.addTrackInMemory(track)
+    }
+    fun getTrackListMemory():Track {
+        val list = trackSaverInteractor.getTrackListMemory()
+        val trackInMemory= list[0]
+        return trackInMemory
     }
 
     companion object {
