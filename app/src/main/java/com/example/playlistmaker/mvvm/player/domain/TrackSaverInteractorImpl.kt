@@ -10,7 +10,9 @@ class TrackSaverInteractorImpl(val searchHistoryRepository: SearchHistoryReposit
     override fun clearMemory() {
         searchHistoryRepository.clearHistory()
     }
-    override fun getTrackListMemory(): MutableList<Track> {
-        return searchHistoryRepository.getTrackListHistory()
+    override fun getTrackFromMemory(): Track {
+        val list = searchHistoryRepository.getTrackListHistory()
+        val track:Track = list[0]
+        return track
     }
 }

@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
-class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor): ViewModel() {
+class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor, private val trackSaverInteractor: TrackSaverInteractor): ViewModel() {
     private val favoritesLiveData = MutableLiveData<List<Track>>()
     fun getLiveData(): LiveData<List<Track>> = favoritesLiveData
 
@@ -22,5 +23,9 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor): 
                 else
                     favoritesLiveData.postValue(listOfFavorites)
         }
+    }
+
+    fun addTrackInMemory(track: Track) {
+        trackSaverInteractor.addTrackInMemory(track)
     }
 }

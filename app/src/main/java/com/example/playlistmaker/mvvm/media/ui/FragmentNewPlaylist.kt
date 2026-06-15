@@ -14,7 +14,6 @@ import com.example.playlistmaker.mvvm.search.domain.model.Track
 class FragmentNewPlaylist: Fragment() {
     //private val viewModel: FavoritesViewModel by viewModel()
 
-    private val track: Track by lazy { requireArguments().get(TRACK) as Track }
     private var _binding: FragmentNewPlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -31,7 +30,6 @@ class FragmentNewPlaylist: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnClickListener { findNavController().navigateUp() }
-
     }
 
     override fun onDestroyView() {
@@ -39,10 +37,4 @@ class FragmentNewPlaylist: Fragment() {
         _binding = null
     }
 
-    companion object {
-        private const val TRACK = "TRACK"
-
-        fun createArgs(track: Track): Bundle =
-            bundleOf(TRACK to track)
-    }
 }

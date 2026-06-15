@@ -2,6 +2,8 @@ package com.example.playlistmaker.mvvm.di
 
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
 import com.example.playlistmaker.mvvm.media.domain.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractorImpl
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.impl.SearchHistoryInteractorImpl
@@ -20,8 +22,12 @@ val interactorModule = module {
         TrackSearchInteractorImpl(get())
     }
 
+    factory<TrackSaverInteractor> {
+        TrackSaverInteractorImpl(get(named(PLAYER)))
+    }
+
     factory<SearchHistoryInteractor> {
-        SearchHistoryInteractorImpl(get())
+        SearchHistoryInteractorImpl(get(named(HISTORY)))
     }
 
     factory<ThemeInteractor> {
@@ -39,3 +45,5 @@ val interactorModule = module {
 }
 
 private const val DARK_THEME = "DARK_THEME"
+private const val HISTORY = "HISTORY"
+private const val PLAYER = "PLAYER"

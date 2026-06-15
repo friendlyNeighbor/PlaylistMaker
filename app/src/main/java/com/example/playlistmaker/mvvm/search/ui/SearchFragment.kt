@@ -60,18 +60,16 @@ class SearchFragment : Fragment() {
         tracksAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
                 viewModel.addTrackInHistory(track)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track))
+                viewModel.addTrackInMemory(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
             }
         }
 
         historyAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
                 viewModel.addTrackInHistory(track)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track))
+                viewModel.addTrackInMemory(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
             }
         }
 

@@ -1,7 +1,6 @@
 package com.example.playlistmaker.mvvm.player.ui
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,11 +20,10 @@ class PlayerFragment : Fragment() {
     private var _binding: FragmentPlayerBinding? = null
     private val binding get() = _binding!!
     private lateinit var track: Track
-    // private val track: Track by lazy { requireArguments().get(TRACK) as Track }
-    private val viewModel: PlayerViewModel by viewModel {
-            parametersOf(track)
-        }
+    //private val track: Track by lazy { requireArguments().get(TRACK) as Track }
+    private val viewModel: PlayerViewModel by viewModel()
 
+/*
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,6 +38,8 @@ class PlayerFragment : Fragment() {
         }
     }
 
+
+ */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,6 +53,7 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        track=viewModel.getTrack()
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
         binding.apply {
@@ -73,9 +74,9 @@ class PlayerFragment : Fragment() {
             }
 
             buttonAdd.setOnClickListener {
+                viewModel.release()
                 findNavController().navigate(
-                    R.id.action_playerFragment_to_fragmentNewPlaylist,
-                    FragmentNewPlaylist.createArgs(track)
+                    R.id.action_playerFragment_to_fragmentNewPlaylist
                 )
             }
 
@@ -119,7 +120,6 @@ class PlayerFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         viewModel.release()
-        viewModel.addTrackInMemory(track)
     }
 
     override fun onDestroyView() {
@@ -127,11 +127,4 @@ class PlayerFragment : Fragment() {
         _binding = null
     }
 
-
-    companion object {
-        private const val TRACK = "TRACK"
-
-        fun createArgs(track: Track): Bundle =
-            bundleOf(TRACK to track)
-    }
 }

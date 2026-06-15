@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +18,6 @@ import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    private val track: Track,
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor,
     private val trackSaverInteractor: TrackSaverInteractor
@@ -26,13 +26,14 @@ class PlayerViewModel(
 
     private val playerLiveData = MutableLiveData<PlayerState>()
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
+    private val playingTrack: Track = trackSaverInteractor.getTrackFromMemory()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     private var timerJob: Job? = null
 
     private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
-    private var playingTrack: Track = track
+
     private var playedTime: String = TIMER_ZERO
     private var isFavoriteTrack = false
 
@@ -42,10 +43,13 @@ class PlayerViewModel(
 
     fun prepared() {
         preparePlayer()
+        if(playingTrack==null)
+            Log.d("MyError", "null")
+        Log.d("MyError", playingTrack.trackName)
     }
 
     private fun preparePlayer() {
-        val url: String = track.previewUrl
+        val url: String = playingTrack.previewUrl
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -112,7 +116,7 @@ class PlayerViewModel(
     fun checkOnFavorite() {
         viewModelScope.launch {
             val list = favoritesInteractor.getFavoritesIdList().first()
-            isFavoriteTrack = list.contains(track.trackId)
+            isFavoriteTrack = list.contains(playingTrack.trackId)
             postLiveData()
         }
     }
@@ -124,9 +128,9 @@ class PlayerViewModel(
 
     fun refreshDataBase() {
         if (isFavoriteTrack) {
-            favoritesInteractor.addTrackInFavorites(track)
+            favoritesInteractor.addTrackInFavorites(playingTrack)
         } else {
-            favoritesInteractor.deleteTrackFromFavoritesById(track.trackId)
+            favoritesInteractor.deleteTrackFromFavoritesById(playingTrack.trackId)
         }
     }
 
@@ -141,14 +145,8 @@ class PlayerViewModel(
         )
     }
 
-
-    fun addTrackInMemory(track:Track) {
-        trackSaverInteractor.addTrackInMemory(track)
-    }
-    fun getTrackListMemory():Track {
-        val list = trackSaverInteractor.getTrackListMemory()
-        val trackInMemory= list[0]
-        return trackInMemory
+    fun getTrack(): Track {
+        return playingTrack
     }
 
     companion object {

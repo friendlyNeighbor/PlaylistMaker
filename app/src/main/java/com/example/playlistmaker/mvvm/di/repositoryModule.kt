@@ -31,11 +31,11 @@ val repositoryModule = module {
         RetrofitClient(get(), get())
     }
 
-    factory<SearchHistoryRepository> {
+    factory<SearchHistoryRepository>(named(HISTORY)) {
         SearchHistoryRepositoryImpl(get(named(HISTORY)), get())
     }
 
-    factory<SearchHistoryRepository> {
+    factory<SearchHistoryRepository>(named(PLAYER)) {
         SearchHistoryRepositoryImpl(get(named(PLAYER)), get())
     }
 
@@ -49,6 +49,10 @@ val repositoryModule = module {
 
     single<Storage>(named(DARK_THEME)) {
         SharedPrefRepositoryImpl(DARK_THEME, get())
+    }
+
+    single<Storage>(named(PLAYER)) {
+        SharedPrefRepositoryImpl(PLAYER, get())
     }
 
     factory {
