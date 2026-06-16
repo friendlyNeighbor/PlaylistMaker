@@ -1,20 +1,17 @@
-package com.example.playlistmaker.mvvm.media.ui
+package com.example.playlistmaker.mvvm.media.ui.createPlaylist
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.playlistmaker.databinding.FragmentNewPlaylistBinding
-import com.example.playlistmaker.mvvm.search.domain.model.Track
+import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
 
+class FragmentCreatePlaylist: Fragment() {
 
-class FragmentNewPlaylist: Fragment() {
-    //private val viewModel: FavoritesViewModel by viewModel()
-
-    private var _binding: FragmentNewPlaylistBinding? = null
+    private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -22,7 +19,7 @@ class FragmentNewPlaylist: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNewPlaylistBinding.inflate(inflater, container, false)
+        _binding = FragmentCreatePlaylistBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -30,6 +27,13 @@ class FragmentNewPlaylist: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnClickListener { findNavController().navigateUp() }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        requireActivity().window.setSoftInputMode(
+            WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
+        )
     }
 
     override fun onDestroyView() {

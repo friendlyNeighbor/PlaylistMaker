@@ -5,6 +5,7 @@ import com.example.playlistmaker.mvvm.search.domain.model.Track
 
 class TrackSaverInteractorImpl(val searchHistoryRepository: SearchHistoryRepository): TrackSaverInteractor {
     override fun addTrackInMemory(track: Track) {
+        searchHistoryRepository.clearHistory()
         searchHistoryRepository.addTrackInHistory(track)
     }
     override fun clearMemory() {

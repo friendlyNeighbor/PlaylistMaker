@@ -15,7 +15,7 @@
         android:visibility="gone">
 
         <Button
-            android:id="@+id/reload"
+            android:id="@+id/buttonCreate"
             style="@style/buttonReload"
             android:layout_width="133dp"
             android:layout_height="36dp"
@@ -28,7 +28,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="46dp"
             android:gravity="center"
-            android:src="@drawable/ic_not_found_120" />
+            android:src="@drawable/ic_not_found_120"
+            tools:ignore="ContentDescription" />
 
         <TextView
             style="@style/errorText"

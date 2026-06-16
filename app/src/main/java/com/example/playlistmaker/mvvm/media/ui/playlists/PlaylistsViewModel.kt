@@ -1,9 +1,8 @@
-package com.example.playlistmaker.mvvm.media.ui
+package com.example.playlistmaker.mvvm.media.ui.playlists
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-
 
 class PlaylistsViewModel: ViewModel() {
     private val playlistsLiveData = MutableLiveData<PlaylistsState>()

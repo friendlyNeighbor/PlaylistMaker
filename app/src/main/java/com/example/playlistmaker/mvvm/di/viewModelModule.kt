@@ -1,9 +1,8 @@
 package com.example.playlistmaker.mvvm.di
 
-import com.example.playlistmaker.mvvm.media.ui.FavoritesViewModel
-import com.example.playlistmaker.mvvm.media.ui.PlaylistsViewModel
+import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesViewModel
+import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsViewModel
 import com.example.playlistmaker.mvvm.player.ui.PlayerViewModel
-import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.SearchState
 import com.example.playlistmaker.mvvm.search.ui.SearchViewModel
 import com.example.playlistmaker.mvvm.settings.ui.SettingsState

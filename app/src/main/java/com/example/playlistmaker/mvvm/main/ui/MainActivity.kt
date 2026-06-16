@@ -31,12 +31,11 @@ class MainActivity : AppCompatActivity() {
 
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
-                R.id.playerFragment -> {
-                    binding.bottomNavigationView.visibility = View.GONE
-                }
-
-                else -> {
+                R.id.mediatekaFragment, R.id.searchFragment, R.id.settingsFragment, -> {
                     binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.GONE
                 }
             }
         }

@@ -2,7 +2,6 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,26 +25,18 @@ class PlayerViewModel(
 
     private val playerLiveData = MutableLiveData<PlayerState>()
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
-    private val playingTrack: Track = trackSaverInteractor.getTrackFromMemory()
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
-    private var timerJob: Job? = null
-
+    private val playingTrack: Track = getTrack()
     private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
-
     private var playedTime: String = TIMER_ZERO
     private var isFavoriteTrack = false
 
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private var timerJob: Job? = null
+
     init {
         checkOnFavorite()
-    }
-
-    fun prepared() {
         preparePlayer()
-        if(playingTrack==null)
-            Log.d("MyError", "null")
-        Log.d("MyError", playingTrack.trackName)
     }
 
     private fun preparePlayer() {
@@ -105,7 +96,7 @@ class PlayerViewModel(
         timerJob?.cancel()
     }
 
-    fun release() {
+    private fun release() {
         stopTimer()
         mediaPlayer.release()
         playedTime = TIMER_ZERO
@@ -113,7 +104,7 @@ class PlayerViewModel(
         postLiveData()
     }
 
-    fun checkOnFavorite() {
+    private fun checkOnFavorite() {
         viewModelScope.launch {
             val list = favoritesInteractor.getFavoritesIdList().first()
             isFavoriteTrack = list.contains(playingTrack.trackId)
@@ -146,7 +137,12 @@ class PlayerViewModel(
     }
 
     fun getTrack(): Track {
-        return playingTrack
+        return trackSaverInteractor.getTrackFromMemory()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        release()
     }
 
     companion object {

@@ -1,22 +1,17 @@
-package com.example.playlistmaker.mvvm.media.ui
-
+package com.example.playlistmaker.mvvm.media.ui.favorites
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentFavoritesBinding
-import com.example.playlistmaker.mvvm.player.ui.PlayerFragment
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.TrackAdapter
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.getValue
 
 class FragmentFavorites : Fragment() {
     private val viewModel: FavoritesViewModel by viewModel()
@@ -50,15 +45,15 @@ class FragmentFavorites : Fragment() {
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
-                binding.favoritesIsEmpty.visibility = VISIBLE
-                binding.recycler.visibility = GONE
+                binding.favoritesIsEmpty.visibility = View.VISIBLE
+                binding.recycler.visibility = View.GONE
             }
             else {
                 trackListOfFavorites.clear()
                 trackListOfFavorites.addAll(it)
                 tracksAdapter.notifyDataSetChanged()
-                binding.favoritesIsEmpty.visibility = GONE
-                binding.recycler.visibility = VISIBLE
+                binding.favoritesIsEmpty.visibility = View.GONE
+                binding.recycler.visibility = View.VISIBLE
             }
         }
     }
@@ -72,4 +67,3 @@ class FragmentFavorites : Fragment() {
         fun newInstance() = FragmentFavorites()
     }
 }
-
