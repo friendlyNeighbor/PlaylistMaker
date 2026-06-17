@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
@@ -27,6 +28,14 @@ class FragmentCreatePlaylist: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.toolbar.setOnClickListener { findNavController().navigateUp() }
+
+        binding.titlePlaylist.doOnTextChanged { text, _, _, _ ->
+            if (text.isNullOrEmpty()) {
+                binding.buttonCreate.isEnabled=false
+            } else {
+                binding.buttonCreate.isEnabled=true
+            }
+        }
     }
 
     override fun onResume() {
