@@ -27,8 +27,7 @@ class FavoritesRepositoryImpl(
     }
 
     override fun deleteTrackFromFavoritesById(id: Long) {
-        GlobalScope.launch {   appDatabase.getTrackDao().deleteTrackById(id)
-        }
+        GlobalScope.launch {   appDatabase.getTrackDao().deleteTrackById(id) }
     }
 
     override fun getFavoritesIdList(): Flow<List<Long>> = flow {

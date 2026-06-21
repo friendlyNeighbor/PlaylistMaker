@@ -1,8 +1,13 @@
 package com.example.playlistmaker.mvvm.di
 
 import com.example.playlistmaker.mvvm.media.data.db.FavoritesRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.PlaylistRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvertor
 import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
+import com.example.playlistmaker.mvvm.media.data.impl.ImageSaverRepositoryImpl
+import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverRepository
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesRepository
+import com.example.playlistmaker.mvvm.media.domain.db.PlaylistRepository
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
 import com.example.playlistmaker.mvvm.search.data.TrackSearchRepositoryImpl
@@ -69,9 +74,20 @@ val repositoryModule = module {
     single<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
     }
-}
 
-private const val HISTORY = "HISTORY"
-private const val DARK_THEME = "DARK_THEME"
-private const val PLAYER= "PLAYER"
+    factory<ImageSaverRepository> {
+        ImageSaverRepositoryImpl(get())
+    }
+
+    factory {
+        PlaylistDbConvertor()
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+}
+    private const val HISTORY = "HISTORY"
+    private const val DARK_THEME = "DARK_THEME"
+    private const val PLAYER = "PLAYER"
 

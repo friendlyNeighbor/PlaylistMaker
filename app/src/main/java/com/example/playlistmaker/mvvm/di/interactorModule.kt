@@ -1,7 +1,11 @@
 package com.example.playlistmaker.mvvm.di
 
+import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.mvvm.media.domain.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.mvvm.media.domain.impl.ImageSaverInteractorImpl
+import com.example.playlistmaker.mvvm.media.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractorImpl
 import com.example.playlistmaker.mvvm.search.domain.api.SearchHistoryInteractor
@@ -42,6 +46,13 @@ val interactorModule = module {
         FavoritesInteractorImpl(get())
     }
 
+    factory<ImageSaverInteractor> {
+        ImageSaverInteractorImpl(get())
+    }
+
+    single< PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
+    }
 }
 
 private const val DARK_THEME = "DARK_THEME"

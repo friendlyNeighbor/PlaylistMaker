@@ -1,10 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     xmlns:tools="http://schemas.android.com/tools"
     >
+
+    <Button
+        android:id="@+id/buttonCreate"
+        style="@style/buttonReload"
+        android:layout_width="133dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/new_playlist"
+        tools:ignore="TouchTargetSizeCheck" />
 
     <LinearLayout
         android:id="@+id/playlistsIsEmpty"
@@ -12,16 +25,8 @@
         android:layout_height="match_parent"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        android:visibility="gone">
-
-        <Button
-            android:id="@+id/buttonCreate"
-            style="@style/buttonReload"
-            android:layout_width="133dp"
-            android:layout_height="36dp"
-            android:layout_marginTop="24dp"
-            android:text="@string/new_playlist"
-            tools:ignore="TouchTargetSizeCheck" />
+        android:visibility="gone"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:layout_width="wrap_content"
@@ -35,4 +40,11 @@
             style="@style/errorText"
             android:text="@string/playlists_not_created" />
     </LinearLayout>
-</FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</LinearLayout>

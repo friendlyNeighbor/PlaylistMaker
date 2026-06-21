@@ -24,10 +24,10 @@ val viewModelModule = module {
         SettingsViewModel(primaryState, get(), get())
     }
 
-    viewModel { PlaylistsViewModel() }
+    viewModel { PlaylistsViewModel(get(), get()) }
 
     viewModel { FavoritesViewModel(get(),get()) }
 
-    viewModel { CreatePlaylistViewModel() }
+    viewModel { CreatePlaylistViewModel(get(), get()) }
 
 }
