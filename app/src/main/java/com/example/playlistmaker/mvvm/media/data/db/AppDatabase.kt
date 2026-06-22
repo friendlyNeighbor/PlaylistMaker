@@ -15,5 +15,5 @@ abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getPlaylistDao(): PlaylistDao
 
-    abstract fun TrackInPlaylists(): TrackInPlaylistsDao
+    abstract fun getTrackInPlaylistsDao(): TrackInPlaylistsDao
 }

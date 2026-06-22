@@ -35,10 +35,6 @@ class FavoritesRepositoryImpl(
         emit(idList)
     }
 
-    private fun convertFromTrackEntity(track: TrackEntity): Track {
-        return trackDbConvertor.map(track)
-    }
-
     private fun convertToTrackEntity(track: Track): TrackEntity {
         return trackDbConvertor.map(track) }
 

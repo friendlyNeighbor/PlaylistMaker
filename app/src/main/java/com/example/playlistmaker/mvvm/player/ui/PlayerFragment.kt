@@ -56,6 +56,14 @@ class PlayerFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
+        playerAdapter.onPlaylistClick = { track ->
+            if (clickDebounce()) {
+                viewModel.addTrackInHistory(track)
+                viewModel.addTrackInMemory(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
+            }
+        }
+
         binding.recycler.adapter = playerAdapter
 
         track=viewModel.getTrack()

@@ -24,7 +24,8 @@ class PlayerViewModel(
     private val favoritesInteractor: FavoritesInteractor,
     private val trackSaverInteractor: TrackSaverInteractor,
     private val playlistInteractor: PlaylistInteractor,
-    private val imageSaverInteractor: ImageSaverInteractor
+    private val imageSaverInteractor: ImageSaverInteractor,
+    private val favoritesInteractor2: FavoritesInteractor,
 ) :
     ViewModel() {
 

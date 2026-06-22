@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.di
 
 import com.example.playlistmaker.mvvm.media.data.db.FavoritesRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.PlaylistRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.TrackInPlaylistsRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvertor
 import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
 import com.example.playlistmaker.mvvm.media.data.impl.ImageSaverRepositoryImpl
@@ -86,6 +87,11 @@ val repositoryModule = module {
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(get(), get())
     }
+
+    single<FavoritesRepository>(named("2")) {
+        TrackInPlaylistsRepositoryImpl(get(), get())
+    }
+
 }
     private const val HISTORY = "HISTORY"
     private const val DARK_THEME = "DARK_THEME"

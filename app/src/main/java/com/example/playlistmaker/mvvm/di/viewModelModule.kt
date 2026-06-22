@@ -9,11 +9,12 @@ import com.example.playlistmaker.mvvm.search.ui.SearchViewModel
 import com.example.playlistmaker.mvvm.settings.ui.SettingsState
 import com.example.playlistmaker.mvvm.settings.ui.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { PlayerViewModel(get(), get(), get(), get(), get())
+    viewModel { PlayerViewModel(get(), get(), get(), get(), get(), get(named("2")))
     }
 
     viewModel { (primaryState: SearchState) ->

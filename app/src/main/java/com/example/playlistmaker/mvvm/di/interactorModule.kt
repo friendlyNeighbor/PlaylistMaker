@@ -53,6 +53,10 @@ val interactorModule = module {
     single< PlaylistInteractor> {
         PlaylistInteractorImpl(get())
     }
+
+    single<FavoritesInteractor>(named("2")) {
+        FavoritesInteractorImpl(get((named("2"))))
+    }
 }
 
 private const val DARK_THEME = "DARK_THEME"
