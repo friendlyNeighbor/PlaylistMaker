@@ -12,6 +12,7 @@ class PlaylistEntity(
         @PrimaryKey
         var title: String="",
         var description: String="",
+        var idListTracks: String="",
         @Ignore
         var uriImage: Uri? = null
     )

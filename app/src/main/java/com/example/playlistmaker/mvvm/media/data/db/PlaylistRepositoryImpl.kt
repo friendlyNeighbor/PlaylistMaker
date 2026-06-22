@@ -27,10 +27,6 @@ class PlaylistRepositoryImpl(
         GlobalScope.launch {   appDatabase.getPlaylistDao().deletePlaylistByName(title) }
     }
 
-    private fun convertFromPlaylistEntity(playlist: PlaylistEntity): Playlist {
-        return playlistDbConvertor.map(playlist)
-    }
-
     private fun convertFromPlaylistEntityList(listOfPlaylist: List<PlaylistEntity>): List<Playlist> {
         return listOfPlaylist.map { playlist -> playlistDbConvertor.map(playlist) }
     }

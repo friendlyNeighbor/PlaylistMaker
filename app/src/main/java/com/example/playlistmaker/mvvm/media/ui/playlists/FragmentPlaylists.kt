@@ -35,7 +35,6 @@ class FragmentPlaylists : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         binding.recycler.layoutManager = GridLayoutManager(requireActivity(), 2)
         binding.recycler.adapter = playlistAdapter
 

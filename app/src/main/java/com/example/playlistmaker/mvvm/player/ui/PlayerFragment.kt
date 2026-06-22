@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.mvvm.search.domain.model.Track
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -32,6 +33,23 @@ class PlayerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
+        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+
+        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_HIDDEN -> {
+                        binding.overlay.visibility = View.GONE
+                    }
+                    else -> {
+                        binding.overlay.visibility = View.VISIBLE
+                    }
+                }
+            }
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
+
         track=viewModel.getTrack()
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
             .into(binding.placeholder)
@@ -53,9 +71,10 @@ class PlayerFragment : Fragment() {
             }
 
             buttonAdd.setOnClickListener {
-                findNavController().navigate(
-                    R.id.action_playerFragment_to_fragmentNewPlaylist
-                )
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+           //     findNavController().navigate(
+           //         R.id.action_playerFragment_to_fragmentNewPlaylist
+           //     )
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }

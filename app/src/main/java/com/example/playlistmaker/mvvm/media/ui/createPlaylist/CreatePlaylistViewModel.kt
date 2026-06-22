@@ -15,7 +15,7 @@ class CreatePlaylistViewModel(private val imageSaverInteractor: ImageSaverIntera
     fun getLiveData():LiveData<StateCreate> = createPlaylistLiveData
 
     fun savePlaylist(textTitle: String, textDescription: String, uriImage: Uri?) {
-        playlistInteractor.addNewPlaylist(Playlist(textTitle, textDescription, null))
+        playlistInteractor.addNewPlaylist(Playlist(textTitle, textDescription,emptyList() ,null))
         if(uriImage!=null) {
             imageSaverInteractor.saveImage(uriImage, textTitle)
     }
