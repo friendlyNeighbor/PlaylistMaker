@@ -6,7 +6,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
+import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
@@ -19,7 +22,9 @@ import kotlin.time.Duration.Companion.milliseconds
 class PlayerViewModel(
     private val mediaPlayer: MediaPlayer,
     private val favoritesInteractor: FavoritesInteractor,
-    private val trackSaverInteractor: TrackSaverInteractor
+    private val trackSaverInteractor: TrackSaverInteractor,
+    private val playlistInteractor: PlaylistInteractor,
+    private val imageSaverInteractor: ImageSaverInteractor
 ) :
     ViewModel() {
 
@@ -30,6 +35,7 @@ class PlayerViewModel(
     private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
     private var playedTime: String = TIMER_ZERO
     private var isFavoriteTrack = false
+    private var listOfPlaylist: List<Playlist> = emptyList()
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var timerJob: Job? = null
@@ -125,13 +131,27 @@ class PlayerViewModel(
         }
     }
 
+    fun  readPlaylistDb() {
+        viewModelScope.launch {
+            val list = playlistInteractor.getListOfPlaylists().first()
+            if (list.isNotEmpty()) {
+                    for (playlist in list) {
+                        playlist.uriImage = imageSaverInteractor.getImage(playlist.title)
+                    }
+                listOfPlaylist = list
+                postLiveData()
+            }
+        }
+    }
+
     private fun postLiveData() {
         playerLiveData.postValue(
             PlayerState(
                 playingStatus,
                 playingTrack,
                 playedTime,
-                isFavoriteTrack
+                isFavoriteTrack,
+                listOfPlaylist
             )
         )
     }
@@ -139,6 +159,8 @@ class PlayerViewModel(
     fun getTrack(): Track {
         return trackSaverInteractor.getTrackFromMemory()
     }
+
+
 
     override fun onCleared() {
         super.onCleared()

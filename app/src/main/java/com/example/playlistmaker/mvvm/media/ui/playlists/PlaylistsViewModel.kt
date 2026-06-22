@@ -26,6 +26,5 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor, pri
                 playlistsLiveData.postValue(PlaylistsState(listOfPlaylist))
             }
         }
-
     }
 }

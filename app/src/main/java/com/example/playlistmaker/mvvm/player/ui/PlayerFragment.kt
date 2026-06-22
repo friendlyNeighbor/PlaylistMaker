@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.player.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
+import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -21,6 +23,9 @@ class PlayerFragment : Fragment() {
     private lateinit var track: Track
     private val viewModel: PlayerViewModel by viewModel()
 
+    private val listOfPlaylist: MutableList<Playlist> = mutableListOf()
+    private val playerAdapter = PlayerAdapter(listOfPlaylist)
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -30,6 +35,7 @@ class PlayerFragment : Fragment() {
         return binding.root
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -49,6 +55,8 @@ class PlayerFragment : Fragment() {
             }
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
+
+        binding.recycler.adapter = playerAdapter
 
         track=viewModel.getTrack()
         Glide.with(this).load(track.artworkUrl100.replaceAfterLast('/', "512x512bb.jpg"))
@@ -71,6 +79,7 @@ class PlayerFragment : Fragment() {
             }
 
             buttonAdd.setOnClickListener {
+                viewModel.readPlaylistDb()
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
            //     findNavController().navigate(
            //         R.id.action_playerFragment_to_fragmentNewPlaylist
@@ -102,6 +111,11 @@ class PlayerFragment : Fragment() {
                 if (it.playingStatus == PlayingStatus.DEFAULT) {
                     buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                     buttonPlay.isEnabled = false
+                }
+                if(it.listOfPlaylist.isNotEmpty()) {
+                    listOfPlaylist.clear()
+                    listOfPlaylist.addAll(it.listOfPlaylist)
+                    playerAdapter.notifyDataSetChanged()
                 }
             }
         }

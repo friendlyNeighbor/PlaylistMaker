@@ -17,7 +17,8 @@ class TrackDbConvertor {
             track.releaseDate,
             track.primaryGenreName,
             track.country,
-            track.previewUrl)
+            track.previewUrl
+        )
     }
 
     fun map(track: TrackEntity): Track {
@@ -32,6 +33,7 @@ class TrackDbConvertor {
             track.releaseDate,
             track.primaryGenreName,
             track.country,
-            track.previewUrl)
+            track.previewUrl
+        )
     }
 }
