@@ -11,4 +11,5 @@ interface PlaylistRepository {
 
     fun deletePlaylist(title: String)
 
+    fun getPlaylist(title:String): Flow<Playlist>
 }

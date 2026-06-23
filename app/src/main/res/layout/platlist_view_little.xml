@@ -6,7 +6,7 @@
     android:layout_height="@dimen/height_view"
     android:layout_gravity="center"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="horizontal">
+    android:orientation="horizontal" >
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/cover"

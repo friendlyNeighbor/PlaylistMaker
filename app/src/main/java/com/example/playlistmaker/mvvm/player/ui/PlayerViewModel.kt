@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -137,6 +138,7 @@ class PlayerViewModel(
             val list = playlistInteractor.getListOfPlaylists().first()
             if (list.isNotEmpty()) {
                     for (playlist in list) {
+
                         playlist.uriImage = imageSaverInteractor.getImage(playlist.title)
                     }
                 listOfPlaylist = list
@@ -161,7 +163,16 @@ class PlayerViewModel(
         return trackSaverInteractor.getTrackFromMemory()
     }
 
+    fun addTrackInSorted() {
+        favoritesInteractor2.addTrackInFavorites(playingTrack)
+    }
 
+    fun addTrackIdInPlaylist(playlist:Playlist) {
+        playlist.idListTracks += listOf(playingTrack.trackId)
+        for (id in playlist.idListTracks)
+            Log.d("MyError","id = ${id}")
+        playlistInteractor.addNewPlaylist(playlist)
+    }
 
     override fun onCleared() {
         super.onCleared()

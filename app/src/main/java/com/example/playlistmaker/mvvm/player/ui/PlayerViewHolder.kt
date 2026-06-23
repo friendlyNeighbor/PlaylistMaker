@@ -14,7 +14,8 @@ class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bind(playlist: Playlist) {
         title.text = playlist.title
         val trackCount = playlist.idListTracks.size
-        val numbers = itemView.context.resources.getQuantityString(R.plurals.track_count, trackCount, trackCount)
+        val numbers = trackCount.toString()
+        //val numbers = itemView.context.resources.getQuantityString(R.plurals.track_count, trackCount, trackCount)
         numberOfTracks.text = numbers
         if(playlist.uriImage!=null)
             cover.setImageURI(playlist.uriImage)

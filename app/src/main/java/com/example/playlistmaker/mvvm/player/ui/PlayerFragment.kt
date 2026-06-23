@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -56,12 +57,10 @@ class PlayerFragment : Fragment() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
-        playerAdapter.onPlaylistClick = { track ->
-            if (clickDebounce()) {
-                viewModel.addTrackInHistory(track)
-                viewModel.addTrackInMemory(track)
-                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
-            }
+        playerAdapter.onPlaylistClick = { playlist ->
+            viewModel.addTrackInSorted()
+            viewModel.addTrackIdInPlaylist(playlist)
+            Toast.makeText(requireActivity(),"сохранил", Toast.LENGTH_LONG).show()
         }
 
         binding.recycler.adapter = playerAdapter
@@ -89,13 +88,16 @@ class PlayerFragment : Fragment() {
             buttonAdd.setOnClickListener {
                 viewModel.readPlaylistDb()
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-           //     findNavController().navigate(
-           //         R.id.action_playerFragment_to_fragmentNewPlaylist
-           //     )
             }
 
             toolbar.setOnClickListener { findNavController().navigateUp() }
+
+            buttonCreate.setOnClickListener {
+                Toast.makeText(requireActivity(), "buttonCreate", Toast.LENGTH_LONG).show()
+            }
         } // binding apply
+
+
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {

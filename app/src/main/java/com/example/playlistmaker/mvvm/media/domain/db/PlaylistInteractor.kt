@@ -9,4 +9,6 @@ interface PlaylistInteractor {
     fun addNewPlaylist(playlist: Playlist)
 
     fun deletePlaylist(title: String)
+
+    fun getPlaylist(title: String): Flow<Playlist>
 }

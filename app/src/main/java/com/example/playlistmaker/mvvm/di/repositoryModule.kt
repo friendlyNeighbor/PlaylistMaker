@@ -5,6 +5,7 @@ import com.example.playlistmaker.mvvm.media.data.db.PlaylistRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.TrackInPlaylistsRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvertor
 import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
+import com.example.playlistmaker.mvvm.media.data.db.converters.TrackInPlaylistsDbConvertor
 import com.example.playlistmaker.mvvm.media.data.impl.ImageSaverRepositoryImpl
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverRepository
 import com.example.playlistmaker.mvvm.media.domain.db.FavoritesRepository
@@ -86,6 +87,10 @@ val repositoryModule = module {
 
     single<PlaylistRepository> {
         PlaylistRepositoryImpl(get(), get())
+    }
+
+    factory {
+        TrackInPlaylistsDbConvertor()
     }
 
     single<FavoritesRepository>(named("2")) {
