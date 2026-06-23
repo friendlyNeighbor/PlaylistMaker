@@ -14,6 +14,7 @@ class CreatePlaylistViewModel(private val imageSaverInteractor: ImageSaverIntera
     private val createPlaylistLiveData = MutableLiveData<StateCreate>()
     fun getLiveData():LiveData<StateCreate> = createPlaylistLiveData
 
+    private var uriImage:Uri? = null
     fun savePlaylist(textTitle: String, textDescription: String, uriImage: Uri?) {
         playlistInteractor.addNewPlaylist(Playlist(textTitle, textDescription,emptyList() ,null))
         if(uriImage!=null) {
@@ -21,4 +22,8 @@ class CreatePlaylistViewModel(private val imageSaverInteractor: ImageSaverIntera
     }
         }
 
+    fun pickImage(uri:Uri) {
+        uriImage = uri
+        createPlaylistLiveData.postValue(StateCreate(uriImage))
+    }
 }

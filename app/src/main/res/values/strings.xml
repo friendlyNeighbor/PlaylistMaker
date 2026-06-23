@@ -41,7 +41,6 @@
     <string name="add_in_playlist">Добавить в плейлист</string>
 
     <plurals name="track_count">
-        <item quantity="zero">0 треков</item>
         <item quantity="one">%d трек</item>
         <item quantity="few">%d трека</item>
         <item quantity="many">%d треков</item>

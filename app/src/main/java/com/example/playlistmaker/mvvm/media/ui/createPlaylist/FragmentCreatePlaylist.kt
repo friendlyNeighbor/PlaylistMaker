@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
@@ -51,8 +52,8 @@ class FragmentCreatePlaylist: Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
-                    binding.cover.setImageURI(uri)
                     uriImage = uri
+                    viewModel.pickImage(uri)
                 }
             }
 
@@ -100,7 +101,15 @@ class FragmentCreatePlaylist: Fragment() {
             findNavController().navigateUp()
         }
 
+        viewModel.getLiveData().observe(viewLifecycleOwner) {
+            if(it.uri!=null) {
+                binding.cover.scaleType = ImageView.ScaleType.CENTER_CROP
+                binding.cover.setImageURI(it.uri)
+            }
+        }
     }
+
+
     private fun closeFragment() {
         if (uriImage==null &&
             binding.titlePlaylist.text.toString().isEmpty() &&

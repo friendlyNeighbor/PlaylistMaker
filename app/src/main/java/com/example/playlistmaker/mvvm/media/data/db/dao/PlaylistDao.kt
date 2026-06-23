@@ -8,7 +8,7 @@ import com.example.playlistmaker.mvvm.media.data.db.entity.PlaylistEntity
 
 @Dao
 interface PlaylistDao {
-    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.IGNORE)
+    @Insert(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: PlaylistEntity)
 
     @Query("DELETE FROM playlists_table WHERE title = :title")

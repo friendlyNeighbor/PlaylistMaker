@@ -60,7 +60,8 @@ class PlayerFragment : Fragment() {
         playerAdapter.onPlaylistClick = { playlist ->
             viewModel.addTrackInSorted()
             viewModel.addTrackIdInPlaylist(playlist)
-            Toast.makeText(requireActivity(),"сохранил", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireActivity(),"Добавлено в плейлист ${playlist.title}", Toast.LENGTH_LONG).show()
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.recycler.adapter = playerAdapter
@@ -94,6 +95,7 @@ class PlayerFragment : Fragment() {
 
             buttonCreate.setOnClickListener {
                 Toast.makeText(requireActivity(), "buttonCreate", Toast.LENGTH_LONG).show()
+                findNavController().navigate(R.id.action_playerFragment_to_fragmentNewPlaylist)
             }
         } // binding apply
 
@@ -134,6 +136,11 @@ class PlayerFragment : Fragment() {
     override fun onPause() {
         viewModel.refreshDataBase()
         super.onPause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.readPlaylistDb()
     }
 
     override fun onDestroyView() {
