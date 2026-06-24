@@ -1,14 +1,14 @@
 package com.example.playlistmaker.mvvm.di
 
-import com.example.playlistmaker.mvvm.media.data.db.FavoritesRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.FavoritesTracksDbRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.PlaylistRepositoryImpl
-import com.example.playlistmaker.mvvm.media.data.db.TrackInPlaylistsRepositoryImpl
+import com.example.playlistmaker.mvvm.media.data.db.SortedTracksDbRepositoryImpl
 import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvertor
-import com.example.playlistmaker.mvvm.media.data.db.converters.TrackDbConvertor
-import com.example.playlistmaker.mvvm.media.data.db.converters.TrackInPlaylistsDbConvertor
+import com.example.playlistmaker.mvvm.media.data.db.converters.FavoritesTracksDbConvertor
+import com.example.playlistmaker.mvvm.media.data.db.converters.SortedTracksDbConvertor
 import com.example.playlistmaker.mvvm.media.data.impl.ImageSaverRepositoryImpl
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverRepository
-import com.example.playlistmaker.mvvm.media.domain.db.FavoritesRepository
+import com.example.playlistmaker.mvvm.media.domain.db.TracksRepository
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistRepository
 import com.example.playlistmaker.mvvm.search.data.NetworkClient
 import com.example.playlistmaker.mvvm.search.data.SearchHistoryRepositoryImpl
@@ -70,11 +70,11 @@ val repositoryModule = module {
     }
 
     factory {
-        TrackDbConvertor()
+        FavoritesTracksDbConvertor()
     }
 
-    single<FavoritesRepository> {
-        FavoritesRepositoryImpl(get(), get())
+    single<TracksRepository> {
+        FavoritesTracksDbRepositoryImpl(get(), get())
     }
 
     factory<ImageSaverRepository> {
@@ -90,15 +90,16 @@ val repositoryModule = module {
     }
 
     factory {
-        TrackInPlaylistsDbConvertor()
+        SortedTracksDbConvertor()
     }
 
-    single<FavoritesRepository>(named("2")) {
-        TrackInPlaylistsRepositoryImpl(get(), get())
+    single<TracksRepository>(named(SORTED)) {
+        SortedTracksDbRepositoryImpl(get(), get())
     }
 
 }
     private const val HISTORY = "HISTORY"
     private const val DARK_THEME = "DARK_THEME"
     private const val PLAYER = "PLAYER"
+    private const val SORTED = "SORTED"
 

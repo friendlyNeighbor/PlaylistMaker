@@ -2,14 +2,12 @@ package com.example.playlistmaker.mvvm.player.ui
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
-import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
-import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.TracksInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
@@ -23,11 +21,11 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
     private val mediaPlayer: MediaPlayer,
-    private val favoritesInteractor: FavoritesInteractor,
+    private val favoritesTracksInteractor: TracksInteractor,
     private val trackSaverInteractor: TrackSaverInteractor,
     private val playlistInteractor: PlaylistInteractor,
     private val imageSaverInteractor: ImageSaverInteractor,
-    private val favoritesInteractor2: FavoritesInteractor,
+    private val sortedTracksInteractor: TracksInteractor,
 ) :
     ViewModel() {
 
@@ -116,7 +114,7 @@ class PlayerViewModel(
 
     private fun checkOnFavorite() {
         viewModelScope.launch {
-            val list = favoritesInteractor.getFavoritesIdList().first()
+            val list = favoritesTracksInteractor.getIdList().first()
             isFavoriteTrack = list.contains(playingTrack.trackId)
             postLiveData()
         }
@@ -129,13 +127,13 @@ class PlayerViewModel(
 
     fun refreshDataBase() {
         if (isFavoriteTrack) {
-            favoritesInteractor.addTrackInFavorites(playingTrack)
+            favoritesTracksInteractor.addTrack(playingTrack)
         } else {
-            favoritesInteractor.deleteTrackFromFavoritesById(playingTrack.trackId)
+            favoritesTracksInteractor.deleteTrackById(playingTrack.trackId)
         }
     }
 
-    fun  readPlaylistDb() {
+    fun readPlaylistDb() {
         viewModelScope.launch {
             val list = playlistInteractor.getListOfPlaylists().first()
             if (list.isNotEmpty()) {
@@ -166,19 +164,21 @@ class PlayerViewModel(
     }
 
     fun addTrackInSorted() {
-        favoritesInteractor2.addTrackInFavorites(playingTrack)
+        sortedTracksInteractor.addTrack(playingTrack)
     }
 
     fun addTrackIdInPlaylist(playlist:Playlist) {
         if(playlist.idListTracks.contains(playingTrack.trackId)) {
             isInPlaylistYet = true
             postLiveData()
+            isInPlaylistYet = null
         }
         else {
             playlistInteractor.addNewPlaylist(playlist)
             isInPlaylistYet = false
             playlist.idListTracks += listOf(playingTrack.trackId)
             postLiveData()
+            isInPlaylistYet = null
         }
     }
 

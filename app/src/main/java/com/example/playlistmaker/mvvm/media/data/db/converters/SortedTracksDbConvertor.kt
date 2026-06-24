@@ -1,12 +1,11 @@
 package com.example.playlistmaker.mvvm.media.data.db.converters
 
-import com.example.playlistmaker.mvvm.media.data.db.entity.TrackEntity
+import com.example.playlistmaker.mvvm.media.data.db.entity.SortedTrackEntity
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 
-
-class TrackDbConvertor {
-    fun map(track: Track): TrackEntity {
-        return TrackEntity(
+class SortedTracksDbConvertor {
+    fun map(track: Track): SortedTrackEntity {
+        return SortedTrackEntity(
             track.number,
             track.trackId,
             track.trackName,
@@ -21,7 +20,7 @@ class TrackDbConvertor {
         )
     }
 
-    fun map(track: TrackEntity): Track {
+    fun map(track: SortedTrackEntity): Track {
         return Track(
             track.number,
             track.trackId,

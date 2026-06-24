@@ -5,7 +5,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "sorted_table", indices = [Index(value = ["trackId"], unique = true)])
-data class TrackInPlaylistsEntity (
+data class SortedTrackEntity (
     @PrimaryKey(autoGenerate = true)
     val number:Long,
     val trackId:Long,

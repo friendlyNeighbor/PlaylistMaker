@@ -14,7 +14,7 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { PlayerViewModel(get(), get(), get(), get(), get(), get(named("2")))
+    viewModel { PlayerViewModel(get(), get(), get(), get(), get(), get(named(SORTED)))
     }
 
     viewModel { (primaryState: SearchState) ->
@@ -32,3 +32,5 @@ val viewModelModule = module {
     viewModel { CreatePlaylistViewModel(get(), get()) }
 
 }
+
+private const val SORTED = "SORTED"

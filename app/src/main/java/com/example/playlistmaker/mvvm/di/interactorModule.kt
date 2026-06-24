@@ -1,9 +1,9 @@
 package com.example.playlistmaker.mvvm.di
 
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
-import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.TracksInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
-import com.example.playlistmaker.mvvm.media.domain.impl.FavoritesInteractorImpl
+import com.example.playlistmaker.mvvm.media.domain.impl.TracksInteractorImpl
 import com.example.playlistmaker.mvvm.media.domain.impl.ImageSaverInteractorImpl
 import com.example.playlistmaker.mvvm.media.domain.impl.PlaylistInteractorImpl
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
@@ -42,20 +42,20 @@ val interactorModule = module {
         SharingInteractorImpl(get(), get())
     }
 
-    single<FavoritesInteractor> {
-        FavoritesInteractorImpl(get())
+    single<TracksInteractor> {
+        TracksInteractorImpl(get())
     }
 
     factory<ImageSaverInteractor> {
         ImageSaverInteractorImpl(get())
     }
 
-    single< PlaylistInteractor> {
+    single<PlaylistInteractor> {
         PlaylistInteractorImpl(get())
     }
 
-    single<FavoritesInteractor>(named("2")) {
-        FavoritesInteractorImpl(get((named("2"))))
+    single<TracksInteractor>(named(SORTED)) {
+        TracksInteractorImpl(get((named(SORTED))))
     }
 
 }
@@ -63,3 +63,4 @@ val interactorModule = module {
 private const val DARK_THEME = "DARK_THEME"
 private const val HISTORY = "HISTORY"
 private const val PLAYER = "PLAYER"
+private const val SORTED = "SORTED"
