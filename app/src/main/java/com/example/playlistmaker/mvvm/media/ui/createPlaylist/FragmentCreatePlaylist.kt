@@ -94,7 +94,7 @@ class FragmentCreatePlaylist: Fragment() {
             val textTitle = binding.titlePlaylist.text.toString()
             val textDescription = binding.description.text.toString()
 
-            viewModel.savePlaylist(textTitle, textDescription, uriImage)
+            viewModel.savePlaylist(textTitle, textDescription)
 
             Toast.makeText(requireContext(), "Плейлист $textTitle создан", Toast.LENGTH_LONG).show()
 

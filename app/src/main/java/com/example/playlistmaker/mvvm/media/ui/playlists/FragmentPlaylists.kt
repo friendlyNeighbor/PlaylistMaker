@@ -59,6 +59,11 @@ class FragmentPlaylists : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.readPlaylistDb()
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

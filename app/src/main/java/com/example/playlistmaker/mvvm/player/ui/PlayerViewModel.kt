@@ -3,6 +3,7 @@ package com.example.playlistmaker.mvvm.player.ui
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -38,6 +39,7 @@ class PlayerViewModel(
     private var playedTime: String = TIMER_ZERO
     private var isFavoriteTrack = false
     private var listOfPlaylist: List<Playlist> = emptyList()
+    private var isInPlaylistYet: Boolean? = null
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
     private var timerJob: Job? = null
@@ -153,7 +155,8 @@ class PlayerViewModel(
                 playingTrack,
                 playedTime,
                 isFavoriteTrack,
-                listOfPlaylist
+                listOfPlaylist,
+                isInPlaylistYet
             )
         )
     }
@@ -167,10 +170,16 @@ class PlayerViewModel(
     }
 
     fun addTrackIdInPlaylist(playlist:Playlist) {
-        playlist.idListTracks += listOf(playingTrack.trackId)
-        for (id in playlist.idListTracks)
-            Log.d("MyError","id = ${id}")
-        playlistInteractor.addNewPlaylist(playlist)
+        if(playlist.idListTracks.contains(playingTrack.trackId)) {
+            isInPlaylistYet = true
+            postLiveData()
+        }
+        else {
+            playlistInteractor.addNewPlaylist(playlist)
+            isInPlaylistYet = false
+            playlist.idListTracks += listOf(playingTrack.trackId)
+            postLiveData()
+        }
     }
 
     override fun onCleared() {

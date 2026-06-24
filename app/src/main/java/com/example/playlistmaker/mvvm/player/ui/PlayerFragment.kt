@@ -26,6 +26,7 @@ class PlayerFragment : Fragment() {
 
     private val listOfPlaylist: MutableList<Playlist> = mutableListOf()
     private val playerAdapter = PlayerAdapter(listOfPlaylist)
+    private var pokedPlaylistTitle = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,10 +59,9 @@ class PlayerFragment : Fragment() {
         })
 
         playerAdapter.onPlaylistClick = { playlist ->
+            pokedPlaylistTitle = playlist.title
             viewModel.addTrackInSorted()
             viewModel.addTrackIdInPlaylist(playlist)
-            Toast.makeText(requireActivity(),"Добавлено в плейлист ${playlist.title}", Toast.LENGTH_LONG).show()
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         binding.recycler.adapter = playerAdapter
@@ -94,11 +94,9 @@ class PlayerFragment : Fragment() {
             toolbar.setOnClickListener { findNavController().navigateUp() }
 
             buttonCreate.setOnClickListener {
-                Toast.makeText(requireActivity(), "buttonCreate", Toast.LENGTH_LONG).show()
                 findNavController().navigate(R.id.action_playerFragment_to_fragmentNewPlaylist)
             }
         } // binding apply
-
 
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
@@ -128,6 +126,12 @@ class PlayerFragment : Fragment() {
                     listOfPlaylist.clear()
                     listOfPlaylist.addAll(it.listOfPlaylist)
                     playerAdapter.notifyDataSetChanged()
+                }
+                if(it.isInPlaylistYet==true)
+                    Toast.makeText(requireActivity(),"Трек уже добавлен в плейлист $pokedPlaylistTitle", Toast.LENGTH_LONG).show()
+                if(it.isInPlaylistYet==false) {
+                    Toast.makeText(requireActivity(),"Добавлено в плейлист $pokedPlaylistTitle", Toast.LENGTH_LONG).show()
+                    bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
                 }
             }
         }
