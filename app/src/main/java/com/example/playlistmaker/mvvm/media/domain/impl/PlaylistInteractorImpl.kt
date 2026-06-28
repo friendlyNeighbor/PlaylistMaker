@@ -10,11 +10,11 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
         return playlistRepository.getListOfPlaylists()
     }
 
-    override fun addNewPlaylist(playlist: Playlist) {
+    override suspend fun addNewPlaylist(playlist: Playlist) {
         playlistRepository.addNewPlaylist(playlist)
     }
 
-    override fun deletePlaylist(title: String) {
+    override suspend fun deletePlaylist(title: String) {
         playlistRepository.deletePlaylist(title)
     }
 

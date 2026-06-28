@@ -1,6 +1,5 @@
 package com.example.playlistmaker.mvvm.media.ui.createPlaylist
 
-
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -32,7 +31,6 @@ class FragmentCreatePlaylist: Fragment() {
     lateinit var confirmDialog: MaterialAlertDialogBuilder
 
     private var uriImage: Uri? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -95,7 +93,11 @@ class FragmentCreatePlaylist: Fragment() {
 
             viewModel.savePlaylist(textTitle, textDescription)
 
-            Toast.makeText(requireContext(), "Плейлист $textTitle создан", Toast.LENGTH_LONG).show()
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.playlist_created, textTitle),
+                Toast.LENGTH_SHORT
+            ).show()
 
             findNavController().navigateUp()
         }
@@ -128,9 +130,7 @@ class FragmentCreatePlaylist: Fragment() {
             .setPositiveButton(R.string.complete) { _, _ ->
                 findNavController().navigateUp()
             }
-
-        val dialog = confirmDialog.show()
-        dialog.show()
+        confirmDialog.show()
     }
 
     override fun onResume() {

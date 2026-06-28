@@ -4,10 +4,9 @@ import com.example.playlistmaker.mvvm.media.data.db.converters.FavoritesTracksDb
 import com.example.playlistmaker.mvvm.media.data.db.entity.FavoritesTrackEntity
 import com.example.playlistmaker.mvvm.media.domain.db.TracksRepository
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+
 
 class FavoritesTracksDbRepositoryImpl(
     private val favoritesTracksDbConvertor: FavoritesTracksDbConvertor,
@@ -22,12 +21,12 @@ class FavoritesTracksDbRepositoryImpl(
         return favoritesList.map { track -> favoritesTracksDbConvertor.map(track) }
     }
 
-    override fun addTrack(track: Track) {
-        GlobalScope.launch {   appDatabase.getFavoritesTrackDao().insertTrack(convertToTrackEntity(track)) }
+    override suspend fun addTrack(track: Track) {
+        appDatabase.getFavoritesTrackDao().insertTrack(convertToTrackEntity(track))
     }
 
-    override fun deleteTrackById(id: Long) {
-        GlobalScope.launch {   appDatabase.getFavoritesTrackDao().deleteTrackById(id) }
+    override suspend fun deleteTrackById(id: Long) {
+        appDatabase.getFavoritesTrackDao().deleteTrackById(id)
     }
 
     override fun getIdList(): Flow<List<Long>> = flow {

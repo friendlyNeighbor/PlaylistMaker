@@ -12,11 +12,11 @@ class TracksInteractorImpl(
         return tracksRepository.getTrackList()
     }
 
-    override fun addTrack(track: Track) {
+    override suspend fun addTrack(track: Track) {
         tracksRepository.addTrack(track)
     }
 
-    override fun deleteTrackById(id: Long) {
+    override suspend fun deleteTrackById(id: Long) {
         tracksRepository.deleteTrackById(id)
     }
 

@@ -4,10 +4,9 @@ import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvert
 import com.example.playlistmaker.mvvm.media.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistRepository
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+
 
 class PlaylistRepositoryImpl(
     private val playlistDbConvertor: PlaylistDbConvertor,
@@ -19,12 +18,12 @@ class PlaylistRepositoryImpl(
         emit(convertFromPlaylistEntityList(listOfPlaylist))
     }
 
-    override fun addNewPlaylist(playlist: Playlist) {
-        GlobalScope.launch {   appDatabase.getPlaylistDao().insertPlaylist(convertToPlaylistEntity(playlist)) }
+    override suspend fun addNewPlaylist(playlist: Playlist) {
+        appDatabase.getPlaylistDao().insertPlaylist(convertToPlaylistEntity(playlist))
     }
 
-    override fun deletePlaylist(title: String) {
-        GlobalScope.launch {   appDatabase.getPlaylistDao().deletePlaylistByName(title) }
+    override suspend fun deletePlaylist(title: String) {
+        appDatabase.getPlaylistDao().deletePlaylistByName(title)
     }
 
     override fun getPlaylist(title:String):Flow<Playlist> = flow {

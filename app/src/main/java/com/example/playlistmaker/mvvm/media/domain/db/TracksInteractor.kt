@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.Flow
 interface TracksInteractor {
     fun getTrackList(): Flow<List<Track>>
 
-    fun addTrack(track: Track)
+    suspend fun addTrack(track: Track)
 
-    fun deleteTrackById(id: Long)
+    suspend fun deleteTrackById(id: Long)
 
     fun getIdList(): Flow<List<Long>>
 }

@@ -5,9 +5,11 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
+import kotlinx.coroutines.launch
 
 
 class CreatePlaylistViewModel(
@@ -25,8 +27,17 @@ class CreatePlaylistViewModel(
     }
 
     fun savePlaylist(textTitle: String, textDescription: String) {
-        playlistInteractor.addNewPlaylist(Playlist(textTitle, textDescription, emptyList(), null))
-        uriImage?.let { imageSaverInteractor.saveImage(it, textTitle) }
+        viewModelScope.launch {
+            playlistInteractor.addNewPlaylist(
+                Playlist(
+                    textTitle,
+                    textDescription,
+                    emptyList(),
+                    null
+                )
+            )
+            uriImage?.let { imageSaverInteractor.saveImage(it, textTitle) }
+        }
     }
 
 }

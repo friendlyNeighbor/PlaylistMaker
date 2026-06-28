@@ -15,7 +15,7 @@ class PlayerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         title.text = playlist.title
         val trackCount: Int = playlist.idListTracks.size
         val numbers = if (trackCount == 0) {
-            "0 треков"
+            itemView.context.resources.getString(R.string.no_tracks)
         } else {
             itemView.context.resources.getQuantityString(R.plurals.track_count, trackCount, trackCount)
         }

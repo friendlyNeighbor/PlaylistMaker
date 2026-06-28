@@ -126,10 +126,11 @@ class PlayerViewModel(
     }
 
     fun refreshDataBase() {
-        if (isFavoriteTrack) {
-            favoritesTracksInteractor.addTrack(playingTrack)
-        } else {
-            favoritesTracksInteractor.deleteTrackById(playingTrack.trackId)
+        viewModelScope.launch {
+        if (isFavoriteTrack)
+             favoritesTracksInteractor.addTrack(playingTrack)
+        else
+             favoritesTracksInteractor.deleteTrackById(playingTrack.trackId)
         }
     }
 
@@ -164,22 +165,24 @@ class PlayerViewModel(
     }
 
     fun addTrackInSorted() {
-        sortedTracksInteractor.addTrack(playingTrack)
+        viewModelScope.launch { sortedTracksInteractor.addTrack(playingTrack) }
     }
 
     fun addTrackIdInPlaylist(playlist:Playlist) {
-        if(playlist.idListTracks.contains(playingTrack.trackId)) {
-            isInPlaylistYet = true
-            postLiveData()
-            isInPlaylistYet = null
-        }
-        else {
-            playlistInteractor.addNewPlaylist(playlist)
-            isInPlaylistYet = false
-            playlist.idListTracks += listOf(playingTrack.trackId)
-            postLiveData()
-            isInPlaylistYet = null
-        }
+            if (playlist.idListTracks.contains(playingTrack.trackId)) {
+                isInPlaylistYet = true
+                postLiveData()
+            } else {
+                playlist.idListTracks += listOf(playingTrack.trackId)
+                viewModelScope.launch { playlistInteractor.addNewPlaylist(playlist)}
+                isInPlaylistYet = false
+                postLiveData()
+            }
+    }
+
+    fun resetIsInPlaylist() {
+        isInPlaylistYet = null
+        postLiveData()
     }
 
     override fun onCleared() {

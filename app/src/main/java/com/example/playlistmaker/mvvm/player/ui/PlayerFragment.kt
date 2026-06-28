@@ -127,11 +127,22 @@ class PlayerFragment : Fragment() {
                     listOfPlaylist.addAll(it.listOfPlaylist)
                     playerAdapter.notifyDataSetChanged()
                 }
-                if(it.isInPlaylistYet==true)
-                    Toast.makeText(requireActivity(),"Трек уже добавлен в плейлист $pokedPlaylistTitle", Toast.LENGTH_LONG).show()
+                if(it.isInPlaylistYet==true) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_track_already_in_playlist, pokedPlaylistTitle),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    viewModel.resetIsInPlaylist()
+                }
                 if(it.isInPlaylistYet==false) {
-                    Toast.makeText(requireActivity(),"Добавлено в плейлист $pokedPlaylistTitle", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.toast_track_added_to_playlist, pokedPlaylistTitle),
+                        Toast.LENGTH_SHORT
+                    ).show()
                     bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                    viewModel.resetIsInPlaylist()
                 }
             }
         }

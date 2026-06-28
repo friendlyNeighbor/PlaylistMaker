@@ -7,9 +7,9 @@ import kotlinx.coroutines.flow.Flow
 interface PlaylistRepository {
     fun getListOfPlaylists(): Flow<List<Playlist>>
 
-    fun addNewPlaylist(playlist: Playlist)
+    suspend fun addNewPlaylist(playlist: Playlist)
 
-    fun deletePlaylist(title: String)
+    suspend fun deletePlaylist(title: String)
 
     fun getPlaylist(title:String): Flow<Playlist>
 }
