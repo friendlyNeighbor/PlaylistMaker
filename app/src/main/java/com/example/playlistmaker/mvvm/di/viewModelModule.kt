@@ -1,32 +1,36 @@
 package com.example.playlistmaker.mvvm.di
 
-import com.example.playlistmaker.mvvm.media.ui.FavoritesViewModel
-import com.example.playlistmaker.mvvm.media.ui.PlaylistsViewModel
+import com.example.playlistmaker.mvvm.media.ui.createPlaylist.CreatePlaylistViewModel
+import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesViewModel
+import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsViewModel
 import com.example.playlistmaker.mvvm.player.ui.PlayerViewModel
-import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.SearchState
 import com.example.playlistmaker.mvvm.search.ui.SearchViewModel
 import com.example.playlistmaker.mvvm.settings.ui.SettingsState
 import com.example.playlistmaker.mvvm.settings.ui.SettingsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val viewModelModule = module {
 
-    viewModel { (track: Track) ->
-        PlayerViewModel(track, get(), get())
+    viewModel { PlayerViewModel(get(), get(), get(), get(), get(), get(named(SORTED)))
     }
 
     viewModel { (primaryState: SearchState) ->
-        SearchViewModel(primaryState, get(), get())
+        SearchViewModel(primaryState, get(), get(), get())
     }
 
     viewModel { (primaryState: SettingsState) ->
         SettingsViewModel(primaryState, get(), get())
     }
 
-    viewModel { PlaylistsViewModel() }
+    viewModel { PlaylistsViewModel(get(), get()) }
 
-    viewModel { FavoritesViewModel(get()) }
+    viewModel { FavoritesViewModel(get(),get()) }
+
+    viewModel { CreatePlaylistViewModel(get(), get()) }
 
 }
+
+private const val SORTED = "SORTED"

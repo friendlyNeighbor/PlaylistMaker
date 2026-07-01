@@ -8,20 +8,13 @@
     tools:context=".mvvm.main.ui.MainActivity"
     android:orientation="vertical">
 
-    <ScrollView android:id="@+id/scroll"
+    <androidx.fragment.app.FragmentContainerView android:id="@+id/container_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-    <androidx.fragment.app.FragmentContainerView android:id="@+id/container_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:name="androidx.navigation.fragment.NavHostFragment"
         app:navGraph="@navigation/navigation_graph"
         app:defaultNavHost="true" />
-
-    </ScrollView>
 
 <LinearLayout
     android:layout_width="match_parent"

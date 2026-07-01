@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.search.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
@@ -13,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
-import com.example.playlistmaker.mvvm.player.ui.PlayerFragment
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class SearchFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -60,18 +60,16 @@ class SearchFragment : Fragment() {
         tracksAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
                 viewModel.addTrackInHistory(track)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track))
+                viewModel.addTrackInMemory(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
             }
         }
 
         historyAdapter.onTrackClick = { track ->
             if (clickDebounce()) {
                 viewModel.addTrackInHistory(track)
-                findNavController().navigate(
-                    R.id.action_searchFragment_to_playerFragment,
-                    PlayerFragment.createArgs(track))
+                viewModel.addTrackInMemory(track)
+                findNavController().navigate(R.id.action_searchFragment_to_playerFragment )
             }
         }
 
@@ -124,6 +122,7 @@ class SearchFragment : Fragment() {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun setViewSearch(reason: SearchStatus) {
         tracksAdapter.notifyDataSetChanged()
         historyAdapter.notifyDataSetChanged()

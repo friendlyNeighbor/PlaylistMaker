@@ -6,7 +6,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.mvvm.media.domain.db.FavoritesInteractor
+import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.TracksInteractor
+import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
+import com.example.playlistmaker.mvvm.media.domain.model.Playlist
+import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -16,34 +20,35 @@ import java.util.Locale
 import kotlin.time.Duration.Companion.milliseconds
 
 class PlayerViewModel(
-    private val track: Track,
     private val mediaPlayer: MediaPlayer,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesTracksInteractor: TracksInteractor,
+    private val trackSaverInteractor: TrackSaverInteractor,
+    private val playlistInteractor: PlaylistInteractor,
+    private val imageSaverInteractor: ImageSaverInteractor,
+    private val sortedTracksInteractor: TracksInteractor,
 ) :
     ViewModel() {
 
     private val playerLiveData = MutableLiveData<PlayerState>()
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-
-    private var timerJob: Job? = null
-
+    private val playingTrack: Track = getTrack()
     private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
-    private var playingTrack: Track = track
     private var playedTime: String = TIMER_ZERO
     private var isFavoriteTrack = false
+    private var listOfPlaylist: List<Playlist> = emptyList()
+    private var isInPlaylistYet: Boolean? = null
+
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private var timerJob: Job? = null
 
     init {
         checkOnFavorite()
-    }
-
-    fun prepared() {
         preparePlayer()
     }
 
     private fun preparePlayer() {
-        val url: String = track.previewUrl
+        val url: String = playingTrack.previewUrl
         mediaPlayer.setDataSource(url)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -99,7 +104,7 @@ class PlayerViewModel(
         timerJob?.cancel()
     }
 
-    fun release() {
+    private fun release() {
         stopTimer()
         mediaPlayer.release()
         playedTime = TIMER_ZERO
@@ -107,10 +112,10 @@ class PlayerViewModel(
         postLiveData()
     }
 
-    fun checkOnFavorite() {
+    private fun checkOnFavorite() {
         viewModelScope.launch {
-            val list = favoritesInteractor.getFavoritesIdList().first()
-            isFavoriteTrack = list.contains(track.trackId)
+            val list = favoritesTracksInteractor.getIdList().first()
+            isFavoriteTrack = list.contains(playingTrack.trackId)
             postLiveData()
         }
     }
@@ -121,10 +126,24 @@ class PlayerViewModel(
     }
 
     fun refreshDataBase() {
-        if (isFavoriteTrack) {
-            favoritesInteractor.addTrackInFavorites(track)
-        } else {
-            favoritesInteractor.deleteTrackFromFavoritesById(track.trackId)
+        viewModelScope.launch {
+        if (isFavoriteTrack)
+             favoritesTracksInteractor.addTrack(playingTrack)
+        else
+             favoritesTracksInteractor.deleteTrackById(playingTrack.trackId)
+        }
+    }
+
+    fun readPlaylistDb() {
+        viewModelScope.launch {
+            val list = playlistInteractor.getListOfPlaylists().first()
+            if (list.isNotEmpty()) {
+                    for (playlist in list) {
+                        playlist.uriImage = imageSaverInteractor.getImage(playlist.title)
+                    }
+                listOfPlaylist = list
+                postLiveData()
+            }
         }
     }
 
@@ -134,9 +153,41 @@ class PlayerViewModel(
                 playingStatus,
                 playingTrack,
                 playedTime,
-                isFavoriteTrack
+                isFavoriteTrack,
+                listOfPlaylist,
+                isInPlaylistYet
             )
         )
+    }
+
+    fun getTrack(): Track {
+        return trackSaverInteractor.getTrackFromMemory()
+    }
+
+    fun addTrackInSorted() {
+        viewModelScope.launch { sortedTracksInteractor.addTrack(playingTrack) }
+    }
+
+    fun addTrackIdInPlaylist(playlist:Playlist) {
+            if (playlist.idListTracks.contains(playingTrack.trackId)) {
+                isInPlaylistYet = true
+                postLiveData()
+            } else {
+                playlist.idListTracks += listOf(playingTrack.trackId)
+                viewModelScope.launch { playlistInteractor.addNewPlaylist(playlist)}
+                isInPlaylistYet = false
+                postLiveData()
+            }
+    }
+
+    fun resetIsInPlaylist() {
+        isInPlaylistYet = null
+        postLiveData()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        release()
     }
 
     companion object {
