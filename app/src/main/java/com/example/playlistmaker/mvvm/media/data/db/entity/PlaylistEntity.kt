@@ -6,10 +6,11 @@ import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "playlists_table", indices = [Index(value = ["title"], unique = true)])
+@Entity(tableName = "playlists_table", indices = [Index(value = ["id"], unique = true)])
 
-class PlaylistEntity(
-        @PrimaryKey
+data class PlaylistEntity(
+        @PrimaryKey(autoGenerate = true)
+        var id: Long=0,
         var title: String="",
         var description: String="",
         var idListTracks: String="",

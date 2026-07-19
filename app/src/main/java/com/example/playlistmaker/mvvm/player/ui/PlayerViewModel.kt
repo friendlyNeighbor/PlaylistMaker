@@ -139,7 +139,7 @@ class PlayerViewModel(
             val list = playlistInteractor.getListOfPlaylists().first()
             if (list.isNotEmpty()) {
                     for (playlist in list) {
-                        playlist.uriImage = imageSaverInteractor.getImage(playlist.title)
+                        playlist.uriImage = imageSaverInteractor.getImage(playlist.id)
                     }
                 listOfPlaylist = list
                 postLiveData()

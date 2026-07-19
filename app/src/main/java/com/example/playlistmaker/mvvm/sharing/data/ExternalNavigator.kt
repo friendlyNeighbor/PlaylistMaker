@@ -15,6 +15,14 @@ class ExternalNavigator(private val context: Context) {
         context.startActivity(intent)
     }
 
+    fun sharePlaylist(message:String) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        intent.setType("text/plain")
+        intent.putExtra(Intent.EXTRA_TEXT, message)
+        context.startActivity(intent)
+    }
+
     fun openLink(url:String) {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

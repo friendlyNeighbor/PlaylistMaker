@@ -51,18 +51,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/placeholder"/>
+        app:layout_constraintBottom_toTopOf="@id/placeholder"
+        app:layout_constraintVertical_chainStyle="spread_inside"/>
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/placeholder"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_placeholder_45"
         app:layout_constraintBottom_toTopOf="@id/trackName"
         app:layout_constraintDimensionRatio="h,1:1"
-        app:layout_constraintEnd_toEndOf="@id/baselineRight24"
-        app:layout_constraintStart_toStartOf="@id/baselineLeft24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:shapeAppearanceOverlay="@style/roundCorners8" />
 
@@ -319,7 +322,7 @@
             android:layout_height="match_parent"
             android:visibility="visible"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/platlist_view_little" />
+            tools:listitem="@layout/playlist_view_little" />
 
     </LinearLayout>
 

@@ -5,14 +5,14 @@ import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverRepository
 
 class ImageSaverInteractorImpl(private val imageSaverRepository: ImageSaverRepository): ImageSaverInteractor {
-    override fun saveImage(uri: Uri, name: String) {
-        imageSaverRepository.saveImage(uri, name)
+    override suspend fun saveImage(uri: Uri, id: Long): Boolean {
+        return imageSaverRepository.saveImage(uri, id)
     }
-    override fun getImage(name: String):Uri? {
-        return imageSaverRepository.getImage(name)
+    override fun getImage(id: Long):Uri? {
+        return imageSaverRepository.getImage(id)
     }
 
-    override fun deleteImage(name: String) {
-        return imageSaverRepository.deleteImage(name)
+    override fun deleteImage(id: Long) {
+        return imageSaverRepository.deleteImage(id)
     }
 }

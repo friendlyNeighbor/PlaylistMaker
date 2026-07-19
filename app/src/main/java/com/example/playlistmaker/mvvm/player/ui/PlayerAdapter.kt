@@ -10,9 +10,10 @@ import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 class PlayerAdapter (private val listOfPlaylists: List<Playlist>): RecyclerView.Adapter<PlayerViewHolder>() {
 
     var onPlaylistClick: ((Playlist) -> Unit)? = null
+    var onPlaylistLongClick: ((Playlist) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayerViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.platlist_view_little, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.playlist_view_little, parent, false)
         return PlayerViewHolder(view)
     }
 
@@ -23,8 +24,13 @@ class PlayerAdapter (private val listOfPlaylists: List<Playlist>): RecyclerView.
     override fun onBindViewHolder(holder: PlayerViewHolder, position: Int) {
         val playlist = listOfPlaylists[position]
         holder.bind(listOfPlaylists[position])
+
         holder.itemView.setOnClickListener {
             onPlaylistClick?.invoke(playlist)
+        }
+        holder.itemView.setOnLongClickListener {
+            onPlaylistLongClick?.invoke(playlist)
+            true
         }
     }
 }

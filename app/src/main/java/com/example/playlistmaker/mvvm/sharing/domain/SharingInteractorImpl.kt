@@ -10,6 +10,10 @@ class SharingInteractorImpl (private val externalNavigator: ExternalNavigator, p
         externalNavigator.shareLink(getShareAppLink())
     }
 
+    override fun sharePlaylist(message: String) {
+        externalNavigator.sharePlaylist(message)
+    }
+
     override fun openTerms() {
         externalNavigator.openLink(getTermsLink())
     }

@@ -9,7 +9,7 @@ import com.example.playlistmaker.mvvm.media.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.mvvm.media.data.db.entity.FavoritesTrackEntity
 import com.example.playlistmaker.mvvm.media.data.db.entity.SortedTrackEntity
 
-@Database(version = 2, entities = [FavoritesTrackEntity::class, PlaylistEntity::class, SortedTrackEntity::class])
+@Database(version = 3, entities = [FavoritesTrackEntity::class, PlaylistEntity::class, SortedTrackEntity::class])
 abstract class AppDatabase: RoomDatabase() {
     abstract fun getFavoritesTrackDao(): FavoritesTrackDao
 
