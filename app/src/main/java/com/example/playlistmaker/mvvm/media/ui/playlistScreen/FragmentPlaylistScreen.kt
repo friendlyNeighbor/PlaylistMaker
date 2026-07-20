@@ -31,8 +31,6 @@ class FragmentPlaylistScreen: Fragment() {
 
     lateinit var confirmDialog: MaterialAlertDialogBuilder
 
-
-
 override fun onCreateView(
     inflater: LayoutInflater,
     container: ViewGroup?,

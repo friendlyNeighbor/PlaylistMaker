@@ -1,6 +1,5 @@
 package com.example.playlistmaker.mvvm.media.ui.playlistScreen
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -28,7 +27,6 @@ class ViewModelPlaylistScreen(private val playlistInteractor: PlaylistInteractor
     private lateinit var allTracksInAllPlaylists: List<Track>
 
     fun loadPlaylistById(id: Long) {
-        Log.d("MyError", "loadPlaylist")
         viewModelScope.launch {
             playlist = playlistInteractor.getPlaylistById(id).first()
             val id = playlist.id

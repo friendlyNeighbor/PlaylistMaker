@@ -1,8 +1,7 @@
 package com.example.playlistmaker.mvvm.media.ui.createPlaylist
 
-import android.net.Uri
+
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,13 +29,10 @@ class FragmentCreatePlaylist : Fragment() {
 
     private val viewModel: CreatePlaylistViewModel by viewModel()
 
-//    lateinit var confirmDialog: MaterialAlertDialogBuilder
+    lateinit var confirmDialog: MaterialAlertDialogBuilder
 
-//    private var uriImage: Uri? = null
-//    private var textTitle: String = ""
-//    private var textDescription: String = ""
     private var savingComplete = false
-//    var state = CREATING
+    var state = CREATING
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +70,6 @@ class FragmentCreatePlaylist : Fragment() {
             }
         }
 
-/*
         arguments?.getLong(ID)?.let {id ->
             binding.toolbar.setTitle(R.string.edit_playlist)
             binding.buttonCreate.setText(R.string.save)
@@ -82,8 +77,6 @@ class FragmentCreatePlaylist : Fragment() {
             state = EDITING
         }
 
-
- */
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
@@ -95,49 +88,23 @@ class FragmentCreatePlaylist : Fragment() {
         }
 
         binding.toolbar.setOnClickListener {
-           // closeFragment()
-            findNavController().navigateUp()
+            closeFragment()
         }
-/*
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             closeFragment()
         }
 
-
- */
-
-
-
         binding.buttonCreate.setOnClickListener {
-            Log.d("MyError", "           button create")
             val textTitle = binding.titlePlaylist.text.toString()
             val textDescription = binding.description.text.toString()
             savingComplete = false
-   //         if(state == CREATING) {
-            viewModel.savePlaylist(textTitle, textDescription)
-
-
-
-      //      }
-            /*
+            if(state == CREATING)
+                viewModel.savePlaylist(textTitle, textDescription)
             if(state == EDITING) {
                 viewModel.updatePlaylist(textTitle, textDescription)
             }
-
-
-             */
-/*
-
-
- */
-
-
-
-
          }
-
-
-
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             if (it.uri != null) {
@@ -149,30 +116,32 @@ class FragmentCreatePlaylist : Fragment() {
             if(it.description != null)
                 binding.description.setText(it.description)
 
-            if(it.savingComplete==true) {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.playlist_created, binding.titlePlaylist.text.toString()),
-                    Toast.LENGTH_SHORT
-                ).show()
-                Log.d("MyError", "           выход")
+            if(it.savingComplete) {
+                if(state == CREATING) {
+                    Toast.makeText(
+                        requireContext(),
+                        getString(R.string.playlist_created, binding.titlePlaylist.text.toString()),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 findNavController().navigateUp()
             }
         }
-
-
     }
 
-
-    /*
     private fun closeFragment() {
-        if (uriImage == null &&
-            binding.titlePlaylist.text.toString().isEmpty() &&
-            binding.description.text.toString().isEmpty()
-        )
+        if(state == EDITING)
             findNavController().navigateUp()
         else {
-            showDialog()
+            if (
+                viewModel.uriImage == null &&
+                binding.titlePlaylist.text.toString().isEmpty() &&
+                binding.description.text.toString().isEmpty()
+            )
+                findNavController().navigateUp()
+            else {
+                showDialog()
+            }
         }
     }
 
@@ -193,13 +162,11 @@ class FragmentCreatePlaylist : Fragment() {
             WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN
         )
     }
- */
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
-
 
     companion object {
         private const val EDITING = "EDITING"

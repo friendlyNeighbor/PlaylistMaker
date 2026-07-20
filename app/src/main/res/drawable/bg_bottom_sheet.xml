@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/black_white_color_inverse" />
-    <corners android:radius="@dimen/inner_pad" />
+android:shape="rectangle">
+
+<solid android:color="@color/black_white_color_inverse" />
+
+<corners
+    android:topLeftRadius="@dimen/inner_pad"
+    android:topRightRadius="@dimen/inner_pad"
+    android:bottomLeftRadius="0dp"
+    android:bottomRightRadius="0dp" />
 </shape>
