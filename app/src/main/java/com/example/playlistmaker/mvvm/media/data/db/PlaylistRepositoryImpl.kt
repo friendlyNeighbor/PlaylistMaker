@@ -1,11 +1,11 @@
 package com.example.playlistmaker.mvvm.media.data.db
 
-
 import com.example.playlistmaker.mvvm.media.data.db.converters.PlaylistDbConvertor
 import com.example.playlistmaker.mvvm.media.data.db.entity.PlaylistEntity
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistRepository
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 
 
@@ -47,6 +47,31 @@ class PlaylistRepositoryImpl(
         appDatabase.getPlaylistDao().updatePlaylist(convertToPlaylistEntity(playlist))
     }
 
+    override suspend fun deleteTrackFromPlaylistById(idTrack: Long, idPlaylist: Long): Boolean {
+        val playlist = getPlaylistById(idPlaylist).first()
+        val newIdListTracks = playlist.idListTracks.filterNot { it == idTrack}
+        playlist.idListTracks = newIdListTracks
+        updatePlaylist(playlist)
+
+        var trackIsInOtherPlaylist = false
+        val listOfPlaylist = getListOfPlaylists().first()
+        for (playlist in listOfPlaylist) {
+            if (playlist.idListTracks.contains(idTrack))
+                trackIsInOtherPlaylist = true
+        }
+        return trackIsInOtherPlaylist
+    }
+
+    override suspend fun deletePlaylistAndReturnListTrackId(playlist: Playlist): List<Long> {
+        var listTrackId = playlist.idListTracks
+        deletePlaylist(playlist)
+
+        val listOfPlaylist = getListOfPlaylists().first()
+        for (playlist in listOfPlaylist) {
+            listTrackId = listTrackId.filter { it !in playlist.idListTracks }
+        }
+        return listTrackId
+    }
 
     private fun convertFromPlaylistEntityList(listOfPlaylist: List<PlaylistEntity>): List<Playlist> {
         return listOfPlaylist.map { playlist -> playlistDbConvertor.map(playlist) }

@@ -54,6 +54,8 @@
     <string name="do_you_want_delete_playlist">Хотите удалить плейлист</string>
     <string name="edit_playlist">Редактировать</string>
     <string name="save">Сохранить</string>
+    <string name="have_no_tracks">В этом плейлисте еще нет треков</string>
+
 
     <plurals name="track_count">
         <item quantity="one">%d трек</item>

@@ -77,26 +77,19 @@ class ViewModelPlaylistScreen(private val playlistInteractor: PlaylistInteractor
     }
 
     fun deleteTrack(track:Track) {
-        val newIdListTracks = playlist.idListTracks.filterNot { it == track.trackId }
-        val updatePlaylist = playlist.copy(idListTracks = newIdListTracks)
         viewModelScope.launch {
-            playlistInteractor.addNewPlaylist(updatePlaylist)
-            loadPlaylistById(playlist.id)
-
-            var trackNotFound = true
-            val playlistList = playlistInteractor.getListOfPlaylists().first()
-            for (playlist in playlistList) {
-                if(playlist.idListTracks.contains(track.trackId))
-                    trackNotFound = false
-            }
-            if (trackNotFound)
+            val trackIsInOtherPlaylist = playlistInteractor.deleteTrackFromPlaylistById(track.trackId, playlist.id)
+            if (!trackIsInOtherPlaylist)
                 sortedTracksInteractor.deleteTrackById(track.trackId)
+            loadPlaylistById(playlist.id)
         }
     }
 
     fun deletePlaylist() {
         viewModelScope.launch {
-            playlistInteractor.deletePlaylist(playlist)
+            val listTrackMustDelete = playlistInteractor.deletePlaylistAndReturnListTrackId(playlist)
+            for (id in listTrackMustDelete)
+                sortedTracksInteractor.deleteTrackById(id)
             playlistLiveData.postValue(PlaylistScreenState("", "", 0,0,null,emptyList(), true ))
         }
     }

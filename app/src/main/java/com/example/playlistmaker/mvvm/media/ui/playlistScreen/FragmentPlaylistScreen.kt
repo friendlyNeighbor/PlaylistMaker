@@ -92,6 +92,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         if (it.playlistDeleted)
             findNavController().navigateUp()
         else {
+            if(it.trackList.isEmpty()) {
+                binding.haveNoTracks.visibility = View.VISIBLE
+                binding.standardBottomSheet.visibility = View.GONE
+            }
+
             binding.title.text = it.title
             binding.includedPlaylistView.title.text = it.title
             binding.description.text = it.description

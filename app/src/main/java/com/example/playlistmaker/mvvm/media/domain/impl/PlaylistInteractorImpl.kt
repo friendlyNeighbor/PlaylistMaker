@@ -33,4 +33,13 @@ class PlaylistInteractorImpl(private val playlistRepository: PlaylistRepository)
     override suspend fun updatePlaylist(playlist: Playlist) {
         playlistRepository.updatePlaylist(playlist)
     }
+
+    override suspend fun deleteTrackFromPlaylistById(idTrack: Long, idPlaylist: Long): Boolean {
+        return playlistRepository.deleteTrackFromPlaylistById(idTrack, idPlaylist)
+    }
+
+    override suspend fun deletePlaylistAndReturnListTrackId(playlist: Playlist): List<Long> {
+        return playlistRepository.deletePlaylistAndReturnListTrackId(playlist)
+    }
+
 }
