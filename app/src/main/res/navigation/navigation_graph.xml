@@ -15,6 +15,9 @@
         <action
             android:id="@+id/action_mediatekaFragment_to_fragmentNewPlaylist"
             app:destination="@id/fragmentNewPlaylist" />
+        <action
+            android:id="@+id/action_mediatekaFragment_to_fragmentPlaylistScreen"
+            app:destination="@id/fragmentPlaylistScreen" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -47,6 +50,17 @@
         android:id="@+id/fragmentNewPlaylist"
         android:name="com.example.playlistmaker.mvvm.media.ui.createPlaylist.FragmentCreatePlaylist"
         android:label="fragment_new_playlist"
-        tools:layout="@layout/fragment_create_playlist" >
+        tools:layout="@layout/fragment_create_playlist" />
+    <fragment
+        android:id="@+id/fragmentPlaylistScreen"
+        android:name="com.example.playlistmaker.mvvm.media.ui.playlistScreen.FragmentPlaylistScreen"
+        android:label="fragment_playlist_screen"
+        tools:layout="@layout/fragment_playlist_screen" >
+        <action
+            android:id="@+id/action_fragmentPlaylistScreen_to_playerFragment"
+            app:destination="@id/playerFragment" />
+        <action
+            android:id="@+id/action_fragmentPlaylistScreen_to_fragmentNewPlaylist"
+            app:destination="@id/fragmentNewPlaylist" />
     </fragment>
 </navigation>

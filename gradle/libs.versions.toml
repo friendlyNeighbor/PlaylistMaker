@@ -1,6 +1,7 @@
 [versions]
 activityKtx = "1.13.0"
 agp = "9.2.1"
+androidxCoreKtx = "1.12.0"
 compiler = "5.0.7"
 converterGson = "3.0.0"
 coreKtxVersion = "1.18.0"
@@ -26,6 +27,7 @@ roomKtx = "2.8.4"
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v100 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
+androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
 androidx-fragment = { module = "androidx.fragment:fragment", version.ref = "fragment" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragment" }
 androidx-lifecycle-livedata-ktx = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }

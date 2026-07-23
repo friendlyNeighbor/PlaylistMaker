@@ -21,7 +21,7 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor, pri
                 playlistsLiveData.postValue(PlaylistsState(emptyList()))
             else {
                 for (playlist in listOfPlaylist) {
-                    playlist.uriImage=imageSaverInteractor.getImage(playlist.title)
+                    playlist.uriImage=imageSaverInteractor.getImage(playlist.id)
                 }
                 playlistsLiveData.postValue(PlaylistsState(listOfPlaylist))
             }

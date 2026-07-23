@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistsBinding
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
+import com.example.playlistmaker.mvvm.media.ui.playlistScreen.FragmentPlaylistScreen
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FragmentPlaylists : Fragment() {
@@ -34,6 +35,10 @@ class FragmentPlaylists : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        playlistAdapter.onPlaylistClick = { playlist ->
+            findNavController().navigate(R.id.action_mediatekaFragment_to_fragmentPlaylistScreen, FragmentPlaylistScreen.createArgs(playlist.id))
+        }
 
         binding.recycler.layoutManager = GridLayoutManager(requireActivity(), 2)
         binding.recycler.adapter = playlistAdapter

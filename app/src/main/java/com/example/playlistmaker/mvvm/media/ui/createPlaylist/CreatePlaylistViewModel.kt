@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 
@@ -19,26 +20,50 @@ class CreatePlaylistViewModel(
     private val createPlaylistLiveData = MutableLiveData<StateCreate>()
     fun getLiveData(): LiveData<StateCreate> = createPlaylistLiveData
 
-    private var uriImage: Uri? = null
+    private lateinit var editingPlaylist: Playlist
+    var uriImage: Uri? = null
 
-    fun pickImage(uri: Uri) {
+    fun refreshImage(uri: Uri?) {
         uriImage = uri
-        createPlaylistLiveData.postValue(StateCreate(uriImage))
+        createPlaylistLiveData.postValue(StateCreate(null, null, uriImage, false))
     }
 
     fun savePlaylist(textTitle: String, textDescription: String) {
         viewModelScope.launch {
-            playlistInteractor.addNewPlaylist(
-                Playlist(
-                    textTitle,
-                    textDescription,
-                    emptyList(),
-                    null
-                )
-            )
-            uriImage?.let { imageSaverInteractor.saveImage(it, textTitle) }
+                val newId = playlistInteractor.addNewPlaylist(Playlist(0L, textTitle, textDescription, emptyList(), null))
+                val currentUri = uriImage
+                if (currentUri != null) {
+                    imageSaverInteractor.saveImage(currentUri, newId)
+                }
+            createPlaylistLiveData.postValue(StateCreate(null, null, null, true))
+
         }
     }
 
+    fun loadPlaylistById(id: Long) {
+        viewModelScope.launch {
+            editingPlaylist = playlistInteractor.getPlaylistById(id).first()
+            val id= editingPlaylist.id
+            uriImage = imageSaverInteractor.getImage(id)
+            createPlaylistLiveData.postValue(StateCreate(editingPlaylist.title, editingPlaylist.description, uriImage, false))
+        }
+    }
+
+    fun updatePlaylist(textTitle: String, textDescription: String) {
+            viewModelScope.launch {
+                editingPlaylist.title = textTitle
+                editingPlaylist.description = textDescription
+                playlistInteractor.updatePlaylist(editingPlaylist)
+
+                val id = editingPlaylist.id
+                val editingUriImage = imageSaverInteractor.getImage(id)
+                val currentUri = uriImage
+
+                if (currentUri != null && currentUri!=editingUriImage) {
+                    imageSaverInteractor.saveImage(currentUri, id)
+                }
+                createPlaylistLiveData.postValue(StateCreate(null, null, null, true))
+            }
+        }
 }
 

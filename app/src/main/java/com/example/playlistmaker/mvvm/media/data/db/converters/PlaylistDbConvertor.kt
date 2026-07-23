@@ -10,6 +10,7 @@ class PlaylistDbConvertor {
     private val gson = Gson()
     fun map(playlist: Playlist): PlaylistEntity {
         return PlaylistEntity(
+            playlist.id,
             playlist.title,
             playlist.description,
             gson.toJson(playlist.idListTracks),
@@ -20,6 +21,7 @@ class PlaylistDbConvertor {
     fun map(playlist: PlaylistEntity): Playlist {
         val idListTracks = gson.fromJson(playlist.idListTracks, Array<Long>::class.java).toList()
         return Playlist(
+            playlist.id,
             playlist.title,
             playlist.description,
             idListTracks,

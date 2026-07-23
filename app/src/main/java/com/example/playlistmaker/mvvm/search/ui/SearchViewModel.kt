@@ -34,20 +34,27 @@ class SearchViewModel(
     }
 
     fun textWasChanged(incomingText: String) {
-        text = incomingText.trimStart()
+        if (incomingText != text) {
+            text = incomingText.trimStart()
 
-        if (textInFocus) {
-            val trackListHistory = searchHistoryInteractor.getTrackListHistory()
-            if (text.isEmpty()) {
-                searchJob?.cancel()
-                if (trackListHistory.isEmpty()) {
-                    searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+            if (textInFocus) {
+                val trackListHistory = searchHistoryInteractor.getTrackListHistory()
+                if (text.isEmpty()) {
+                    searchJob?.cancel()
+                    if (trackListHistory.isEmpty()) {
+                        searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+                    } else {
+                        searchLiveData.postValue(
+                            SearchState(
+                                SearchStatus.HISTORY,
+                                trackListHistory
+                            )
+                        )
+                    }
                 } else {
-                    searchLiveData.postValue(SearchState(SearchStatus.HISTORY, trackListHistory))
+                    searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
+                    debounceSearchTrack()
                 }
-            } else {
-                searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
-                debounceSearchTrack()
             }
         }
     }
