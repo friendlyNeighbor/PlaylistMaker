@@ -96,8 +96,7 @@ class PlayerFragment : Fragment() {
             buttonCreate.setOnClickListener {
                 findNavController().navigate(R.id.action_playerFragment_to_fragmentNewPlaylist)
             }
-        } // binding apply
-
+        }
 
         viewModel.getLiveData().observe(viewLifecycleOwner) {
             binding.apply {
@@ -106,20 +105,15 @@ class PlayerFragment : Fragment() {
                 else
                     buttonLike.setImageResource(R.drawable.ic_button_like_51)
 
+                timer.text = it.playedTime
+
                 if (it.playingStatus == PlayingStatus.PREPARED) {
                     buttonPlay.isEnabled = true
-                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                    timer.text = it.playedTime
+                    buttonPlay.setPaused()
                 }
-                if (it.playingStatus == PlayingStatus.PLAYING) {
-                    buttonPlay.setImageResource(R.drawable.ic_button_stop_100)
-                    timer.text = it.playedTime
-                }
-                if (it.playingStatus == PlayingStatus.PAUSED) {
-                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
-                }
+
+
                 if (it.playingStatus == PlayingStatus.DEFAULT) {
-                    buttonPlay.setImageResource(R.drawable.ic_button_play_100)
                     buttonPlay.isEnabled = false
                 }
                 if(it.listOfPlaylist.isNotEmpty()) {

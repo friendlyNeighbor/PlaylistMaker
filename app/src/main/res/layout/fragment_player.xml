@@ -96,18 +96,17 @@
         app:layout_constraintStart_toStartOf="@id/baselineLeft24"
         app:layout_constraintTop_toBottomOf="@id/trackName" />
 
-    <ImageButton
+    <com.example.playlistmaker.mvvm.player.ui.PlaybackButtonView
         android:id="@+id/buttonPlay"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:background="@drawable/round_button"
-        android:foreground="?attr/selectableItemBackground"
-        android:src="@drawable/ic_button_play_100"
+        android:layout_gravity="center"
+        app:playImageResId="@drawable/ic_button_play_100"
+        app:pauseImageResId="@drawable/ic_button_stop_100"
         app:layout_constraintBottom_toTopOf="@id/trackTime"
         app:layout_constraintEnd_toStartOf="@id/buttonLike"
         app:layout_constraintStart_toEndOf="@id/buttonAdd"
-        app:layout_constraintTop_toBottomOf="@id/artistName"
-        tools:ignore="ContentDescription"/>
+        app:layout_constraintTop_toBottomOf="@id/artistName" />
 
     <TextView
         android:id="@+id/timer"
@@ -130,9 +129,9 @@
         android:background="@drawable/round_button"
         android:foreground="?attr/selectableItemBackground"
         android:src="@drawable/ic_button_add_in_playlist"
-        app:layout_constraintBottom_toTopOf="@id/trackTime"
+        app:layout_constraintBottom_toBottomOf="@id/buttonPlay"
         app:layout_constraintStart_toStartOf="@id/baselineLeft24"
-        app:layout_constraintTop_toBottomOf="@id/artistName"
+        app:layout_constraintTop_toTopOf="@id/buttonPlay"
         tools:ignore="ContentDescription"/>
 
     <ImageButton
@@ -142,9 +141,9 @@
         android:background="@drawable/round_button"
         android:foreground="?attr/selectableItemBackground"
         android:src="@drawable/ic_button_like_51"
-        app:layout_constraintBottom_toTopOf="@id/trackTime"
+        app:layout_constraintBottom_toBottomOf="@id/buttonPlay"
         app:layout_constraintEnd_toEndOf="@id/baselineRight24"
-        app:layout_constraintTop_toBottomOf="@id/artistName"
+        app:layout_constraintTop_toTopOf="@id/buttonPlay"
         tools:ignore="ContentDescription"/>
 
     <TextView
