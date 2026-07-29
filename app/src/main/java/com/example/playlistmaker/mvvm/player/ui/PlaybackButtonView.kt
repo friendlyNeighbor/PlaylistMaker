@@ -46,16 +46,16 @@ class PlaybackButtonView @JvmOverloads constructor (
 
     override fun onSaveInstanceState(): Parcelable {
         val bundle = Bundle().apply {
-            putBoolean("isPlaying", isPlaying)
+            putBoolean(IS_PLAYING, isPlaying)
         }
-        bundle.putParcelable("super", super.onSaveInstanceState())
+        bundle.putParcelable(SUPER, super.onSaveInstanceState())
         return bundle
     }
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         val bundle = state as Bundle
-        isPlaying = bundle.getBoolean("isPlaying", false)
-        super.onRestoreInstanceState(bundle.getParcelable("super"))
+        isPlaying = bundle.getBoolean(IS_PLAYING, false)
+        super.onRestoreInstanceState(bundle.getParcelable(SUPER))
         if (isPlaying)
             setPlaying()
     }
@@ -67,7 +67,7 @@ class PlaybackButtonView @JvmOverloads constructor (
 
     override fun onDraw(canvas: Canvas) {
         imageBitmap?.let {
-            canvas.drawBitmap(imageBitmap!!, null, imageRect, null)
+            canvas.drawBitmap(it, null, imageRect, null)
         }
     }
 
@@ -102,5 +102,10 @@ class PlaybackButtonView @JvmOverloads constructor (
         isPlaying=false
         imageBitmap = imageBitmapPlay
         invalidate()
+    }
+
+    companion object {
+        const val SUPER = "SUPER"
+        const val IS_PLAYING = "IS_PlAYING"
     }
 }
