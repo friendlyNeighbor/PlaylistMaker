@@ -1,7 +1,12 @@
 package com.example.playlistmaker.mvvm.player.ui
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlayerBinding
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
+import com.example.playlistmaker.mvvm.player.services.MusicService
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -27,6 +33,22 @@ class PlayerFragment : Fragment() {
     private val listOfPlaylist: MutableList<Playlist> = mutableListOf()
     private val playerAdapter = PlayerAdapter(listOfPlaylist)
     private var pokedPlaylistTitle = ""
+// !!! url песни ------------------
+    private companion object {
+        const val SONG_URL = "https://files.freemusicarchive.org/storage-freemusicarchive-org/tracks/h3vL7veZhrT8ghGqKN0s02D0RFqOGPftD7fFtCga.mp3"
+    }
+ // -------------------------
+    private var musicService: MusicService? = null
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            val binder = service as MusicService.MusicServiceBinder
+            musicService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) {
+            musicService = null
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +62,8 @@ class PlayerFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        bindMusicService()
 
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -79,7 +103,10 @@ class PlayerFragment : Fragment() {
             valueCountry.text = track.country
 
             buttonPlay.setOnClickListener {
-                viewModel.playbackControl()
+                // запуск воспроизведения
+       //         bindMusicService() // ??
+                musicService?.startPlayer()
+    // !!! вернуть            viewModel.playbackControl()
             }
 
             buttonLike.setOnClickListener {
@@ -154,7 +181,22 @@ class PlayerFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
+        unbindMusicService()
         _binding = null
+    }
+
+
+    private fun bindMusicService() {
+        val intent = Intent(requireContext(), MusicService::class.java).apply {
+            putExtra("song_url", SONG_URL)
+
+         //   putExtra("song_url", track.previewUrl)
+        }
+        requireContext().bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    private fun unbindMusicService() {
+        requireContext().unbindService(serviceConnection)
     }
 
 }

@@ -24,6 +24,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service
+            android:name="com.example.playlistmaker.mvvm.player.services.MusicService"
+            android:exported="false" />
+
     </application>
 
 </manifest>
