@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Application
 import com.example.playlistmaker.mvvm.di.dataModule
 import com.example.playlistmaker.mvvm.di.interactorModule
+import com.example.playlistmaker.mvvm.di.playerModule
 import com.example.playlistmaker.mvvm.di.repositoryModule
 import com.example.playlistmaker.mvvm.di.viewModelModule
 import com.example.playlistmaker.mvvm.settings.domain.api.ThemeInteractor
@@ -19,7 +20,7 @@ class App() : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(viewModelModule, repositoryModule, interactorModule, dataModule)
+            modules(viewModelModule, repositoryModule, interactorModule, dataModule, playerModule)
         }
 
         val themeInteractor: ThemeInteractor by inject()
