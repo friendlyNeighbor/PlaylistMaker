@@ -70,6 +70,7 @@ class PlayerViewModel(
         when (playingStatus) {
             is PlayingStatus.Prepared ->  startPlayer()
             is PlayingStatus.Paused ->  startPlayer()
+            is PlayingStatus.Complitted ->  startPlayer()
             is PlayingStatus.Playing ->  pausePlayer()
             is PlayingStatus.Default ->  pausePlayer()
         }

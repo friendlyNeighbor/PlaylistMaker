@@ -1,11 +1,12 @@
 package com.example.playlistmaker.mvvm.player.services
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.os.Binder
@@ -19,8 +20,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import android.icu.text.SimpleDateFormat
 import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.player.ui.PlayerFragment
@@ -29,10 +33,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.android.getKoin
 import java.util.Locale
+import kotlin.time.Duration.Companion.milliseconds
 
 class MusicService : Service(), AudioPlayerControl {
 
-    private var playingStatus = MutableStateFlow<PlayingStatus>(PlayingStatus.Default())
+    private val playingStatus = MutableStateFlow<PlayingStatus>(PlayingStatus.Default())
     private var mediaPlayer: MediaPlayer? = null
     private val binder = MusicServiceBinder()
     private var songUrl = ""
@@ -41,6 +46,7 @@ class MusicService : Service(), AudioPlayerControl {
     private lateinit var artistName: String
     private lateinit var trackName: String
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private var notificationGranted = true
 
     override fun onCreate() {
         super.onCreate()
@@ -53,12 +59,12 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     override fun onBind(intent: Intent?): IBinder {
-        songUrl = intent?.getStringExtra(SONG_URL) ?: ""
-        initMediaPlayer()
         val trackSaverInteractor = getKoin().get<TrackSaverInteractor>()
-        track= trackSaverInteractor.getTrackFromMemory()
+        track = trackSaverInteractor.getTrackFromMemory()
         artistName = track.artistName
         trackName = track.trackName
+        songUrl = intent?.getStringExtra(SONG_URL) ?: ""
+        initMediaPlayer()
         return binder
     }
 
@@ -67,10 +73,10 @@ class MusicService : Service(), AudioPlayerControl {
         return super.onUnbind(intent)
     }
 
-
-
     override fun showNotification() {
-        if(playingStatus.value is PlayingStatus.Playing ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            checkNotificationPermission()
+        if (notificationGranted && playingStatus.value is PlayingStatus.Playing) {
             ServiceCompat.startForeground(
                 this,
                 SERVICE_NOTIFICATION_ID,
@@ -81,7 +87,11 @@ class MusicService : Service(), AudioPlayerControl {
     }
 
     override fun hideNotification() {
-        stopForeground(STOP_FOREGROUND_REMOVE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            checkNotificationPermission()
+        if (notificationGranted) {
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        }
     }
 
     private fun initMediaPlayer() {
@@ -93,7 +103,7 @@ class MusicService : Service(), AudioPlayerControl {
         }
         mediaPlayer?.setOnCompletionListener {
             timerJob?.cancel()
-            playingStatus.value = PlayingStatus.Prepared()
+            playingStatus.value = PlayingStatus.Complitted()
             hideNotification()
         }
     }
@@ -103,57 +113,68 @@ class MusicService : Service(), AudioPlayerControl {
         runTimer()
     }
 
-private fun runTimer() {
-    timerJob?.cancel()
-    timerJob = CoroutineScope(Dispatchers.IO).launch {
-        while (true) {
-            val player = mediaPlayer ?: break
-            if (!player.isPlaying) {
-                break
+    private fun runTimer() {
+        timerJob?.cancel()
+        timerJob = CoroutineScope(Dispatchers.IO).launch {
+            while (true) {
+                val player = mediaPlayer ?: break
+                if (!player.isPlaying) {
+                    break
+                }
+                delay(TIMER_UPDATE_DELAY.milliseconds)
+                val position = try {
+                    player.currentPosition
+                } catch (_: IllegalStateException) {
+                    break
+                }
+                playingStatus.value = PlayingStatus.Playing(dateFormat.format(position))
             }
-            delay(TIMER_UPDATE_DELAY)
-            val position = try {
-                player.currentPosition
-            } catch (e: IllegalStateException) {
-                break
-            }
-            playingStatus.value = PlayingStatus.Playing(dateFormat.format(position))
         }
     }
-}
 
     override fun pausePlayer() {
         mediaPlayer?.pause()
         timerJob?.cancel()
-        playingStatus.value = PlayingStatus.Paused(dateFormat.format(mediaPlayer?.currentPosition))    }
+        playingStatus.value = PlayingStatus.Paused(dateFormat.format(mediaPlayer?.currentPosition))
+    }
 
     override fun getPlayingStatus(): StateFlow<PlayingStatus> = playingStatus
 
     override fun releasePlayer() {
-        mediaPlayer?.stop()
-        mediaPlayer?.setOnPreparedListener(null)
-        mediaPlayer?.setOnCompletionListener(null)
-        mediaPlayer?.release()
-        mediaPlayer = null
         timerJob?.cancel()
+        timerJob = null
+        val player = mediaPlayer ?: return
+        if (player.isPlaying) {
+            player.stop()
+        }
+        player.setOnPreparedListener(null)
+        player.setOnCompletionListener(null)
+
+        try {
+            player.release()
+        } catch (e: IllegalStateException) {
+            Log.w("mylog", "Tried to release already released MediaPlayer", e)
+        } finally {
+            mediaPlayer = null
+        }
         playingStatus.value = PlayingStatus.Default()
         hideNotification()
-        stopSelf()
     }
 
-private fun createNotificationChannel() {
-    val channel = NotificationChannel(
-        NOTIFICATION_CHANNEL_ID,
-        NOTIFICATION_CHANNEL_NAME,
-        NotificationManager.IMPORTANCE_DEFAULT
-    )
-    channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
 
-    val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    notificationManager.createNotificationChannel(channel)
-}
+    private fun createNotificationChannel() {
+        val channel = NotificationChannel(
+            NOTIFICATION_CHANNEL_ID,
+            NOTIFICATION_CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
+        channel.description = NOTIFICATION_CHANNEL_DESCRIPTION
+        val notificationManager =
+            getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
     private fun createServiceNotification(): Notification {
-
         return NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID)
             .setContentTitle(NOTIFICATION_TITLE)
             .setContentText("$artistName - $trackName")
@@ -162,9 +183,18 @@ private fun createNotificationChannel() {
             .setCategory(NotificationCompat.CATEGORY_SERVICE)
             .build()
     }
+
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private fun checkNotificationPermission() {
+        notificationGranted = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.POST_NOTIFICATIONS
+        ) == PackageManager.PERMISSION_GRANTED }
+
     inner class MusicServiceBinder : Binder() {
         fun getService(): MusicService = this@MusicService
     }
+
     private fun getForegroundServiceTypeConstant(): Int {
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK

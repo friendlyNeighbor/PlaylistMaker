@@ -64,35 +64,32 @@ class PlayerFragment : Fragment() {
         val bottomSheetBehavior = BottomSheetBehavior.from(binding.standardBottomSheet)
         bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-        bottomSheetBehavior.addBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
+        bottomSheetBehavior.addBottomSheetCallback(object :
+            BottomSheetBehavior.BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
                         binding.overlay.visibility = View.GONE
                     }
+
                     else -> {
                         binding.overlay.visibility = View.VISIBLE
                     }
                 }
             }
+
             override fun onSlide(bottomSheet: View, slideOffset: Float) {}
         })
 
-        track=viewModel.getTrack()
+        track = viewModel.getTrack()
+        bindMusicService()
 
         val requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                bindMusicService()
-            } else {
-                Toast.makeText(requireActivity(), "Can't bind service!", Toast.LENGTH_LONG).show()
-            }
-        }
+        ) { }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
-        } else {
-            bindMusicService()
         }
 
         playerAdapter.onPlaylistClick = { playlist ->
@@ -143,20 +140,27 @@ class PlayerFragment : Fragment() {
 
                 timer.text = it.playingStatus.progress
 
-                if (it.playingStatus is PlayingStatus.Prepared) {
-                    buttonPlay.isEnabled = true
-                    buttonPlay.setPaused()
+                when (it.playingStatus) {
+                    is PlayingStatus.Prepared -> {
+                        buttonPlay.isEnabled = true
+                        buttonPlay.setPaused()
+                    }
+
+                    is PlayingStatus.Paused -> buttonPlay.setPaused()
+                    is PlayingStatus.Complitted -> buttonPlay.setPaused()
+                    is PlayingStatus.Playing -> buttonPlay.setPlaying()
+                    is PlayingStatus.Default -> {
+                        buttonPlay.isEnabled = false
+                        buttonPlay.setPaused()
+                    }
                 }
 
-                if (it.playingStatus is PlayingStatus.Default) {
-                    buttonPlay.isEnabled = false
-                }
-                if(it.listOfPlaylist.isNotEmpty()) {
+                if (it.listOfPlaylist.isNotEmpty()) {
                     listOfPlaylist.clear()
                     listOfPlaylist.addAll(it.listOfPlaylist)
                     playerAdapter.notifyDataSetChanged()
                 }
-                if(it.isInPlaylistYet==true) {
+                if (it.isInPlaylistYet == true) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.toast_track_already_in_playlist, pokedPlaylistTitle),
@@ -164,7 +168,7 @@ class PlayerFragment : Fragment() {
                     ).show()
                     viewModel.resetIsInPlaylist()
                 }
-                if(it.isInPlaylistYet==false) {
+                if (it.isInPlaylistYet == false) {
                     Toast.makeText(
                         requireContext(),
                         getString(R.string.toast_track_added_to_playlist, pokedPlaylistTitle),

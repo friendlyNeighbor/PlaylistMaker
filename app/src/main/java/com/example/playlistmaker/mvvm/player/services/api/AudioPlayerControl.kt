@@ -10,5 +10,4 @@ interface AudioPlayerControl {
     fun releasePlayer()
     fun showNotification()
     fun hideNotification()
-
 }

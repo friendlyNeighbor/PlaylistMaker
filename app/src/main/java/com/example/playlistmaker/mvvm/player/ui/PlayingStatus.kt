@@ -6,6 +6,8 @@ sealed class PlayingStatus(val progress: String) {
 
     class Prepared : PlayingStatus("00:00")
 
+    class Complitted : PlayingStatus("00:00")
+
     class Playing(progress: String) :PlayingStatus(progress)
 
     class Paused(progress: String) : PlayingStatus(progress)
