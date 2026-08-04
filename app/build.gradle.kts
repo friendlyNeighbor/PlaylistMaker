@@ -44,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.espresso.core)
     implementation(libs.material)
     implementation(libs.glide)
     implementation(libs.cronet.embedded)

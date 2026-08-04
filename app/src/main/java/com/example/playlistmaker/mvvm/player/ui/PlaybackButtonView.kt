@@ -77,7 +77,6 @@ class PlaybackButtonView @JvmOverloads constructor (
                 return true
             }
             MotionEvent.ACTION_UP -> {
-                changeImage()
                 performClick()
                 return true
             }

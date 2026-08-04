@@ -1,7 +1,5 @@
 package com.example.playlistmaker.mvvm.player.ui
 
-import android.icu.text.SimpleDateFormat
-import android.media.MediaPlayer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -11,16 +9,13 @@ import com.example.playlistmaker.mvvm.media.domain.db.TracksInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
 import com.example.playlistmaker.mvvm.media.domain.model.Playlist
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
+import com.example.playlistmaker.mvvm.player.services.api.AudioPlayerControl
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import java.util.Locale
-import kotlin.time.Duration.Companion.milliseconds
+
 
 class PlayerViewModel(
-    private val mediaPlayer: MediaPlayer,
     private val favoritesTracksInteractor: TracksInteractor,
     private val trackSaverInteractor: TrackSaverInteractor,
     private val playlistInteractor: PlaylistInteractor,
@@ -33,83 +28,60 @@ class PlayerViewModel(
     fun getLiveData(): LiveData<PlayerState> = playerLiveData
 
     private val playingTrack: Track = getTrack()
-    private var playingStatus: PlayingStatus = PlayingStatus.DEFAULT
-    private var playedTime: String = TIMER_ZERO
+    private var playingStatus: PlayingStatus = PlayingStatus.Default()
     private var isFavoriteTrack = false
     private var listOfPlaylist: List<Playlist> = emptyList()
     private var isInPlaylistYet: Boolean? = null
-
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
-    private var timerJob: Job? = null
+    private var audioPlayerControl: AudioPlayerControl? = null
 
     init {
         checkOnFavorite()
-        preparePlayer()
     }
 
-    private fun preparePlayer() {
-        val url: String = playingTrack.previewUrl
-        mediaPlayer.setDataSource(url)
-        mediaPlayer.prepareAsync()
-        mediaPlayer.setOnPreparedListener {
-            playingStatus = PlayingStatus.PREPARED
-            postLiveData()
-        }
-        mediaPlayer.setOnCompletionListener {
-            pausePlayer()
-            playingStatus = PlayingStatus.PREPARED
-            playedTime=TIMER_ZERO
-            postLiveData()
-        }
+    override fun onCleared() {
+        super.onCleared()
+        audioPlayerControl = null
     }
 
-    fun playbackControl() {
-        when (playingStatus) {
-            PlayingStatus.PREPARED, PlayingStatus.PAUSED ->  startPlayer()
-            PlayingStatus.PLAYING                        ->  pausePlayer()
-            PlayingStatus.DEFAULT                        ->  pausePlayer()
-        }
-    }
+    fun setAudioPlayerControl(audioPlayerControl: AudioPlayerControl) {
+        this.audioPlayerControl = audioPlayerControl
 
-    private fun startPlayer() {
-        mediaPlayer.start()
-        playingStatus = PlayingStatus.PLAYING
-        runTimer()
-        postLiveData()
-    }
-
-    private fun runTimer() {
-        timerJob?.cancel()
-        timerJob = viewModelScope.launch {
-            while (mediaPlayer.isPlaying) {
-                delay(TIMER_UPDATE_DELAY.milliseconds)
-                setTime()
+        viewModelScope.launch {
+            audioPlayerControl.getPlayingStatus().collect {
+                playingStatus = it
+                postLiveData()
             }
         }
     }
 
-    private fun setTime() {
-        playedTime = dateFormat.format(mediaPlayer.currentPosition)
-        postLiveData()
+    fun removeAudioPlayerControl() {
+        audioPlayerControl = null
+    }
+
+    fun showNotification() {
+        audioPlayerControl?.showNotification()
+    }
+
+    fun hideNotification() {
+        audioPlayerControl?.hideNotification()
+    }
+
+    fun playbackControl() {
+        when (playingStatus) {
+            is PlayingStatus.Prepared ->  startPlayer()
+            is PlayingStatus.Paused ->  startPlayer()
+            is PlayingStatus.Complitted ->  startPlayer()
+            is PlayingStatus.Playing ->  pausePlayer()
+            is PlayingStatus.Default ->  pausePlayer()
+        }
+    }
+
+    private fun startPlayer() {
+        audioPlayerControl?.startPlayer()
     }
 
     private fun pausePlayer() {
-        mediaPlayer.pause()
-        playingStatus = PlayingStatus.PAUSED
-        stopTimer()
-        postLiveData()
-    }
-
-    private fun stopTimer() {
-        timerJob?.cancel()
-    }
-
-    private fun release() {
-        stopTimer()
-        mediaPlayer.release()
-        playedTime = TIMER_ZERO
-        playingStatus = PlayingStatus.DEFAULT
-        postLiveData()
+        audioPlayerControl?.pausePlayer()
     }
 
     private fun checkOnFavorite() {
@@ -152,7 +124,6 @@ class PlayerViewModel(
             PlayerState(
                 playingStatus,
                 playingTrack,
-                playedTime,
                 isFavoriteTrack,
                 listOfPlaylist,
                 isInPlaylistYet
@@ -185,13 +156,4 @@ class PlayerViewModel(
         postLiveData()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        release()
-    }
-
-    companion object {
-        private const val TIMER_UPDATE_DELAY = 300L
-        private const val TIMER_ZERO = "00:00"
-    }
 }
