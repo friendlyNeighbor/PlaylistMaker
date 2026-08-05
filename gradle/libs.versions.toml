@@ -1,8 +1,10 @@
 [versions]
+activityCompose = "<version>"
 activityKtx = "1.13.0"
 agp = "9.2.1"
 androidxCoreKtx = "1.12.0"
 compiler = "5.0.7"
+composeBom = "2026.06.01"
 converterGson = "3.0.0"
 coreKtxVersion = "1.18.0"
 fragment = "1.8.9"
@@ -20,11 +22,19 @@ material = "1.13.0"
 activity = "1.13.0"
 constraintlayout = "2.2.1"
 cronetEmbedded = "143.7445.0"
+materialVersion = "1.11.4"
 navigationFragmentKtx = "2.9.8"
 viewpager2 = "1.1.0"
 roomKtx = "2.8.4"
+uiToolingPreview = "1.11.4"
+uiTooling = "1.11.4"
 [libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityKtx" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-compose-ui = { module = "androidx.compose.ui:ui" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-core-ktx-v100 = { module = "androidx.core:core-ktx", version.ref = "coreKtxVersion" }
 androidx-core-ktx-v1120 = { module = "androidx.core:core-ktx", version.ref = "androidxCoreKtx" }
@@ -53,8 +63,11 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 cronet-embedded = { group = "org.chromium.net", name = "cronet-embedded", version.ref = "cronetEmbedded" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converterGson" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiToolingPreview" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 

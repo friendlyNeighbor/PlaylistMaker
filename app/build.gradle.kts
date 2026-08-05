@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("com.google.devtools.ksp")
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -21,6 +22,9 @@ android {
             viewBinding = true
         }
 
+        buildFeatures {
+            compose = true
+        }
     }
 
     buildTypes {
@@ -36,6 +40,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     kotlin {
         compilerOptions {
             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
@@ -44,6 +49,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.espresso.core)
     implementation(libs.material)
     implementation(libs.glide)
@@ -70,7 +76,12 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.androidx.room.runtime)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
+   // implementation(platform(libs.androidx.compose.bom)) // или актуальная BOM
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.activity.compose)
 }
 

@@ -4,6 +4,50 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
+
+class SettingsFragment : Fragment() {
+
+    private val primaryState = SettingsState.DEFAULT
+    private val viewModel: SettingsViewModel by viewModel() {
+        parametersOf(primaryState)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+
+                    Scaffold { padding ->
+                        SettingsScreen(
+                            //viewModel = viewModel,
+                            modifier = Modifier.padding(padding)
+                        )
+                    }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+/*
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.databinding.FragmentSettingsBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -65,3 +109,4 @@ class SettingsFragment : Fragment() {
         _binding = null
     }
 }
+*/
