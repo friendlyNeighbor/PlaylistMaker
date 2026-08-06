@@ -29,7 +29,7 @@ class SettingsFragment : Fragment() {
 
                     Scaffold { padding ->
                         SettingsScreen(
-                            //viewModel = viewModel,
+                            viewModel = viewModel,
                             modifier = Modifier.padding(padding)
                         )
                     }

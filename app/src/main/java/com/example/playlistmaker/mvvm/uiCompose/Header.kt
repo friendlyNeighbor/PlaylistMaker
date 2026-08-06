@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.ui
+package com.example.playlistmaker.mvvm.uiCompose
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

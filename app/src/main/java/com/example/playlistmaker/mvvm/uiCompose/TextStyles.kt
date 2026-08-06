@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.ui
+package com.example.playlistmaker.mvvm.uiCompose
 
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight

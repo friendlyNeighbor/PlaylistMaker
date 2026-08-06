@@ -1,6 +1,7 @@
-package com.example.playlistmaker.mvvm.ui
+package com.example.playlistmaker.mvvm.uiCompose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,11 +16,14 @@ import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 
 @Composable
-fun ActionPanel(actionText: String, iconRes: Int?) {
+fun ActionPanel(
+    actionText: String, iconRes: Int?,
+    onClickAction: (() -> Unit)? = null ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(61.dp),
+            .height(61.dp)
+            .clickable(onClickAction!=null) { onClickAction?.invoke() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
@@ -38,9 +42,7 @@ fun ActionPanel(actionText: String, iconRes: Int?) {
                     .height(61.dp)
                     .padding(end = 12.dp)
             )
-
         }
-
     }
 }
 
