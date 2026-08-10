@@ -6,9 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -24,15 +27,20 @@ class SettingsFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         return ComposeView(requireContext()).apply {
             setContent {
+                val uiState by viewModel.getLiveData().observeAsState()
 
+                val isDarkTheme = (uiState == SettingsState.NIGHT)   // или любое значение по умолчанию
+                ComposeTheme(isDarkTheme) {
                     Scaffold { padding ->
                         SettingsScreen(
                             viewModel = viewModel,
                             modifier = Modifier.padding(padding)
                         )
                     }
+                }
             }
         }
     }

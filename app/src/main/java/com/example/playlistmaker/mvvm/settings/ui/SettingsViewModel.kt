@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.settings.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -22,6 +23,12 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
 
     }
 
+    fun getTheme(): Boolean {
+        Log.d("тема","${themeInteractor.getTheme()}")
+        return themeInteractor.getTheme() }
+
+
+
     fun share() {
         sharingInteractor.shareApp()
     }
@@ -35,6 +42,8 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
     }
 
     fun switchTheme() {
+        Log.d("тема","themeInteractor.switchTheme()")
         themeInteractor.switchTheme()
+        updateSwitcher()
     }
 }

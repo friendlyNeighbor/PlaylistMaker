@@ -25,8 +25,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier )
 
             Spacer(Modifier.height(24.dp))
 
-            SwitchPanel(stringResource(R.string.dark))
-            SwitchPanel("Тест", {viewModel.switchTheme()}) //
+            SwitchPanel(stringResource(R.string.dark), {viewModel.switchTheme()}, viewModel.getTheme() )
 
             ActionPanel(stringResource(R.string.share), R.drawable.ic_share_24, {viewModel.share()})
 

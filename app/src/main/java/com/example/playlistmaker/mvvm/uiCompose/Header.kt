@@ -21,7 +21,7 @@ fun Header(text: String) {
     ) {
         Text(
             text = text,
-            style = TextStyles.headerStyle,
+            style = TextStyles.headerStyle(),
             modifier = Modifier.padding(horizontal = 16.dp)
         )
     }

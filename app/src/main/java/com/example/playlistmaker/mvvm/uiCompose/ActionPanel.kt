@@ -28,7 +28,7 @@ fun ActionPanel(
     ) {
         Text(
             text = actionText,
-            style = TextStyles.actionPanelStyle,
+            style = TextStyles.actionPanelStyle(),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .weight(1f)

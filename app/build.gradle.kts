@@ -49,6 +49,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.espresso.core)
     implementation(libs.material)

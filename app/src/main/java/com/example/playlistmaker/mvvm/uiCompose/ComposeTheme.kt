@@ -10,13 +10,14 @@ import androidx.compose.ui.res.colorResource
 import com.example.playlistmaker.R
 
 
+
 @Composable
 fun ComposeTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
     val LightColors = Colors(
-        primary = colorResource(id = R.color.yp_black),
+        primary = colorResource(id = R.color.test),
         primaryVariant = Color.Gray,          // аналог secondary/darker variant
         secondary = Color.LightGray,
         secondaryVariant = Color.DarkGray,
@@ -32,7 +33,7 @@ fun ComposeTheme(
     )
 
     val DarkColors = Colors(
-        primary = colorResource(id = R.color.yp_black),
+        primary = colorResource(id = R.color.test1),
         primaryVariant = Color.DarkGray,
         secondary = Color.Black,
         secondaryVariant = Color.Black,
@@ -55,4 +56,6 @@ fun ComposeTheme(
   //      shapes = Shapes,               // из material
         content = content
     )
+
+
 }

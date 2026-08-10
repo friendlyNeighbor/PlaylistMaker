@@ -25,21 +25,22 @@ import com.example.playlistmaker.R
 @Composable
 fun SwitchPanel(
     actionText: String,
-    onClickAction: (() -> Unit)? = null )
+    onClickAction: (() -> Unit)? = null,
+    switchChecked: Boolean = false)
 {
-    var checked by remember { mutableStateOf(false) }
+    var checked by remember { mutableStateOf(switchChecked) }
 
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
-            .clickable(onClickAction!=null) { onClickAction?.invoke()
-                                                       checked =!checked },
+            .clickable(onClickAction!=null) {  checked =!checked
+                                                        onClickAction?.invoke()},
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = actionText,
-            style = TextStyles.actionPanelStyle,
+            style = TextStyles.actionPanelStyle(),
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .weight(1f)
@@ -49,6 +50,7 @@ fun SwitchPanel(
             checked = checked,
             onCheckedChange = {
                 checked = it
+                onClickAction?.invoke()
             },
             modifier = Modifier
                 .height(18.dp)
