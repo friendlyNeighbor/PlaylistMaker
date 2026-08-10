@@ -27,8 +27,6 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
         Log.d("тема","${themeInteractor.getTheme()}")
         return themeInteractor.getTheme() }
 
-
-
     fun share() {
         sharingInteractor.shareApp()
     }

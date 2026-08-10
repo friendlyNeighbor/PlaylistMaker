@@ -1,11 +1,13 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Switch
 import androidx.compose.material.SwitchDefaults
 import androidx.compose.material.Text
@@ -35,12 +37,14 @@ fun SwitchPanel(
             .fillMaxWidth()
             .height(61.dp)
             .clickable(onClickAction!=null) {  checked =!checked
-                                                        onClickAction?.invoke()},
+                                                        onClickAction?.invoke()}
+            .background(MaterialTheme.colors.primary),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = actionText,
             style = TextStyles.actionPanelStyle(),
+            color = MaterialTheme.colors.onPrimary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .weight(1f)

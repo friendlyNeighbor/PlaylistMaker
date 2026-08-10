@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.getValue
@@ -30,9 +31,9 @@ class SettingsFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-                val uiState by viewModel.getLiveData().observeAsState()
+             //   val themeState by viewModel.getLiveData().observeAsState()
 
-                val isDarkTheme = (uiState == SettingsState.NIGHT)   // или любое значение по умолчанию
+                val isDarkTheme = isSystemInDarkTheme()   // или любое значение по умолчанию
                 ComposeTheme(isDarkTheme) {
                     Scaffold { padding ->
                         SettingsScreen(

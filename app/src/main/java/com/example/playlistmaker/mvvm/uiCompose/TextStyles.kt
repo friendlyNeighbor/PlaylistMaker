@@ -1,6 +1,5 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
-import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -12,16 +11,23 @@ object TextStyles {
         fontFamily = displayFontFamily,
         fontSize = 22.sp,
         fontWeight = FontWeight.Medium,
-        letterSpacing = 0.sp,
-        color = MaterialTheme.colors.primary
+        letterSpacing = 0.sp
     )
+
     @Composable
     fun actionPanelStyle() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
-        letterSpacing = 0.sp,
-        color = MaterialTheme.colors.primary
+        letterSpacing = 0.sp
+    )
+
+    @Composable
+    fun actionButtonStyle() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 14.sp,
+        fontWeight = FontWeight.Medium,
+        letterSpacing = 0.sp
     )
 
 }

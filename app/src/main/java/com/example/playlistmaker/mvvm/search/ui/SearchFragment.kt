@@ -9,12 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Scaffold
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentSearchBinding
 import com.example.playlistmaker.mvvm.search.domain.model.Track
+import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -23,34 +29,65 @@ import org.koin.core.parameter.parametersOf
 class SearchFragment : Fragment() {
 
     private val trackList: MutableList<Track> = mutableListOf()
+
+    /*
     private val tracksAdapter = TrackAdapter(trackList)
 
     private val trackListHistory: MutableList<Track> = mutableListOf()
     private val historyAdapter = TrackAdapter(trackListHistory)
 
     private var text: String = TEXT_DEFAULT
-
+*/
     private val primaryState = SearchState(SearchStatus.CLEAR, trackList)
     private val viewModel: SearchViewModel by viewModel() {
         parametersOf(primaryState)
     }
+
+    /*
 
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
     private var isClickAllowed = true
 
+
+ */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                val isDarkTheme = isSystemInDarkTheme()
+                ComposeTheme(isDarkTheme) {
+                    Scaffold { padding ->
+                        SearchScreen(
+                            viewModel = viewModel,
+                            modifier = Modifier.padding(padding)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+
+
+
+ /*
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
 
         binding.recycler.adapter = tracksAdapter
         binding.recyclerHistory.adapter = historyAdapter
@@ -165,3 +202,5 @@ class SearchFragment : Fragment() {
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 }
+
+  */
