@@ -29,5 +29,12 @@ object TextStyles {
         fontWeight = FontWeight.Medium,
         letterSpacing = 0.sp
     )
+    @Composable
+    fun searchPanelStyle() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = 0.sp
+    )
 
 }

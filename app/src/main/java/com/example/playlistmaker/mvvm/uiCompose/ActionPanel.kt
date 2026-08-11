@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,14 +27,13 @@ fun ActionPanel(
             .fillMaxWidth()
             .height(61.dp)
             .clickable(onClickAction!=null) { onClickAction?.invoke() }
-            .background(MaterialTheme.colors.primary),
+            .background(MaterialTheme.colorScheme.primary),
         verticalAlignment = Alignment.CenterVertically
-
     ) {
         Text(
             text = actionText,
             style = TextStyles.actionPanelStyle(),
-            color = MaterialTheme.colors.onPrimary,
+            color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
                 .weight(1f)

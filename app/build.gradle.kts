@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.playlistmaker"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.playlistmaker"
@@ -41,12 +41,21 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+/*
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+
+ */
     kotlin {
         compilerOptions {
             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
         }
     }
 }
+
+
 
 dependencies {
     implementation(libs.androidx.compose.runtime.livedata)
@@ -81,8 +90,16 @@ dependencies {
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
    // implementation(platform(libs.androidx.compose.bom)) // или актуальная BOM
-    implementation(libs.androidx.compose.material)
+  //  implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.material3.window.size.class1)
+    implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
+    implementation (libs.material3)
+    implementation (libs.androidx.compose.material3)
+// Если используешь иконки:
+ //   implementation (libs.androidx.compose.material.icons.core)
+ //   implementation (libs.androidx.compose.material.icons.extended)
 }
 

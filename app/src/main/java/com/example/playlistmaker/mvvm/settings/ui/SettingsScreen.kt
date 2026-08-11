@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -23,7 +23,7 @@ fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier )
    // val state by viewModel.uiState.collectAsState() // LiveData/StateFlow → State
 
         Column(modifier = modifier.fillMaxSize()
-            .background(MaterialTheme.colors.primary)
+            .background(MaterialTheme.colorScheme.primary)
         ) {
             Header(stringResource(R.string.settings))
 
