@@ -19,37 +19,37 @@ fun ComposeTheme(
 ) {
     val LightColorScheme =lightColorScheme(
 
-        primary = Color(0xFFFFFFFF),
-        onPrimary = Color(0xFF1A1B22),
-
-
+        primary = Color(0xFFFFFFFF),// yp_white
+        onPrimary = Color(0xFF1A1B22),// yp_black
+        secondary = Color(0xFFE6E8EB), // YP Light Gray
+        onSecondary = Color(0xFF1A1B22),// yp_black
 
       //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
-        secondary = colorResource(id = R.color.test3),
     //    secondaryVariant = colorResource(id = R.color.test3),
         background = colorResource(id = R.color.test3),
         surface = colorResource(id = R.color.test3),
         error = colorResource(id = R.color.test3),
-        onSecondary = colorResource(id = R.color.test3),
         onBackground = colorResource(id = R.color.test3),
         onSurface = colorResource(id = R.color.test3),
         onError = colorResource(id = R.color.test3),
+        surfaceContainer = colorResource(id = R.color.test3),
+        onSurfaceVariant = colorResource(id = R.color.test3)
        // isLight = true
     )
 
     val DarkColorScheme = darkColorScheme(
         primary = Color(0xFF1A1B22),
         onPrimary = Color(0xFFFFFFFF),
-
-
+        secondary = Color(0xFFFFFFFF),
+        onSecondary = Color(0xFF1A1B22),
 
      //   primaryVariant = colorResource(id = R.color.test2),
-        secondary = colorResource(id = R.color.test2),
+
      //   secondaryVariant = colorResource(id = R.color.test2),
         background = colorResource(id = R.color.test2),
+        inverseSurface = colorResource(id = R.color.test2),
         surface = colorResource(id = R.color.test2),
         error = colorResource(id = R.color.test2),
-        onSecondary = colorResource(id = R.color.test2),
         onBackground = colorResource(id = R.color.test2),
         onSurface = colorResource(id = R.color.test2),
         onError = colorResource(id = R.color.test2),
