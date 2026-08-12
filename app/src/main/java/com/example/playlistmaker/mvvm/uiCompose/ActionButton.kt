@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.playlistmaker.mvvm.uiCompose.TextStyles.actionButtonStyle
+import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 
 @Composable
 fun ActionButton(text: String, onClickAction: (() -> Unit)? = null) {
@@ -20,14 +20,14 @@ fun ActionButton(text: String, onClickAction: (() -> Unit)? = null) {
         onClick = { onClickAction?.invoke() },
         modifier = Modifier.height(36.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,      // фон кнопки (было backgroundColor)
-            contentColor = MaterialTheme.colorScheme.onPrimary     // цвет текста/иконок (было contentColor)
+            containerColor = MaterialTheme.colorScheme.primary,
+            contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         shape = RoundedCornerShape(18.dp)
     ) {
         Text(
             text= text,
-            style = actionButtonStyle()
+            style = buttonStyle()
         )
     }
 

@@ -23,14 +23,13 @@ fun ComposeTheme(
         onPrimary = Color(0xFF1A1B22),// yp_black
         secondary = Color(0xFFE6E8EB), // YP Light Gray
         onSecondary = Color(0xFF1A1B22),// yp_black
-
-      //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
+        onSurface = Color(0xFFAEAFB4), // YP Text Gray
+            //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
     //    secondaryVariant = colorResource(id = R.color.test3),
         background = colorResource(id = R.color.test3),
         surface = colorResource(id = R.color.test3),
         error = colorResource(id = R.color.test3),
         onBackground = colorResource(id = R.color.test3),
-        onSurface = colorResource(id = R.color.test3),
         onError = colorResource(id = R.color.test3),
         surfaceContainer = colorResource(id = R.color.test3),
         onSurfaceVariant = colorResource(id = R.color.test3)
@@ -42,7 +41,7 @@ fun ComposeTheme(
         onPrimary = Color(0xFFFFFFFF),
         secondary = Color(0xFFFFFFFF),
         onSecondary = Color(0xFF1A1B22),
-
+        onSurface = Color(0xFF1A1B22),
      //   primaryVariant = colorResource(id = R.color.test2),
 
      //   secondaryVariant = colorResource(id = R.color.test2),
@@ -51,7 +50,7 @@ fun ComposeTheme(
         surface = colorResource(id = R.color.test2),
         error = colorResource(id = R.color.test2),
         onBackground = colorResource(id = R.color.test2),
-        onSurface = colorResource(id = R.color.test2),
+
         onError = colorResource(id = R.color.test2),
      //   isLight = false
     )

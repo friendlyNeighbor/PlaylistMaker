@@ -58,7 +58,10 @@ android {
 
 
 dependencies {
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.runtime.saveable)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.espresso.core)
     implementation(libs.material)

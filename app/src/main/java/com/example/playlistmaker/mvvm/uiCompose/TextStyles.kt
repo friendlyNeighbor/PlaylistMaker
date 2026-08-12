@@ -15,7 +15,7 @@ object TextStyles {
     )
 
     @Composable
-    fun actionPanelStyle() = TextStyle(
+    fun panelStyle() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 16.sp,
         fontWeight = FontWeight.Normal,
@@ -23,18 +23,12 @@ object TextStyles {
     )
 
     @Composable
-    fun actionButtonStyle() = TextStyle(
+    fun buttonStyle() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
         letterSpacing = 0.sp
     )
-    @Composable
-    fun searchPanelStyle() = TextStyle(
-        fontFamily = displayFontFamily,
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Normal,
-        letterSpacing = 0.sp
-    )
+
 
 }

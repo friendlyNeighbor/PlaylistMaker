@@ -32,7 +32,7 @@ fun ActionPanel(
     ) {
         Text(
             text = actionText,
-            style = TextStyles.actionPanelStyle(),
+            style = TextStyles.panelStyle(),
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .padding(horizontal = 16.dp)
