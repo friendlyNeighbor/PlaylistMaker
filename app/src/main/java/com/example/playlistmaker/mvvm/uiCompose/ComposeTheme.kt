@@ -24,6 +24,8 @@ fun ComposeTheme(
         secondary = Color(0xFFE6E8EB), // YP Light Gray
         onSecondary = Color(0xFF1A1B22),// yp_black
         onSurface = Color(0xFFAEAFB4), // YP Text Gray
+        onSurfaceVariant = Color(0xFFAEAFB4), // YP Text Gray
+
             //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
     //    secondaryVariant = colorResource(id = R.color.test3),
         background = colorResource(id = R.color.test3),
@@ -32,8 +34,7 @@ fun ComposeTheme(
         onBackground = colorResource(id = R.color.test3),
         onError = colorResource(id = R.color.test3),
         surfaceContainer = colorResource(id = R.color.test3),
-        onSurfaceVariant = colorResource(id = R.color.test3)
-       // isLight = true
+
     )
 
     val DarkColorScheme = darkColorScheme(
@@ -42,6 +43,8 @@ fun ComposeTheme(
         secondary = Color(0xFFFFFFFF),
         onSecondary = Color(0xFF1A1B22),
         onSurface = Color(0xFF1A1B22),
+        onSurfaceVariant = Color(0xFFFFFFFF),
+
      //   primaryVariant = colorResource(id = R.color.test2),
 
      //   secondaryVariant = colorResource(id = R.color.test2),
@@ -52,7 +55,6 @@ fun ComposeTheme(
         onBackground = colorResource(id = R.color.test2),
 
         onError = colorResource(id = R.color.test2),
-     //   isLight = false
     )
 
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme

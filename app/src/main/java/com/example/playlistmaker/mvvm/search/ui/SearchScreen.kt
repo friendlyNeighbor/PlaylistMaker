@@ -16,6 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -52,12 +55,17 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
+import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
 import com.example.playlistmaker.mvvm.uiCompose.Header
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
+import com.example.playlistmaker.mvvm.uiCompose.TrackItem
 import kotlinx.coroutines.launch
 
+
+private val trackList: MutableList<Track> = mutableListOf()
+private val trackListHistory: MutableList<Track> = mutableListOf()
 
 @Composable
 fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
@@ -71,14 +79,82 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
     ) {
         Header(stringResource(R.string.search))
 
-        SearchField(isSystemInDarkTheme(), { Log.d("mylog","текст изменился")})
+        SearchField(
+            isSystemInDarkTheme(),
+            { text -> viewModel.textWasChanged(text)
+        } )
 
+        Spacer(modifier = Modifier.height(16.dp))
+
+        repeat(50) {
+        trackList.add( Track(
+                0,
+        1,
+        "Группа крови",
+        "Кино",
+        "03:45",
+        "https://img.goodfon.ru/wallpaper/nbig/c/c9/enot-vzgliad-voda-pogruzhenie-morda.webp",
+        "2026",
+        "2026",
+        "Рок",
+        "Россия",
+        "нет"
+        ))}
+
+        LazyColumn { items(trackList){track -> TrackItem(track)}}
+
+
+/*
+    viewModel.getLiveData().observe(viewLifecycleOwner) {
+        if(it.searchStatus == SearchStatus.HISTORY) {
+            trackListHistory.clear()
+            trackListHistory.addAll(it.searchResult)
+        }
+        else {
+            trackList.clear()
+            trackList.addAll(it.searchResult)
+        }
+        setViewSearch(it.searchStatus)
     }
+
+        fun setViewSearch(reason: SearchStatus) {
+      //  tracksAdapter.notifyDataSetChanged()
+      //  historyAdapter.notifyDataSetChanged()
+      */
+
+/*
+        binding.apply {
+            notFound.visibility = View.GONE
+            connectionProblem.visibility = View.GONE
+            recycler.visibility = View.GONE
+            historyOfSearch.visibility = View.GONE
+            progressBar.visibility = View.GONE
+            clearSearch.visibility = View.VISIBLE
+        }
+        when (reason) {
+            SearchStatus.CONNECTION_PROBLEM -> binding.connectionProblem.visibility = View.VISIBLE
+            SearchStatus.NOT_FOUND -> binding.notFound.visibility = View.VISIBLE
+            SearchStatus.SEARCH_SUCCESSFUL -> binding.recycler.visibility = View.VISIBLE
+            SearchStatus.HISTORY -> {
+                binding.historyOfSearch.visibility = View.VISIBLE
+                binding.clearSearch.visibility = View.GONE
+            }
+            SearchStatus.PROGRESS ->  binding.progressBar.visibility = View.VISIBLE
+            SearchStatus.CLEAR ->  binding.clearSearch.visibility = View.GONE
+        }
+
+ */
+    }
+
 }
 
 
+
+
+
+
 @Composable
-fun SearchField(theme: Boolean, onTextChangeAction: (() -> Unit) ) {
+fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit ) {
     ComposeTheme(theme) {
 
         var text by rememberSaveable {
@@ -93,7 +169,7 @@ fun SearchField(theme: Boolean, onTextChangeAction: (() -> Unit) ) {
             BasicTextField(
                 value = text,
                 onValueChange = { text = it
-                    onTextChangeAction.invoke()},
+                    onTextChangeAction(text)},
                 singleLine = true,
                 textStyle = panelStyle(),
                 modifier = Modifier

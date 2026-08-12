@@ -30,5 +30,13 @@ object TextStyles {
         letterSpacing = 0.sp
     )
 
+    @Composable
+    fun panelStyleSmall() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 11.sp,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = 0.sp
+    )
+
 
 }

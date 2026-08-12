@@ -3,6 +3,8 @@ activityCompose = "<version>"
 activityKtx = "1.13.0"
 agp = "9.2.1"
 androidxCoreKtx = "1.12.0"
+coil = "2.7.0"
+coilCompose = "2.7.0"
 compiler = "5.0.7"
 composeBom = "2026.06.01"
 converterGson = "3.0.0"
@@ -59,6 +61,8 @@ androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx",
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomKtx" }
 androidx-viewpager2 = { module = "androidx.viewpager2:viewpager2", version.ref = "viewpager2" }
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "compiler" }
