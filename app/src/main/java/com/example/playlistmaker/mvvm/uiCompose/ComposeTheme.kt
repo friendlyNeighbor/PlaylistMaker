@@ -25,6 +25,7 @@ fun ComposeTheme(
         onSecondary = Color(0xFF1A1B22),// yp_black
         onSurface = Color(0xFFAEAFB4), // YP Text Gray
         onSurfaceVariant = Color(0xFFAEAFB4), // YP Text Gray
+        tertiary = Color(0xFF3772E7), // progress
 
             //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
     //    secondaryVariant = colorResource(id = R.color.test3),
@@ -44,6 +45,8 @@ fun ComposeTheme(
         onSecondary = Color(0xFF1A1B22),
         onSurface = Color(0xFF1A1B22),
         onSurfaceVariant = Color(0xFFFFFFFF),
+        tertiary = Color(0xFF3772E7), // progress
+
 
      //   primaryVariant = colorResource(id = R.color.test2),
 

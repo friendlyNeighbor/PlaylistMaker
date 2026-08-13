@@ -20,11 +20,11 @@ class SearchViewModel(
     private val trackSaverInteractor: TrackSaverInteractor
 ) : ViewModel() {
 
-    private val searchLiveData = MutableLiveData(primaryState)
-    fun getLiveData(): LiveData<SearchState> = searchLiveData
+    private val _searchLiveData = MutableLiveData(primaryState)
+    fun getLiveData(): LiveData<SearchState> = _searchLiveData
 
-    private var textInFocus = false
-    private var text = ""
+    private var textInFocus = true //
+    var text = ""
 
     private var searchJob: Job? = null
 
@@ -42,9 +42,9 @@ class SearchViewModel(
                 if (text.isEmpty()) {
                     searchJob?.cancel()
                     if (trackListHistory.isEmpty()) {
-                        searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+                        _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
                     } else {
-                        searchLiveData.postValue(
+                        _searchLiveData.value = (
                             SearchState(
                                 SearchStatus.HISTORY,
                                 trackListHistory
@@ -52,7 +52,7 @@ class SearchViewModel(
                         )
                     }
                 } else {
-                    searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
+                    _searchLiveData.value = (SearchState(SearchStatus.PROGRESS, emptyList()))
                     debounceSearchTrack()
                 }
             }
@@ -61,7 +61,7 @@ class SearchViewModel(
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()
-        searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+        _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
     }
 
     private fun debounceSearchTrack() {
@@ -81,14 +81,14 @@ private suspend fun searchTrack() {
     private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
         val trackList: MutableList<Track> = mutableListOf()
         if (errorMessage != null || foundTrack == null) {
-            searchLiveData.postValue(SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
+            _searchLiveData.value = (SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
         } else {
             trackList.clear()
             trackList.addAll(foundTrack)
             if (trackList.isEmpty()) {
-                searchLiveData.postValue(SearchState(SearchStatus.NOT_FOUND, trackList))
+                _searchLiveData.value = (SearchState(SearchStatus.NOT_FOUND, trackList))
             } else {
-                searchLiveData.postValue(
+                _searchLiveData.value = (
                     SearchState(
                         SearchStatus.SEARCH_SUCCESSFUL,
                         trackList

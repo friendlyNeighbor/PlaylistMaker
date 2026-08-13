@@ -20,8 +20,8 @@ fun ActionButton(text: String, onClickAction: (() -> Unit)? = null) {
         onClick = { onClickAction?.invoke() },
         modifier = Modifier.height(36.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
+            containerColor = MaterialTheme.colorScheme.onPrimary,
+            contentColor = MaterialTheme.colorScheme.primary
         ),
         shape = RoundedCornerShape(18.dp)
     ) {

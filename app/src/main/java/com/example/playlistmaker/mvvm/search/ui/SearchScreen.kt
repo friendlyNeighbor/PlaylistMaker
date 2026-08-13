@@ -1,67 +1,44 @@
 package com.example.playlistmaker.mvvm.search.ui
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.snapping.SnapPosition
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.TextField
 //import androidx.compose.material3.SearchBar
 //import androidx.compose.material3.SearchBarDefaults
 //import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
+import com.example.playlistmaker.mvvm.uiCompose.ActionButton
 import com.example.playlistmaker.mvvm.uiCompose.Header
-import com.example.playlistmaker.mvvm.uiCompose.TextStyles
-import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
+import com.example.playlistmaker.mvvm.uiCompose.SearchField
+import com.example.playlistmaker.mvvm.uiCompose.TextStyles.placeholderStyle
 import com.example.playlistmaker.mvvm.uiCompose.TrackItem
-import kotlinx.coroutines.launch
 
 
 private val trackList: MutableList<Track> = mutableListOf()
@@ -72,10 +49,13 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
 
     // val state by viewModel.uiState.collectAsState() // LiveData/StateFlow → State
 
+    val uiState by viewModel.getLiveData().observeAsState()
+
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary)
+            .background(MaterialTheme.colorScheme.primary),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Header(stringResource(R.string.search))
 
@@ -85,7 +65,7 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
         } )
 
         Spacer(modifier = Modifier.height(16.dp))
-
+/*
         repeat(50) {
         trackList.add( Track(
                 0,
@@ -101,12 +81,77 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
         "нет"
         ))}
 
-        LazyColumn { items(trackList){track -> TrackItem(track)}}
 
+ */
+
+
+        if(uiState?.searchStatus == SearchStatus.HISTORY) {
+            trackListHistory.clear()
+            uiState?.searchResult?.let { trackListHistory.addAll(it) } }
+            else {
+                trackList.clear()
+                uiState?.searchResult?.let { trackList.addAll(it) }
+            }
+       // SetViewSearch(uiState?.searchStatus)
+        when (uiState?.searchStatus) {
+
+            SearchStatus.CONNECTION_PROBLEM -> {
+                Image(
+                    modifier = Modifier
+                        .padding(top = 102.dp, bottom = 16.dp),
+                    painter = painterResource(R.drawable.ic_connection_problem_120),
+                    contentDescription = null
+                )
+                Text(
+                    modifier = Modifier
+                        .padding(bottom = 24.dp),
+                    textAlign = TextAlign.Center,
+                    text = stringResource(R.string.connection_problem),
+                    style = placeholderStyle(),
+                    color = MaterialTheme.colorScheme.onPrimary)
+                ActionButton(text = stringResource(R.string.reload),  {viewModel.textWasChanged(viewModel.text)} )
+            }
+
+            SearchStatus.NOT_FOUND -> {
+                Image(
+                    modifier = Modifier
+                        .padding(top = 102.dp, bottom = 16.dp),
+                    painter = painterResource(R.drawable.ic_not_found_120),
+                    contentDescription = null
+                )
+                Text(
+                    text = stringResource(R.string.not_found),
+                    textAlign = TextAlign.Center,
+                    style = placeholderStyle(),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+            }
+
+            SearchStatus.SEARCH_SUCCESSFUL -> {
+                LazyColumn { items(trackList) {track -> TrackItem(track=track)}}
+            }
+
+            SearchStatus.HISTORY -> {
+                LazyColumn { items(trackListHistory) {track -> TrackItem(track=track)}}
+            }
+
+            SearchStatus.PROGRESS -> {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(44.dp)
+                        .offset(y = 140.dp),
+                    color = MaterialTheme.colorScheme.tertiary,
+                    trackColor = Color.Transparent,
+                    strokeCap = StrokeCap.Butt
+                )
+            }
+            SearchStatus.CLEAR -> {}//binding.clearSearch.visibility = View.GONE
+            null -> {}
+        }
 
 /*
     viewModel.getLiveData().observe(viewLifecycleOwner) {
-        if(it.searchStatus == SearchStatus.HISTORY) {
+        if(uiState.searchStatus == SearchStatus.HISTORY) {
             trackListHistory.clear()
             trackListHistory.addAll(it.searchResult)
         }
@@ -147,86 +192,21 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
     }
 
 }
-
-
-
-
-
-
 @Composable
-fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit ) {
-    ComposeTheme(theme) {
+fun SetViewSearch(reason: SearchStatus?) {
+    //  tracksAdapter.notifyDataSetChanged()
+    //  historyAdapter.notifyDataSetChanged()
 
-        var text by rememberSaveable {
-            mutableStateOf("")
-        }
-        Box(
-            modifier = Modifier
-                .height(52.dp)
-                .fillMaxWidth()
-                .padding(vertical = 8.dp, horizontal = 16.dp)
-        ) {
-            BasicTextField(
-                value = text,
-                onValueChange = { text = it
-                    onTextChangeAction(text)},
-                singleLine = true,
-                textStyle = panelStyle(),
-                modifier = Modifier
-                    .height(36.dp)
-                    .fillMaxWidth()
-                    .background(
-                        color = MaterialTheme.colorScheme.secondary,
-                        shape = RoundedCornerShape(8.dp)
-                    ),
-                decorationBox = { innerTextField ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxSize(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_search_16),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(
-                                    start = 12.dp,
-                                    end = 10.dp
-                                )
-                                .size(16.dp)
-                        )
-                        Box(
-                            modifier = Modifier
-                                .weight(1f),
-                            contentAlignment = Alignment.CenterStart,
-
-                        ) {
-                            if (text.isEmpty()) {
-                                Text(
-                                    text = "Поиск",
-                                    color = MaterialTheme.colorScheme.onSurface,
-                                    style = panelStyle()
-                                )
-                            }
-                            innerTextField()
-                        }
-                        if (text.isNotEmpty()) {
-                            Image(
-                                painter = painterResource(id = R.drawable.ic_clear_16),
-                                contentDescription = null,
-                                modifier = Modifier
-                                    .padding(
-                                        start = 10.dp,
-                                        end = 12.dp
-                                    )
-                                    .size(16.dp)
-                                    .clickable { text = "" }
-                            )
-                        }
-                    }
+    /*
+                binding.apply {
+                    notFound.visibility = View.GONE
+                    connectionProblem.visibility = View.GONE
+                    recycler.visibility = View.GONE
+                    historyOfSearch.visibility = View.GONE
+                    progressBar.visibility = View.GONE
+                    clearSearch.visibility = View.VISIBLE
                 }
-            )
-        }
-    }
-}
 
+     */
+
+}

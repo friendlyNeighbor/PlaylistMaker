@@ -15,6 +15,14 @@ object TextStyles {
     )
 
     @Composable
+    fun placeholderStyle() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 19.sp,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = 0.sp
+    )
+
+    @Composable
     fun panelStyle() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 16.sp,
