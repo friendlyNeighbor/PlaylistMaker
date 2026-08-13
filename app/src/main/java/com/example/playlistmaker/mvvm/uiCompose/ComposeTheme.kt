@@ -26,11 +26,13 @@ fun ComposeTheme(
         onSurface = Color(0xFFAEAFB4), // YP Text Gray
         onSurfaceVariant = Color(0xFFAEAFB4), // YP Text Gray
         tertiary = Color(0xFF3772E7), // progress
+        background = Color(0xFFFFFFFF),
+
 
             //  primaryVariant = colorResource(id = R.color.test3),          // аналог secondary/darker variant
     //    secondaryVariant = colorResource(id = R.color.test3),
-        background = colorResource(id = R.color.test3),
-        surface = colorResource(id = R.color.test3),
+
+        surface = colorResource(id = R.color.test),
         error = colorResource(id = R.color.test3),
         onBackground = colorResource(id = R.color.test3),
         onError = colorResource(id = R.color.test3),
@@ -46,12 +48,11 @@ fun ComposeTheme(
         onSurface = Color(0xFF1A1B22),
         onSurfaceVariant = Color(0xFFFFFFFF),
         tertiary = Color(0xFF3772E7), // progress
-
+        background = Color(0xFF1A1B22),
 
      //   primaryVariant = colorResource(id = R.color.test2),
 
      //   secondaryVariant = colorResource(id = R.color.test2),
-        background = colorResource(id = R.color.test2),
         inverseSurface = colorResource(id = R.color.test2),
         surface = colorResource(id = R.color.test2),
         error = colorResource(id = R.color.test2),

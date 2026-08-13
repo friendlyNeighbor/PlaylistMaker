@@ -57,16 +57,20 @@ class SearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val navController = findNavController()
         return ComposeView(requireContext()).apply {
             setContent {
-                val isDarkTheme = isSystemInDarkTheme()
-                ComposeTheme(isDarkTheme) {
-                    Scaffold { padding ->
+  //              val isDarkTheme = isSystemInDarkTheme()
+                ComposeTheme(isSystemInDarkTheme()) {
+  //                  Scaffold { padding ->
                         SearchScreen(
-                            viewModel = viewModel,
-                            modifier = Modifier.padding(padding)
-                        )
-                    }
+                            viewModel = viewModel, navController
+
+                            //,
+    //                        modifier = Modifier.padding(padding
+                            )
+   //                     )
+  //                  }
                 }
             }
         }

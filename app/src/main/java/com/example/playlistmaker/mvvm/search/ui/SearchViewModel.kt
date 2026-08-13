@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
@@ -23,14 +24,16 @@ class SearchViewModel(
     private val _searchLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SearchState> = _searchLiveData
 
-    private var textInFocus = true //
+    private var textInFocus = false //
     var text = ""
 
     private var searchJob: Job? = null
 
+    //private var isClickAllowed = true
+
     fun editTextInFocus() {
         textInFocus = true
-        textWasChanged("")
+        textWasChanged("  ")
     }
 
     fun textWasChanged(incomingText: String) {
@@ -105,7 +108,22 @@ private suspend fun searchTrack() {
     fun addTrackInMemory(track: Track) {
         trackSaverInteractor.addTrackInMemory(track)
     }
+/*
+    fun onTrackClicked(track: Track) {
+        if (!isClickAllowed) return
+        isClickAllowed = false
 
+        viewModelScope.launch {
+            delay(CLICK_DEBOUNCE_DELAY) // твой CLICK_DEBOUNCE_DELAY
+            isClickAllowed = true
+        }
+        addTrackInHistory(track)
+        addTrackInMemory(track)
+        findNavController().navigate(R.id.action_searchFragment_to_playerFragment)
+    }
+
+
+ */
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }

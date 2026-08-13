@@ -33,14 +33,14 @@ class SettingsFragment : Fragment() {
             setContent {
              //   val themeState by viewModel.getLiveData().observeAsState()
 
-                val isDarkTheme = isSystemInDarkTheme()   // или любое значение по умолчанию
-                ComposeTheme(isDarkTheme) {
-                    Scaffold { padding ->
+        //        val isDarkTheme = isSystemInDarkTheme()   // или любое значение по умолчанию
+                ComposeTheme(isSystemInDarkTheme()) {
+        //            Scaffold { padding ->
                         SettingsScreen(
-                            viewModel = viewModel,
-                            modifier = Modifier.padding(padding)
+                            viewModel = viewModel//,
+        //                    modifier = Modifier.padding(padding)
                         )
-                    }
+        //            }
                 }
             }
         }

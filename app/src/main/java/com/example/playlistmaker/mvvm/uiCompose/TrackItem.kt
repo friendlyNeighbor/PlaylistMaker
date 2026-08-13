@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.uiCompose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,18 +26,19 @@ import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyleSmall
 
 
 @Composable
-fun TrackItem(track: Track) {
+fun TrackItem(track: Track, onClickAction: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(61.dp)
-            .background(MaterialTheme.colorScheme.primary),
-        verticalAlignment = Alignment.CenterVertically
+            .background(MaterialTheme.colorScheme.primary)
+            .clickable(onClick = onClickAction),
+        verticalAlignment = Alignment.CenterVertically,
+
             ) {
 
         Image(
             painter = rememberAsyncImagePainter(model = track.artworkUrl100),
-            //painter = painterResource(R.drawable.ic_placeholder_45),
             contentDescription = null,
             modifier = Modifier
                 .padding(start = 13.dp, end = 8.dp)
@@ -115,12 +117,12 @@ val track:Track = Track(
 @Composable
 fun TrackItemLight() {
     ComposeTheme(true) {
-            TrackItem(track)
+            TrackItem(track, {})
     }}
 
 @Preview
 @Composable
 fun TrackItemDark() {
     ComposeTheme(false) {
-        TrackItem(track)
+        TrackItem(track, {})
     }}

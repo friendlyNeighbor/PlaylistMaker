@@ -22,8 +22,13 @@ import androidx.compose.material3.Text
 //import androidx.compose.material3.SearchBarDefaults
 //import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,6 +37,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.uiCompose.ActionButton
@@ -39,20 +46,27 @@ import com.example.playlistmaker.mvvm.uiCompose.Header
 import com.example.playlistmaker.mvvm.uiCompose.SearchField
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.placeholderStyle
 import com.example.playlistmaker.mvvm.uiCompose.TrackItem
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 private val trackList: MutableList<Track> = mutableListOf()
 private val trackListHistory: MutableList<Track> = mutableListOf()
+//var isClickAllowed = true
+
+//private const val TEXT_DEFAULT = ""
+private const val CLICK_DEBOUNCE_DELAY = 1000L
+
 
 @Composable
-fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
+fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
 
     // val state by viewModel.uiState.collectAsState() // LiveData/StateFlow → State
-
+    val clickDebounce = rememberClickDebounce()
     val uiState by viewModel.getLiveData().observeAsState()
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.primary),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -61,29 +75,11 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
 
         SearchField(
             isSystemInDarkTheme(),
-            { text -> viewModel.textWasChanged(text)
-        } )
+            { text -> viewModel.textWasChanged(text) },
+            { viewModel.editTextInFocus()}
+            )
 
         Spacer(modifier = Modifier.height(16.dp))
-/*
-        repeat(50) {
-        trackList.add( Track(
-                0,
-        1,
-        "Группа крови",
-        "Кино",
-        "03:45",
-        "https://img.goodfon.ru/wallpaper/nbig/c/c9/enot-vzgliad-voda-pogruzhenie-morda.webp",
-        "2026",
-        "2026",
-        "Рок",
-        "Россия",
-        "нет"
-        ))}
-
-
- */
-
 
         if(uiState?.searchStatus == SearchStatus.HISTORY) {
             trackListHistory.clear()
@@ -92,7 +88,7 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
                 trackList.clear()
                 uiState?.searchResult?.let { trackList.addAll(it) }
             }
-       // SetViewSearch(uiState?.searchStatus)
+
         when (uiState?.searchStatus) {
 
             SearchStatus.CONNECTION_PROBLEM -> {
@@ -104,12 +100,13 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
                 )
                 Text(
                     modifier = Modifier
-                        .padding(bottom = 24.dp),
+                        .padding(bottom = 24.dp)
+                        .width(312.dp),
                     textAlign = TextAlign.Center,
                     text = stringResource(R.string.connection_problem),
                     style = placeholderStyle(),
                     color = MaterialTheme.colorScheme.onPrimary)
-                ActionButton(text = stringResource(R.string.reload),  {viewModel.textWasChanged(viewModel.text)} )
+                ActionButton(text = stringResource(R.string.reload),  {viewModel.textWasChanged(viewModel.text+" ")} )
             }
 
             SearchStatus.NOT_FOUND -> {
@@ -128,11 +125,39 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
             }
 
             SearchStatus.SEARCH_SUCCESSFUL -> {
-                LazyColumn { items(trackList) {track -> TrackItem(track=track)}}
+                LazyColumn { items(trackList) {track -> TrackItem(track=track, {
+                    if (clickDebounce()) {
+                        viewModel.addTrackInHistory(track)
+                        viewModel.addTrackInMemory(track)
+                        navController.navigate(R.id.action_searchFragment_to_playerFragment )
+                    }
+                }
+                )}}
             }
 
             SearchStatus.HISTORY -> {
-                LazyColumn { items(trackListHistory) {track -> TrackItem(track=track)}}
+                Text(
+                    text = stringResource(R.string.history_of_search),
+                    style = placeholderStyle(),
+                    modifier = Modifier
+                        .padding(top = 42.dp, bottom = 20.dp),
+                    color = MaterialTheme.colorScheme.onPrimary
+                )
+
+                LazyColumn(modifier = Modifier.weight(0.9f, fill = false)) {
+                    items(trackListHistory) {track -> TrackItem(track=track, {
+                        if (clickDebounce()) {
+                            viewModel.addTrackInHistory(track)
+                            viewModel.addTrackInMemory(track)
+                            navController.navigate(R.id.action_searchFragment_to_playerFragment )
+                        }
+                    }
+                    )}
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                ActionButton(text = stringResource(R.string.clear_history),  { viewModel.clearHistory() } )
             }
 
             SearchStatus.PROGRESS -> {
@@ -191,7 +216,9 @@ fun SearchScreen(viewModel: SearchViewModel, modifier: Modifier = Modifier) {
  */
     }
 
+
 }
+/*
 @Composable
 fun SetViewSearch(reason: SearchStatus?) {
     //  tracksAdapter.notifyDataSetChanged()
@@ -209,4 +236,29 @@ fun SetViewSearch(reason: SearchStatus?) {
 
      */
 
+
 }
+*/
+@Composable
+fun rememberClickDebounce(): () -> Boolean {
+    var isClickAllowed by remember { mutableStateOf(true) }
+    val scope = rememberCoroutineScope()
+
+    return remember {
+        {
+            val current = isClickAllowed
+
+            if (isClickAllowed) {
+                isClickAllowed = false
+
+                scope.launch {
+                    delay(CLICK_DEBOUNCE_DELAY)
+                    isClickAllowed = true
+                }
+            }
+            current
+        }
+    }
+}
+
+

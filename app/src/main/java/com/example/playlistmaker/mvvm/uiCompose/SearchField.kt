@@ -17,22 +17,26 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
 
 @Composable
-fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit ) {
+fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit, onFocusedAction: (() -> Unit)?=null ) {
     ComposeTheme(theme) {
 
         var text by rememberSaveable {
             mutableStateOf("")
         }
+        var isFocused by remember { mutableStateOf(false) }
+
         Box(
             modifier = Modifier
                 .height(52.dp)
@@ -51,7 +55,25 @@ fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit ) {
                     .background(
                         color = MaterialTheme.colorScheme.secondary,
                         shape = RoundedCornerShape(8.dp)
-                    ),
+                    )
+                    .onFocusChanged { focusState -> onFocusedAction?.invoke()
+
+                        isFocused = focusState.isFocused
+
+                        if (focusState.isFocused) {
+                            onFocusedAction?.invoke()
+                            // Действие при получении фокуса
+                           // println("Поле в фокусе: можно, например, показать подсказку или раскрыть список")
+                            // viewModel.onSearchFocused()
+                        }
+                        /*else {
+
+                            // Действие при потере фокуса
+                          //  println("Фокус потерян: можно скрыть подсказки")
+                            // viewModel.onSearchUnfocused()
+                        }
+                        */
+                    },
                 decorationBox = { innerTextField ->
                     Row(
                         modifier = Modifier
@@ -93,7 +115,8 @@ fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit ) {
                                         end = 12.dp
                                     )
                                     .size(16.dp)
-                                    .clickable { text = "" }
+                                    .clickable { text = ""
+                                                 onTextChangeAction(text)}
                             )
                         }
                     }
