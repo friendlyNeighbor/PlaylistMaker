@@ -76,7 +76,7 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
         SearchField(
             isSystemInDarkTheme(),
             { text -> viewModel.textWasChanged(text) },
-            { viewModel.editTextInFocus()}
+            { focus -> viewModel.editTextInFocus(focus) }
             )
 
         Spacer(modifier = Modifier.height(16.dp))

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.search.ui
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,12 +32,16 @@ class SearchViewModel(
 
     //private var isClickAllowed = true
 
-    fun editTextInFocus() {
-        textInFocus = true
+    fun editTextInFocus(inFocus: Boolean) {
+        if(inFocus)
+            textInFocus = true
+        else
+            textInFocus = false
         textWasChanged("  ")
     }
 
     fun textWasChanged(incomingText: String) {
+        Log.d("mylog", " --- --- textWasChanged, textInFocus = $textInFocus ")
         if (incomingText != text) {
             text = incomingText.trimStart()
 
@@ -59,6 +64,8 @@ class SearchViewModel(
                     debounceSearchTrack()
                 }
             }
+            else
+                _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
         }
     }
 

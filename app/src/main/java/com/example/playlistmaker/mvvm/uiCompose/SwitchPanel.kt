@@ -6,8 +6,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
@@ -18,7 +21,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
@@ -57,14 +62,12 @@ fun SwitchPanel(
                 onClickAction?.invoke()
             },
             modifier = Modifier
-                .height(18.dp)
-                .width(35.dp)
-                .padding(end = 53.dp),
+                .padding(end = 18.dp),
             colors = SwitchDefaults.colors(
-                checkedThumbColor = colorResource(id = R.color.blue),          // цвет «кружка» при checked
-                checkedTrackColor = colorResource(id = R.color.blue),      // цвет дорожки при checked
-                uncheckedThumbColor = colorResource(id = R.color.grey),        // цвет «кружка» при unchecked
-                uncheckedTrackColor = colorResource(id = R.color.yp_light_grey)     // цвет дорожки при unchecked
+                checkedThumbColor = MaterialTheme.colorScheme.tertiary,          // цвет «кружка» при checked
+                checkedTrackColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.45f),      // цвет дорожки при checked
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,        // цвет «кружка» при unchecked
+                uncheckedTrackColor = MaterialTheme.colorScheme.secondary     // цвет дорожки при unchecked
             )
         )
     }

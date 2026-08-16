@@ -27,15 +27,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
+import android.util.Log
 
 @Composable
-fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit, onFocusedAction: (() -> Unit)?=null ) {
+fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit, onFocusedAction: ((Boolean) -> Unit)?=null ) {
     ComposeTheme(theme) {
 
         var text by rememberSaveable {
             mutableStateOf("")
         }
-        var isFocused by remember { mutableStateOf(false) }
+     //   var isFocused by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -56,23 +57,16 @@ fun SearchField(theme: Boolean, onTextChangeAction: (String) -> Unit, onFocusedA
                         color = MaterialTheme.colorScheme.secondary,
                         shape = RoundedCornerShape(8.dp)
                     )
-                    .onFocusChanged { focusState -> onFocusedAction?.invoke()
-
-                        isFocused = focusState.isFocused
-
-                        if (focusState.isFocused) {
-                            onFocusedAction?.invoke()
-                            // Действие при получении фокуса
-                           // println("Поле в фокусе: можно, например, показать подсказку или раскрыть список")
-                            // viewModel.onSearchFocused()
+                    .onFocusChanged { focusState ->
+                        Log.d("mylog", "onFocus Change")
+                 //       isFocused = focusState.isFocused
+                        if (focusState.isFocused && text=="") {
+                            Log.d("mylog", "focusState.isFocused")
+                            onFocusedAction?.invoke(focusState.isFocused)
                         }
-                        /*else {
-
-                            // Действие при потере фокуса
-                          //  println("Фокус потерян: можно скрыть подсказки")
-                            // viewModel.onSearchUnfocused()
-                        }
-                        */
+                        else
+                            Log.d("mylog", "focusState do not Focused")
+                        onFocusedAction?.invoke(focusState.isFocused)
                     },
                 decorationBox = { innerTextField ->
                     Row(
