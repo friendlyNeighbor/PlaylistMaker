@@ -1,7 +1,6 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
 import android.annotation.SuppressLint
-//import androidx.compose.material.Colors
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -69,6 +68,4 @@ fun ComposeTheme(
   //      shapes = Shapes,               // из material
         content = content
     )
-
-
 }

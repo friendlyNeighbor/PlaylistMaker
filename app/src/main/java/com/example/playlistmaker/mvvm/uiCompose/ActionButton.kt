@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -13,12 +14,12 @@ import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 
 @Composable
-fun ActionButton(text: String, onClickAction: (() -> Unit)? = null) {
-
+fun ActionButton(text: String, onClickAction: (() -> Unit)? = null, @SuppressLint("ModifierParameter") modifier: Modifier = Modifier) {
 
     Button(
         onClick = { onClickAction?.invoke() },
-        modifier = Modifier.height(36.dp),
+        modifier = modifier
+            .height(36.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.onPrimary,
             contentColor = MaterialTheme.colorScheme.primary
@@ -30,11 +31,10 @@ fun ActionButton(text: String, onClickAction: (() -> Unit)? = null) {
             style = buttonStyle()
         )
     }
-
 }
 
 @Preview
 @Composable
 fun ActionButtonPreview() {
-    ActionButton( "кнопка")
+    ActionButton( text = "кнопка")
 }

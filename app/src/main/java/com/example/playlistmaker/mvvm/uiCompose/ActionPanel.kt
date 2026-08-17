@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,9 +22,11 @@ import com.example.playlistmaker.R
 fun ActionPanel(
     actionText: String,
     iconRes: Int?,
-    onClickAction: (() -> Unit)? = null ) {
+    onClickAction: (() -> Unit)? = null,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier) {
+
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(61.dp)
             .clickable(onClickAction!=null) { onClickAction?.invoke() }

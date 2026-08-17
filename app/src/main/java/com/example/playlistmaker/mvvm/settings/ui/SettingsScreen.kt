@@ -2,16 +2,14 @@ package com.example.playlistmaker.mvvm.settings.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.uiCompose.ActionButton
 import com.example.playlistmaker.mvvm.uiCompose.ActionPanel
 import com.example.playlistmaker.mvvm.uiCompose.Header
 import com.example.playlistmaker.mvvm.uiCompose.SwitchPanel
@@ -20,14 +18,12 @@ import com.example.playlistmaker.mvvm.uiCompose.SwitchPanel
 @Composable
 fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier ) {
 
-   // val state by viewModel.uiState.collectAsState() // LiveData/StateFlow → State
-
         Column(modifier = modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.primary)
         ) {
-            Header(stringResource(R.string.settings))
-
-            Spacer(Modifier.height(24.dp))
+            Header(
+                stringResource(R.string.settings),
+                modifier = Modifier.padding(bottom = 24.dp))
 
             SwitchPanel(stringResource(R.string.dark), {viewModel.switchTheme()}, viewModel.getTheme() )
 
@@ -38,12 +34,3 @@ fun SettingsScreen(viewModel: SettingsViewModel, modifier: Modifier = Modifier )
             ActionPanel(stringResource(R.string.agreement),R.drawable.ic_arrow_forward_24, {viewModel.agreement()})
         }
     }
-
-/*
-@Preview
-@Composable
-fun SettingsScreenPreview() {
-    SettingsScreen(Modifier.padding(top = 25.dp))
-}
-
- */

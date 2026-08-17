@@ -1,11 +1,10 @@
 package com.example.playlistmaker.mvvm.search.ui
 
-import android.util.Log
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.player.domain.TrackSaverInteractor
 import com.example.playlistmaker.mvvm.search.domain.api.TrackSearchInteractor
 import com.example.playlistmaker.mvvm.search.domain.model.Track
@@ -25,47 +24,35 @@ class SearchViewModel(
     private val _searchLiveData = MutableLiveData(primaryState)
     fun getLiveData(): LiveData<SearchState> = _searchLiveData
 
-    private var textInFocus = false //
+    private var textInFocus = false
     var text = ""
 
     private var searchJob: Job? = null
 
-    //private var isClickAllowed = true
-
-    fun editTextInFocus(inFocus: Boolean) {
-        if(inFocus)
-            textInFocus = true
-        else
-            textInFocus = false
-        textWasChanged("  ")
+    fun focusWasChanged(focusState: Boolean) {
+        textInFocus = focusState
+        if (text == "")
+            textWasChanged(text)
     }
 
-    fun textWasChanged(incomingText: String) {
-        Log.d("mylog", " --- --- textWasChanged, textInFocus = $textInFocus ")
-        if (incomingText != text) {
-            text = incomingText.trimStart()
-
-            if (textInFocus) {
-                val trackListHistory = searchHistoryInteractor.getTrackListHistory()
-                if (text.isEmpty()) {
-                    searchJob?.cancel()
-                    if (trackListHistory.isEmpty()) {
-                        _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
-                    } else {
-                        _searchLiveData.value = (
-                            SearchState(
-                                SearchStatus.HISTORY,
-                                trackListHistory
-                            )
+    fun textWasChanged(newText: String) {
+        val trackListHistory = searchHistoryInteractor.getTrackListHistory()
+        text = newText.trimStart()
+        if (text == "") {
+            searchJob?.cancel()
+            if (textInFocus && trackListHistory.isNotEmpty()) {
+                _searchLiveData.value = (
+                        SearchState(
+                            SearchStatus.HISTORY,
+                            trackListHistory
                         )
-                    }
-                } else {
-                    _searchLiveData.value = (SearchState(SearchStatus.PROGRESS, emptyList()))
-                    debounceSearchTrack()
-                }
-            }
-            else
+                        )
+            } else {
                 _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
+            }
+        } else {
+            _searchLiveData.value = (SearchState(SearchStatus.PROGRESS, emptyList()))
+            debounceSearchTrack()
         }
     }
 
@@ -82,12 +69,13 @@ class SearchViewModel(
         }
     }
 
-private suspend fun searchTrack() {
-    trackSearchInteractor.searchTrack(text)
-        .collect { pair ->
-            processResult(pair.first, pair.second)
-        }
-}
+    private suspend fun searchTrack() {
+        trackSearchInteractor.searchTrack(text)
+            .collect { pair ->
+                processResult(pair.first, pair.second)
+            }
+    }
+
     private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
         val trackList: MutableList<Track> = mutableListOf()
         if (errorMessage != null || foundTrack == null) {
@@ -99,11 +87,10 @@ private suspend fun searchTrack() {
                 _searchLiveData.value = (SearchState(SearchStatus.NOT_FOUND, trackList))
             } else {
                 _searchLiveData.value = (
-                    SearchState(
-                        SearchStatus.SEARCH_SUCCESSFUL,
-                        trackList
-                    )
-                )
+                        SearchState(
+                            SearchStatus.SEARCH_SUCCESSFUL,
+                            trackList )
+                        )
             }
         }
     }
@@ -115,22 +102,7 @@ private suspend fun searchTrack() {
     fun addTrackInMemory(track: Track) {
         trackSaverInteractor.addTrackInMemory(track)
     }
-/*
-    fun onTrackClicked(track: Track) {
-        if (!isClickAllowed) return
-        isClickAllowed = false
 
-        viewModelScope.launch {
-            delay(CLICK_DEBOUNCE_DELAY) // твой CLICK_DEBOUNCE_DELAY
-            isClickAllowed = true
-        }
-        addTrackInHistory(track)
-        addTrackInMemory(track)
-        findNavController().navigate(R.id.action_searchFragment_to_playerFragment)
-    }
-
-
- */
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
