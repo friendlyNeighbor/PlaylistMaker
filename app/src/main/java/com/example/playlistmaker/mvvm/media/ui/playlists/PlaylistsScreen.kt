@@ -57,7 +57,7 @@ fun PlaylistsScreen(viewModel: PlaylistsViewModel = koinViewModel(), navControll
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp)

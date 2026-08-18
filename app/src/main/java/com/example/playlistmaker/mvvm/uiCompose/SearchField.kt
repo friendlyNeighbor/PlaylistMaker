@@ -23,6 +23,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
@@ -55,6 +56,7 @@ fun SearchField(
             },
             singleLine = true,
             textStyle = panelStyle(),
+            cursorBrush = SolidColor(MaterialTheme.colorScheme.tertiary),
             modifier = Modifier
                 .height(36.dp)
                 .fillMaxWidth()

@@ -37,7 +37,9 @@ fun TrackItem(track: Track, onClickAction: () -> Unit) {
             ) {
 
         Image(
-            painter = rememberAsyncImagePainter(model = track.artworkUrl100),
+            painter = rememberAsyncImagePainter(
+                model = track.artworkUrl100,
+                placeholder = painterResource(R.drawable.ic_placeholder_45)),
             contentDescription = null,
             modifier = Modifier
                 .padding(start = 13.dp, end = 8.dp)
@@ -102,7 +104,7 @@ val track:Track = Track(
 "Группа крови",
 "Кино",
 "03:45",
-"https://img.goodfon.ru/wallpaper/nbig/c/c9/enot-vzgliad-voda-pogruzhenie-morda.webp",
+"",
 "2026",
 "2026",
 "Рок",
