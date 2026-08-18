@@ -39,6 +39,14 @@ object TextStyles {
     )
 
     @Composable
+    fun cardStyle() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal,
+        letterSpacing = 0.sp
+    )
+
+    @Composable
     fun panelStyleSmall() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 11.sp,

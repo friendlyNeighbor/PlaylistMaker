@@ -34,7 +34,6 @@ fun TrackItem(track: Track, onClickAction: () -> Unit) {
             .background(MaterialTheme.colorScheme.primary)
             .clickable(onClick = onClickAction),
         verticalAlignment = Alignment.CenterVertically,
-
             ) {
 
         Image(
@@ -44,7 +43,6 @@ fun TrackItem(track: Track, onClickAction: () -> Unit) {
                 .padding(start = 13.dp, end = 8.dp)
                 .size(45.dp, 45.dp),
             contentScale = ContentScale.Crop
-
         )
 
         Column(

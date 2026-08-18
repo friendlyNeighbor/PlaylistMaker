@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
 
 class MediatekaFragment : Fragment() {
@@ -16,10 +17,11 @@ class MediatekaFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val navController = findNavController()
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(isSystemInDarkTheme()) {
-                    MediatekaScreen( )
+                    MediatekaScreen( navController )
                 }
             }
         }

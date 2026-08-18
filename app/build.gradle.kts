@@ -105,6 +105,7 @@ dependencies {
     implementation(libs.coil) // или актуальная версия
     implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation("io.insert-koin:koin-androidx-compose:4.2.2")
 // Если используешь иконки:
  //   implementation (libs.androidx.compose.material.icons.core)
  //   implementation (libs.androidx.compose.material.icons.extended)

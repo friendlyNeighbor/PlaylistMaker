@@ -18,15 +18,17 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesScreen
 import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsScreen
+import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsViewModel
 import com.example.playlistmaker.mvvm.uiCompose.Header
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 import kotlinx.coroutines.launch
 
 @Composable
-fun MediatekaScreen() {
+fun MediatekaScreen( navController: NavController ) {
     val scope = rememberCoroutineScope()
     val pagerState = rememberPagerState(pageCount = { 2 })
     val selectedTabIndex = pagerState.currentPage
@@ -84,8 +86,8 @@ fun MediatekaScreen() {
                 .weight(1f)
         ) { page ->
             when(page) {
-                0 -> FavoritesScreen()
-                1 -> PlaylistsScreen()
+                0 -> FavoritesScreen(navController = navController)
+                1 -> PlaylistsScreen(navController = navController)
             }
         }
     }

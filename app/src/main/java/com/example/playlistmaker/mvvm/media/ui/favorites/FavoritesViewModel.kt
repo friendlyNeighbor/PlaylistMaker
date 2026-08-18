@@ -18,9 +18,9 @@ class FavoritesViewModel(private val favoritesTracksInteractor: TracksInteractor
         viewModelScope.launch {
             val listOfFavorites=favoritesTracksInteractor.getTrackList().first()
                 if (listOfFavorites.isEmpty())
-                    favoritesLiveData.postValue(emptyList())
+                    favoritesLiveData.value = emptyList()
                 else
-                    favoritesLiveData.postValue(listOfFavorites)
+                    favoritesLiveData.value = listOfFavorites
         }
     }
 
