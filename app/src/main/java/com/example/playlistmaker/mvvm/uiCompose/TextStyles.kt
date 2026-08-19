@@ -31,6 +31,14 @@ object TextStyles {
     )
 
     @Composable
+    fun additionalButtonStyle() = TextStyle(
+        fontFamily = displayFontFamily,
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Medium,
+        letterSpacing = 0.sp
+    )
+
+    @Composable
     fun buttonStyle() = TextStyle(
         fontFamily = displayFontFamily,
         fontSize = 14.sp,

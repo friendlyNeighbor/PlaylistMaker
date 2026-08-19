@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.widget.doOnTextChanged
@@ -18,12 +20,43 @@ import androidx.fragment.app.Fragment
 import com.example.playlistmaker.R
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.databinding.FragmentCreatePlaylistBinding
+import com.example.playlistmaker.mvvm.media.ui.MediatekaScreen
+import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class FragmentCreatePlaylist : Fragment() {
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val navController = findNavController()
+        var playlistId: Long? = null
+
+        arguments?.getLong(ID)?.let {id ->
+            playlistId = id
+        }
+
+        return ComposeView(requireContext()).apply {
+            setContent {
+                ComposeTheme(isSystemInDarkTheme()) {
+                    CreatePlaylistScreen( navController, playlistId )
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        private const val ID = "ID"
+
+        fun createArgs(id: Long): Bundle =
+            bundleOf(ID to id)
+    }
+    /*
     private var _binding: FragmentCreatePlaylistBinding? = null
     private val binding get() = _binding!!
 
@@ -177,4 +210,6 @@ class FragmentCreatePlaylist : Fragment() {
         fun createArgs(id: Long): Bundle =
             bundleOf(ID to id)
     }
+
+     */
 }

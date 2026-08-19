@@ -28,7 +28,7 @@ fun FavoritesScreen(viewModel: FavoritesViewModel = koinViewModel(), navControll
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary),
+            .background(MaterialTheme.colorScheme.primary), // ??
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         val favoritesList = uiState
