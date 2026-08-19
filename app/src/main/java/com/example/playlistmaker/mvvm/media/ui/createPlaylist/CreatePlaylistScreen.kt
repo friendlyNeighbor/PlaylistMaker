@@ -1,6 +1,5 @@
 package com.example.playlistmaker.mvvm.media.ui.createPlaylist
 
-import android.widget.Space
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -32,6 +31,8 @@ import com.example.playlistmaker.mvvm.uiCompose.dashedBorder
 import org.koin.androidx.compose.koinViewModel
 
 
+
+
 @Composable
 fun CreatePlaylistScreen(
     navController: NavController,
@@ -39,6 +40,16 @@ fun CreatePlaylistScreen(
 ) {
     val viewModel: CreatePlaylistViewModel = koinViewModel()
     val uiState by viewModel.getLiveData().observeAsState()
+
+    val EDITING = "EDITING"
+    val CREATING = "CREATING"
+
+    var state = CREATING
+
+    if(playlistId!=null) {
+        viewModel.loadPlaylistById(playlistId)
+        state = EDITING
+    }
 
     Column(
         modifier = Modifier
@@ -53,7 +64,10 @@ fun CreatePlaylistScreen(
 
         Header(
             stringResource(R.string.new_playlist),
-            R.drawable.ic_arrow_back_black_24)
+            R.drawable.ic_arrow_back_24,
+            onClickAction = { empty() }
+
+        )
 
         Image(
             modifier = Modifier
@@ -81,22 +95,22 @@ fun CreatePlaylistScreen(
         )
 
         TextField(
-            placeHolderText = stringResource(R.string.title),
-            { textTitle = " 2 " },
+            labelText = stringResource(R.string.title),
+            { textTitle = " 2 " },      //fdddddddddddddg
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 33.dp)
         )
         TextField(
-            placeHolderText = stringResource(R.string.description),
+            labelText = stringResource(R.string.description),
             {},
             modifier = Modifier
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp)
         )
 
         Spacer(
-            modifier = Modifier.
-                        weight(1f)
+            modifier = Modifier.weight(1f)
         )
+
         val additionalButtonIsEnabled = textTitle.isNotBlank()
 
         AdditionalButton(
@@ -108,5 +122,44 @@ fun CreatePlaylistScreen(
 
     }
 
+
+   // requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+   //     closeFragment()
+   fun empty() {}
+
+    fun closeFragment() {
+        if(state == EDITING)
+            navController.navigateUp()
+        else {
+            if (
+                viewModel.uriImage == null// &&
+            //       binding.titlePlaylist.text.toString().isEmpty() &&
+            //       binding.description.text.toString().isEmpty()
+            )
+                navController.navigateUp()
+            else {
+                //  showDialog()
+            }
+        }
+    }
+
+    fun showDialog() {
+        /*
+        confirmDialog = MaterialAlertDialogBuilder(requireActivity())
+            .setTitle(R.string.finish_creating)
+            .setMessage(R.string.data_will_be_lost)
+            .setNeutralButton(R.string.cancel) { _, _ -> }
+            .setPositiveButton(R.string.complete) { _, _ ->
+                navController().navigateUp()
+            }
+        confirmDialog.show()
+
+
+         */
+    }
+
+
+
 }
 
+fun empty() {}

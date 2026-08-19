@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.uiCompose
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,16 +15,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.playlistmaker.R
+
 
 @Composable
-fun Header(text: String, imageRes: Int? = null, modifier: Modifier = Modifier) {
+fun Header(text: String, imageRes: Int? = null, onClickAction: (() -> Unit)?=null, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
             .height(64.dp)
-            .background(MaterialTheme.colorScheme.primary),
+            .background(MaterialTheme.colorScheme.primary)
+            .clickable(onClickAction!=null) { onClickAction?.invoke() },
         verticalAlignment = Alignment.CenterVertically
+
     ) {
         if(imageRes!=null) {
             Image(

@@ -22,7 +22,6 @@ import androidx.navigation.NavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesScreen
 import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsScreen
-import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsViewModel
 import com.example.playlistmaker.mvvm.uiCompose.Header
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 import kotlinx.coroutines.launch
