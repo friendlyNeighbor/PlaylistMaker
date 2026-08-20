@@ -38,7 +38,7 @@ fun TrackItem(track: Track, onClickAction: () -> Unit) {
 
         Image(
             painter = rememberAsyncImagePainter(
-                model = track.artworkUrl100,
+                model = if(track.artworkUrl100!="") track.artworkUrl100 else R.drawable.ic_placeholder_45,
                 placeholder = painterResource(R.drawable.ic_placeholder_45)),
             contentDescription = null,
             modifier = Modifier

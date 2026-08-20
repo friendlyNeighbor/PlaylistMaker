@@ -21,7 +21,7 @@ import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
 @Composable
 fun TextField(
     labelText: String,
-    onTextChangeAction: () -> Unit,
+    onTextChangeAction: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
@@ -37,7 +37,7 @@ fun TextField(
         textStyle = panelStyle(),
         onValueChange = {
             text = it
-            onTextChangeAction.invoke()
+            onTextChangeAction.invoke(it)
         },
         singleLine = true,
         shape = RoundedCornerShape(8.dp),

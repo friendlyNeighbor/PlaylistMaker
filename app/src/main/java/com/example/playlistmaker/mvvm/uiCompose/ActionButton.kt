@@ -1,6 +1,6 @@
 package com.example.playlistmaker.mvvm.uiCompose
 
-import android.annotation.SuppressLint
+
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,7 +17,7 @@ import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 fun ActionButton(
     text: String,
     onClickAction: (() -> Unit)? = null,
-    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier
+    modifier: Modifier = Modifier
 ) {
 
     Button(

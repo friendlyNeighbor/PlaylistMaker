@@ -22,13 +22,15 @@ class CreatePlaylistViewModel(
 
     private lateinit var editingPlaylist: Playlist
     var uriImage: Uri? = null
+    var textTitle: String =""
+    var textDescription: String =""
 
     fun refreshImage(uri: Uri?) {
         uriImage = uri
         createPlaylistLiveData.postValue(StateCreate(null, null, uriImage, false))
     }
 
-    fun savePlaylist(textTitle: String, textDescription: String) {
+    fun savePlaylist() {
         viewModelScope.launch {
                 val newId = playlistInteractor.addNewPlaylist(Playlist(0L, textTitle, textDescription, emptyList(), null))
                 val currentUri = uriImage
@@ -49,7 +51,7 @@ class CreatePlaylistViewModel(
         }
     }
 
-    fun updatePlaylist(textTitle: String, textDescription: String) {
+    fun updatePlaylist() {
             viewModelScope.launch {
                 editingPlaylist.title = textTitle
                 editingPlaylist.description = textDescription

@@ -33,7 +33,7 @@ fun PlaylistItem(playlist: Playlist, onClickAction: () -> Unit) {
     ) {
         Image(
             painter = rememberAsyncImagePainter(
-                model = playlist.uriImage,
+                model = playlist.uriImage ?: R.drawable.ic_placeholder_45,
                 placeholder = painterResource(R.drawable.ic_placeholder_45)),
             contentDescription = null,
             modifier = Modifier
