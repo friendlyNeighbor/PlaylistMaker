@@ -2,6 +2,7 @@ package com.example.playlistmaker.mvvm.media.ui.playlistScreen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings.Global.putLong
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -76,9 +77,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }
 
     binding.edit.setOnClickListener {
+        val bundle = Bundle().apply {
+            putLong("playlistId", id)}
         findNavController().navigate(
             R.id.action_fragmentPlaylistScreen_to_fragmentNewPlaylist,
-            FragmentCreatePlaylist.createArgs(id)
+            bundle
         )
     }
 

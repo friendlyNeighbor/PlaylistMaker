@@ -20,25 +20,22 @@ import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
 
 @Composable
 fun TextField(
+    value: String,
+    onValueChange: (String) -> Unit,
     labelText: String,
-    onTextChangeAction: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
-    var text by rememberSaveable { mutableStateOf("") }
-    var borderColor =
-        if (text.isNotBlank())
+    val borderColor =
+        if (value.isNotBlank())
             MaterialTheme.colorScheme.tertiary
         else
             MaterialTheme.colorScheme.onSurfaceVariant
 
     OutlinedTextField(
-        value = text,
+        value = value,
         textStyle = panelStyle(),
-        onValueChange = {
-            text = it
-            onTextChangeAction.invoke(it)
-        },
+        onValueChange = onValueChange,
         singleLine = true,
         shape = RoundedCornerShape(8.dp),
         label = { Text(labelText) },

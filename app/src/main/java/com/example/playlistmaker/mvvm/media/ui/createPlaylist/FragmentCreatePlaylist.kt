@@ -43,7 +43,7 @@ class FragmentCreatePlaylist : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 ComposeTheme(isSystemInDarkTheme()) {
-                    CreatePlaylistScreen( navController, playlistId )
+                    CreatePlaylistScreen( navController )
                 }
             }
         }
