@@ -5,11 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import com.example.playlistmaker.mvvm.uiCompose.ComposeTheme
@@ -31,91 +26,12 @@ class SettingsFragment : Fragment() {
 
         return ComposeView(requireContext()).apply {
             setContent {
-             //   val themeState by viewModel.getLiveData().observeAsState()
-
-        //        val isDarkTheme = isSystemInDarkTheme()   // или любое значение по умолчанию
                 ComposeTheme(isSystemInDarkTheme()) {
-        //            Scaffold { padding ->
                         SettingsScreen(
-                            viewModel = viewModel//,
-        //                    modifier = Modifier.padding(padding)
+                            viewModel = viewModel
                         )
-        //            }
                 }
             }
         }
     }
 }
-
-
-
-
-
-
-/*
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.example.playlistmaker.databinding.FragmentSettingsBinding
-import org.koin.androidx.viewmodel.ext.android.viewModel
-import org.koin.core.parameter.parametersOf
-
-class SettingsFragment : Fragment() {
-
-    private var _binding: FragmentSettingsBinding? = null
-    private val binding get() = _binding!!
-
-    private val primaryState = SettingsState.DEFAULT
-    private val viewModel: SettingsViewModel by viewModel() {
-        parametersOf(primaryState)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        binding.apply {
-
-            share.setOnClickListener {
-                viewModel.share()
-            }
-            support.setOnClickListener {
-                viewModel.support()
-            }
-            agreement.setOnClickListener {
-                viewModel.agreement()
-            }
-            switchDarkTheme.setOnClickListener {
-                viewModel.switchTheme()
-            }
-        }
-
-        viewModel.updateSwitcher()
-
-        viewModel.getLiveData().observe(viewLifecycleOwner) {
-            if (it == SettingsState.NIGHT && !binding.switchDarkTheme.isChecked) {
-                binding.switchDarkTheme.isChecked=true
-            }
-            else {
-                binding.switchDarkTheme.isChecked=false
-            }
-        }
-
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-}
-*/

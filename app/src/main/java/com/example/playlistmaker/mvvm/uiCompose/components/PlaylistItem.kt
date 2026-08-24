@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.uiCompose
+package com.example.playlistmaker.mvvm.uiCompose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable

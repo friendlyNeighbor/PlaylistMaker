@@ -3,7 +3,6 @@ package com.example.playlistmaker.mvvm.media.ui.playlists
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -20,9 +19,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.playlistmaker.mvvm.media.ui.playlistScreen.FragmentPlaylistScreen
-import com.example.playlistmaker.mvvm.uiCompose.ActionButton
-import com.example.playlistmaker.mvvm.uiCompose.PlaceHolder
-import com.example.playlistmaker.mvvm.uiCompose.PlaylistItem
+import com.example.playlistmaker.mvvm.uiCompose.components.ActionButton
+import com.example.playlistmaker.mvvm.uiCompose.components.PlaceHolder
+import com.example.playlistmaker.mvvm.uiCompose.components.PlaylistItem
 
 import org.koin.androidx.compose.koinViewModel
 

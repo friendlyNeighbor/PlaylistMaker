@@ -2,7 +2,6 @@ package com.example.playlistmaker.mvvm.media.ui.playlistScreen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.provider.Settings.Global.putLong
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistScreenBinding
-import com.example.playlistmaker.mvvm.media.ui.createPlaylist.FragmentCreatePlaylist
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.TrackAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior

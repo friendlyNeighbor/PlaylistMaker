@@ -21,13 +21,14 @@ class CreatePlaylistViewModel(
     private val imageSaverInteractor: ImageSaverInteractor,
     private val playlistInteractor: PlaylistInteractor
 ) : ViewModel() {
+
     private val _state = MutableStateFlow(StateCreate("", "", null, false))
     val state: StateFlow<StateCreate> = _state.asStateFlow()
 
     val playlistId: Long? = savedStateHandle.get<Long>("playlistId")?.takeIf { it != -1L }
     private lateinit var editingPlaylist: Playlist
 
-    lateinit var mode: String
+    var mode: String
     val EDITING = "EDITING"
     val CREATING = "CREATING"
 

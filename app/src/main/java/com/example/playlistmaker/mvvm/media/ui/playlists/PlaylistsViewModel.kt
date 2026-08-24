@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.playlistmaker.mvvm.media.domain.api.ImageSaverInteractor
 import com.example.playlistmaker.mvvm.media.domain.db.PlaylistInteractor
-import com.example.playlistmaker.mvvm.search.ui.SearchState
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -15,10 +14,6 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor, pri
     private val playlistsLiveData = MutableLiveData<PlaylistsState>()
     fun getLiveData(): LiveData<PlaylistsState> = playlistsLiveData
 
-/*
-    private val _searchLiveData = MutableLiveData(primaryState)
-    fun getLiveData(): LiveData<SearchState> = _searchLiveData
- */
     fun  readPlaylistDb() {
         viewModelScope.launch {
             val listOfPlaylist = playlistInteractor.getListOfPlaylists().first()

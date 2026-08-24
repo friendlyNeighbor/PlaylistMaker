@@ -62,5 +62,4 @@ object TextStyles {
         letterSpacing = 0.sp
     )
 
-
 }

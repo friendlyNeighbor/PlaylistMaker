@@ -22,7 +22,7 @@ import androidx.navigation.NavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesScreen
 import com.example.playlistmaker.mvvm.media.ui.playlists.PlaylistsScreen
-import com.example.playlistmaker.mvvm.uiCompose.Header
+import com.example.playlistmaker.mvvm.uiCompose.components.Header
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.buttonStyle
 import kotlinx.coroutines.launch
 
@@ -49,7 +49,7 @@ fun MediatekaScreen( navController: NavController ) {
                 TabRowDefaults.SecondaryIndicator(
                     Modifier
                         .tabIndicatorOffset(selectedTabIndex, matchContentSize = false)
-                        .width(48.dp), // <-- фиксированная ширина
+                        .width(48.dp),
                     color = MaterialTheme.colorScheme.onPrimary
                 )
             },

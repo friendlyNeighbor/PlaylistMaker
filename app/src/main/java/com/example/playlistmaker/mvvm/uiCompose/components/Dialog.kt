@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.uiCompose
+package com.example.playlistmaker.mvvm.uiCompose.components
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button

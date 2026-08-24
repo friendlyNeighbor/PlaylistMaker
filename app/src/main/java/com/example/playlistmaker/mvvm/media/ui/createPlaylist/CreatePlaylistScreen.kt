@@ -31,10 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.uiCompose.AdditionalButton
-import com.example.playlistmaker.mvvm.uiCompose.Dialog
-import com.example.playlistmaker.mvvm.uiCompose.Header
-import com.example.playlistmaker.mvvm.uiCompose.TextField
+import com.example.playlistmaker.mvvm.uiCompose.components.AdditionalButton
+import com.example.playlistmaker.mvvm.uiCompose.components.Dialog
+import com.example.playlistmaker.mvvm.uiCompose.components.Header
+import com.example.playlistmaker.mvvm.uiCompose.components.TextField
 import com.example.playlistmaker.mvvm.uiCompose.dashedBorder
 import org.koin.androidx.compose.koinViewModel
 

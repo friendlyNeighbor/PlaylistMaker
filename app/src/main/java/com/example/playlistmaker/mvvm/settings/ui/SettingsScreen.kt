@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.playlistmaker.R
-import com.example.playlistmaker.mvvm.uiCompose.ActionPanel
-import com.example.playlistmaker.mvvm.uiCompose.Header
-import com.example.playlistmaker.mvvm.uiCompose.SwitchPanel
+import com.example.playlistmaker.mvvm.uiCompose.components.ActionPanel
+import com.example.playlistmaker.mvvm.uiCompose.components.Header
+import com.example.playlistmaker.mvvm.uiCompose.components.SwitchPanel
 
 
 @Composable

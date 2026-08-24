@@ -27,12 +27,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.mvvm.search.domain.model.Track
-import com.example.playlistmaker.mvvm.uiCompose.ActionButton
-import com.example.playlistmaker.mvvm.uiCompose.Header
-import com.example.playlistmaker.mvvm.uiCompose.PlaceHolder
-import com.example.playlistmaker.mvvm.uiCompose.SearchField
+import com.example.playlistmaker.mvvm.uiCompose.components.ActionButton
+import com.example.playlistmaker.mvvm.uiCompose.components.Header
+import com.example.playlistmaker.mvvm.uiCompose.components.PlaceHolder
+import com.example.playlistmaker.mvvm.uiCompose.components.SearchField
 import com.example.playlistmaker.mvvm.uiCompose.TextStyles.placeholderStyle
-import com.example.playlistmaker.mvvm.uiCompose.TrackItem
+import com.example.playlistmaker.mvvm.uiCompose.components.TrackItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.uiCompose
+package com.example.playlistmaker.mvvm.uiCompose.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.playlistmaker.mvvm.uiCompose.TextStyles
 
 @Composable
 fun SwitchPanel(
@@ -59,10 +60,10 @@ fun SwitchPanel(
             modifier = Modifier
                 .padding(end = 18.dp),
             colors = SwitchDefaults.colors(
-                checkedThumbColor = MaterialTheme.colorScheme.tertiary,          // цвет «кружка» при checked
-                checkedTrackColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.45f),      // цвет дорожки при checked
-                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,        // цвет «кружка» при unchecked
-                uncheckedTrackColor = MaterialTheme.colorScheme.secondary     // цвет дорожки при unchecked
+                checkedThumbColor = MaterialTheme.colorScheme.tertiary,
+                checkedTrackColor = MaterialTheme.colorScheme.tertiary.copy(alpha = 0.45f),
+                uncheckedThumbColor = MaterialTheme.colorScheme.onSurface,
+                uncheckedTrackColor = MaterialTheme.colorScheme.secondary
             )
         )
     }

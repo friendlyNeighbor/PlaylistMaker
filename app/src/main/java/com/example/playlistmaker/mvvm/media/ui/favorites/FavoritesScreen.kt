@@ -15,8 +15,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.playlistmaker.mvvm.uiCompose.PlaceHolder
-import com.example.playlistmaker.mvvm.uiCompose.TrackItem
+import com.example.playlistmaker.mvvm.uiCompose.components.PlaceHolder
+import com.example.playlistmaker.mvvm.uiCompose.components.TrackItem
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

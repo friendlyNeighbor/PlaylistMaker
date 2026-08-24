@@ -1,4 +1,4 @@
-package com.example.playlistmaker.mvvm.uiCompose
+package com.example.playlistmaker.mvvm.uiCompose.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -116,13 +116,15 @@ val track:Track = Track(
 @Preview
 @Composable
 fun TrackItemLight() {
-    ComposeTheme(true) {
-            TrackItem(track, {})
-    }}
+    _root_ide_package_.com.example.playlistmaker.mvvm.uiCompose.ComposeTheme(true) {
+        TrackItem(track, {})
+    }
+}
 
 @Preview
 @Composable
 fun TrackItemDark() {
-    ComposeTheme(false) {
+    _root_ide_package_.com.example.playlistmaker.mvvm.uiCompose.ComposeTheme(false) {
         TrackItem(track, {})
-    }}
+    }
+}
