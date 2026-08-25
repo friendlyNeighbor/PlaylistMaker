@@ -76,6 +76,13 @@ fun SearchScreen(viewModel: SearchViewModel, navController: NavController) {
                 R.string.connection_problem,
                 modifier = Modifier.padding(top = 102.dp)
             )
+
+            ActionButton(
+                text = stringResource(R.string.reload),
+                { viewModel.textWasChanged(null) },
+                modifier = Modifier.padding(top = 24.dp)
+            )
+
         }
 
         if (uiState?.searchStatus == SearchStatus.NOT_FOUND) {

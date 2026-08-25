@@ -41,21 +41,12 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-/*
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-
-
- */
     kotlin {
         compilerOptions {
             jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
         }
     }
 }
-
-
 
 dependencies {
     implementation(libs.androidx.compose.foundation)
@@ -93,8 +84,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-   // implementation(platform(libs.androidx.compose.bom)) // или актуальная BOM
-  //  implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)
@@ -102,12 +91,9 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation (libs.material3)
     implementation (libs.androidx.compose.material3)
-    implementation(libs.coil) // или актуальная версия
+    implementation(libs.coil)
     implementation(libs.coil.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation("io.insert-koin:koin-androidx-compose:4.2.2")
-// Если используешь иконки:
- //   implementation (libs.androidx.compose.material.icons.core)
- //   implementation (libs.androidx.compose.material.icons.extended)
+    implementation(libs.koin.androidx.compose)
 }
 

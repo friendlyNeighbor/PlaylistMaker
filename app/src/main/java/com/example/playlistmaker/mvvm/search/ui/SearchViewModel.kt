@@ -31,13 +31,14 @@ class SearchViewModel(
 
     fun focusWasChanged(focusState: Boolean) {
         textInFocus = focusState
-        if (text == "")
+        if (text.isEmpty())
             textWasChanged(text)
     }
 
-    fun textWasChanged(newText: String) {
+    fun textWasChanged(newText: String?) {
         val trackListHistory = searchHistoryInteractor.getTrackListHistory()
-        text = newText.trimStart()
+        if (newText!= null)
+            text = newText.trimStart()
         if (text == "") {
             searchJob?.cancel()
             if (textInFocus && trackListHistory.isNotEmpty()) {
