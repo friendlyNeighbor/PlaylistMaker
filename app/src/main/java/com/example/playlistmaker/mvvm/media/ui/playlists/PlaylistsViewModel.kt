@@ -18,12 +18,12 @@ class PlaylistsViewModel(private val playlistInteractor: PlaylistInteractor, pri
         viewModelScope.launch {
             val listOfPlaylist = playlistInteractor.getListOfPlaylists().first()
             if (listOfPlaylist.isEmpty())
-                playlistsLiveData.postValue(PlaylistsState(emptyList()))
+                playlistsLiveData.value =PlaylistsState(emptyList())
             else {
                 for (playlist in listOfPlaylist) {
                     playlist.uriImage=imageSaverInteractor.getImage(playlist.id)
                 }
-                playlistsLiveData.postValue(PlaylistsState(listOfPlaylist))
+                playlistsLiveData.value = PlaylistsState(listOfPlaylist)
             }
         }
     }

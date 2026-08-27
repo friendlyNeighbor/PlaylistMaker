@@ -19,8 +19,10 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
         else {
             settingsLiveData.postValue(SettingsState.DAY)
         }
-
     }
+
+    fun getTheme(): Boolean {
+        return themeInteractor.getTheme() }
 
     fun share() {
         sharingInteractor.shareApp()
@@ -36,5 +38,6 @@ class SettingsViewModel(primaryState: SettingsState, private val sharingInteract
 
     fun switchTheme() {
         themeInteractor.switchTheme()
+        updateSwitcher()
     }
 }

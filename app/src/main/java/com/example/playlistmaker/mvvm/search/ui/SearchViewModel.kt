@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.search.ui
 
+
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -20,48 +21,45 @@ class SearchViewModel(
     private val trackSaverInteractor: TrackSaverInteractor
 ) : ViewModel() {
 
-    private val searchLiveData = MutableLiveData(primaryState)
-    fun getLiveData(): LiveData<SearchState> = searchLiveData
+    private val _searchLiveData = MutableLiveData(primaryState)
+    fun getLiveData(): LiveData<SearchState> = _searchLiveData
 
     private var textInFocus = false
-    private var text = ""
+    var text = ""
 
     private var searchJob: Job? = null
 
-    fun editTextInFocus() {
-        textInFocus = true
-        textWasChanged("")
+    fun focusWasChanged(focusState: Boolean) {
+        textInFocus = focusState
+        if (text.isEmpty())
+            textWasChanged(text)
     }
 
-    fun textWasChanged(incomingText: String) {
-        if (incomingText != text) {
-            text = incomingText.trimStart()
-
-            if (textInFocus) {
-                val trackListHistory = searchHistoryInteractor.getTrackListHistory()
-                if (text.isEmpty()) {
-                    searchJob?.cancel()
-                    if (trackListHistory.isEmpty()) {
-                        searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
-                    } else {
-                        searchLiveData.postValue(
-                            SearchState(
-                                SearchStatus.HISTORY,
-                                trackListHistory
-                            )
+    fun textWasChanged(newText: String?) {
+        val trackListHistory = searchHistoryInteractor.getTrackListHistory()
+        if (newText!= null)
+            text = newText.trimStart()
+        if (text == "") {
+            searchJob?.cancel()
+            if (textInFocus && trackListHistory.isNotEmpty()) {
+                _searchLiveData.value = (
+                        SearchState(
+                            SearchStatus.HISTORY,
+                            trackListHistory
                         )
-                    }
-                } else {
-                    searchLiveData.postValue(SearchState(SearchStatus.PROGRESS, emptyList()))
-                    debounceSearchTrack()
-                }
+                        )
+            } else {
+                _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
             }
+        } else {
+            _searchLiveData.value = (SearchState(SearchStatus.PROGRESS, emptyList()))
+            debounceSearchTrack()
         }
     }
 
     fun clearHistory() {
         searchHistoryInteractor.clearHistory()
-        searchLiveData.postValue(SearchState(SearchStatus.CLEAR, emptyList()))
+        _searchLiveData.value = (SearchState(SearchStatus.CLEAR, emptyList()))
     }
 
     private fun debounceSearchTrack() {
@@ -72,28 +70,28 @@ class SearchViewModel(
         }
     }
 
-private suspend fun searchTrack() {
-    trackSearchInteractor.searchTrack(text)
-        .collect { pair ->
-            processResult(pair.first, pair.second)
-        }
-}
+    private suspend fun searchTrack() {
+        trackSearchInteractor.searchTrack(text)
+            .collect { pair ->
+                processResult(pair.first, pair.second)
+            }
+    }
+
     private fun processResult(foundTrack: List<Track>?, errorMessage: String?) {
         val trackList: MutableList<Track> = mutableListOf()
         if (errorMessage != null || foundTrack == null) {
-            searchLiveData.postValue(SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
+            _searchLiveData.value = (SearchState(SearchStatus.CONNECTION_PROBLEM, trackList))
         } else {
             trackList.clear()
             trackList.addAll(foundTrack)
             if (trackList.isEmpty()) {
-                searchLiveData.postValue(SearchState(SearchStatus.NOT_FOUND, trackList))
+                _searchLiveData.value = (SearchState(SearchStatus.NOT_FOUND, trackList))
             } else {
-                searchLiveData.postValue(
-                    SearchState(
-                        SearchStatus.SEARCH_SUCCESSFUL,
-                        trackList
-                    )
-                )
+                _searchLiveData.value = (
+                        SearchState(
+                            SearchStatus.SEARCH_SUCCESSFUL,
+                            trackList )
+                        )
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.example.playlistmaker.mvvm.di
 
+import androidx.lifecycle.SavedStateHandle
 import com.example.playlistmaker.mvvm.media.ui.createPlaylist.CreatePlaylistViewModel
 import com.example.playlistmaker.mvvm.media.ui.favorites.FavoritesViewModel
 import com.example.playlistmaker.mvvm.media.ui.playlistScreen.ViewModelPlaylistScreen
@@ -30,7 +31,7 @@ val viewModelModule = module {
 
     viewModel { FavoritesViewModel(get(),get()) }
 
-    viewModel { CreatePlaylistViewModel(get(), get()) }
+    viewModel { (savedStateHandle: SavedStateHandle) -> CreatePlaylistViewModel(savedStateHandle, get(), get()) }
 
     viewModel { ViewModelPlaylistScreen(get(), get(), get(named(SORTED)), get(), get()) }
 

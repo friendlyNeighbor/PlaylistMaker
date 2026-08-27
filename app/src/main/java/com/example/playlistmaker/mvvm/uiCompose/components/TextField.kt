@@ -1,0 +1,52 @@
+package com.example.playlistmaker.mvvm.uiCompose.components
+
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.example.playlistmaker.mvvm.uiCompose.TextStyles.panelStyle
+
+@Composable
+fun TextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    labelText: String,
+    modifier: Modifier = Modifier
+) {
+
+    val borderColor =
+        if (value.isNotBlank())
+            MaterialTheme.colorScheme.tertiary
+        else
+            MaterialTheme.colorScheme.onSurfaceVariant
+
+    OutlinedTextField(
+        value = value,
+        textStyle = panelStyle(),
+        onValueChange = onValueChange,
+        singleLine = true,
+        shape = RoundedCornerShape(8.dp),
+        label = { Text(labelText) },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = borderColor,
+            unfocusedBorderColor = borderColor,
+            focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onPrimary,
+            focusedPlaceholderColor = MaterialTheme.colorScheme.tertiary,
+            unfocusedPlaceholderColor = MaterialTheme.colorScheme.onPrimary,
+            cursorColor = MaterialTheme.colorScheme.tertiary,
+            focusedLabelColor = borderColor,
+            unfocusedLabelColor = borderColor,
+        ),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(56.dp)
+    )
+}
+

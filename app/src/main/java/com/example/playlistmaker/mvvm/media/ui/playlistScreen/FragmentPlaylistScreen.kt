@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.playlistmaker.R
 import com.example.playlistmaker.databinding.FragmentPlaylistScreenBinding
-import com.example.playlistmaker.mvvm.media.ui.createPlaylist.FragmentCreatePlaylist
 import com.example.playlistmaker.mvvm.search.domain.model.Track
 import com.example.playlistmaker.mvvm.search.ui.TrackAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -76,9 +75,11 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     }
 
     binding.edit.setOnClickListener {
+        val bundle = Bundle().apply {
+            putLong("playlistId", id)}
         findNavController().navigate(
             R.id.action_fragmentPlaylistScreen_to_fragmentNewPlaylist,
-            FragmentCreatePlaylist.createArgs(id)
+            bundle
         )
     }
 
